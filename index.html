@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>∞ Infinite Naming Engine</title>
+<title>∞ Infinite Naming World</title>
 
 <style>
 
@@ -137,10 +137,26 @@ body{
   padding:5px 12px;
   border-radius:999px;
   border:1px solid rgba(0,240,255,.25);
-  background:rgba(0,240,255,.08);
+  background:rgb(0, 238, 255);
   color:var(--glow);
   font-size:.6rem;
   white-space:nowrap;
+}
+
+.badge.online{
+  color:var(--success);
+  border-color:var(--success);
+  background:rgba(34,197,94,.15);
+  animation:pulseOnline 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseOnline{
+  0%,100%{
+    box-shadow:0 0 0 0 rgba(34,197,94,.4);
+  }
+  50%{
+    box-shadow:0 0 0 3px rgb(0, 174, 93);
+  }
 }
 
 .header-buttons{
@@ -159,12 +175,23 @@ body{
   font-size:.58rem;
   letter-spacing:1px;
   white-space:nowrap;
+  position:relative;
 }
 
 .info-btn{
-  background:rgba(0,240,255,.12);
-  border:1px solid rgba(0,240,255,.25);
+  background:rgba(236, 247, 248, 0.12);
+  border:1px solid rgb(255, 255, 255);
   color:var(--glow);
+  animation:pulseInfoBtn 2s ease-in-out infinite;
+}
+
+@keyframes pulseInfoBtn{
+  0%,100%{
+    box-shadow:0 0 0 0 rgba(0, 255, 174, 0.4);
+  }
+  50%{
+    box-shadow:0 0 0 10px rgba(255, 255, 255, 0);
+  }
 }
 
 .message-btn{
@@ -173,19 +200,49 @@ body{
   color:var(--glow2);
 }
 
+.counter-badge{
+  position:absolute;
+  top:-8px;
+  right:-8px;
+  background:#22c55e;
+  color:#00ff8c;
+  font-family:'Orbitron',sans-serif;
+  font-size:.55rem;
+  font-weight:700;
+  border-radius:50%;
+  width:20px;
+  height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:pulseCounter 1.2s ease-in-out infinite;
+}
+
+@keyframes pulseCounter{
+  0%,100%{
+    transform:scale(1);
+    box-shadow:0 0 0 0 rgba(0, 250, 100, 0.6);
+  }
+  50%{
+    transform:scale(1.15);
+    box-shadow:0 0 0 6px rgb(0, 255, 119);
+  }
+}
+
 /* ================= TABS ================= */
 
 .tabs{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
+  display:flex;
   gap:8px;
   padding:10px;
   border-bottom:1px solid var(--border);
   background:rgba(0,0,0,.2);
   overflow-x:auto;
+  overflow-y:hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  flex-wrap:nowrap;
 }
 
 .tabs::-webkit-scrollbar{
@@ -196,8 +253,8 @@ body{
   border:none;
   cursor:pointer;
   border-radius:10px;
-  padding:12px 8px;
-  background:rgba(255,255,255,.03);
+  padding:12px 16px;
+  background:rgba(255, 255, 255, 0.03);
   border:1px solid var(--border);
   color:var(--dim);
   font-family:'Orbitron',sans-serif;
@@ -206,6 +263,7 @@ body{
   white-space:nowrap;
   -webkit-user-select: none;
   user-select: none;
+  flex-shrink:0;
 }
 
 .tab.active{
@@ -392,749 +450,26 @@ textarea{
 
   appearance:none;
   -webkit-appearance:none;
+  
+  animation:pulseInput 2s ease-in-out infinite;
+  box-shadow:0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+@keyframes pulseInput{
+  0%,100%{
+    box-shadow:0 0 0 2px rgba(34,197,94,.2), 0 0 10px rgba(34,197,94,.1);
+  }
+  50%{
+    box-shadow:0 0 0 3px rgba(34,197,94,.5), 0 0 20px rgba(34,197,94,.3);
+  }
 }
 
 textarea:focus{
   border-color:var(--glow);
   background:#0b0b12 !important;
   color:#ffffff !important;
-}
-
-textarea::placeholder{
-  color:var(--dim);
-}
-
-.paste-btn{
-  position:absolute;
-  top:6px;
-  right:6px;
-
-  border:none;
-  cursor:pointer;
-
-  border-radius:6px;
-
-  padding:4px 8px;
-
-  background:rgba(168,85,247,.15);
-  border:1px solid rgba(168,85,247,.25);
-
-  color:var(--glow2);
-
-  font-size:.55rem;
-}
-
-.btn{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-
-  border:none;
-  border-radius:10px;
-
-  cursor:pointer;
-
-  font-family:'Orbitron',sans-serif;
-  font-size:.62rem;
-  font-weight:700;
-
-  letter-spacing:1px;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.generate{
-  background:linear-gradient(135deg,var(--glow),#008ba5);
-  color:#000;
-}
-
-.cycle{
-  background:linear-gradient(135deg,var(--success),#15803d);
-  color:#fff;
-}
-
-.progress{
-  width:100%;
-  height:3px;
-  background:rgba(255,255,255,.05);
-  border-radius:999px;
-  overflow:hidden;
-  margin-top:12px;
-}
-
-.progress-fill{
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg,var(--glow),var(--glow2));
-}
-
-/* ================= STORED ================= */
-
-.stored{
-  margin-top:14px;
-  background:rgba(0,0,0,.2);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:8px;
-  min-height:120px;
-  max-height:220px;
-  overflow:auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.tag{
-  display:inline-block;
-  margin:3px;
-  padding:4px 8px;
-  border-radius:999px;
-
-  background:rgba(0,240,255,.05);
-  border:1px solid rgba(0,240,255,.15);
-
-  color:var(--glow);
-
-  font-size:.6rem;
-}
-
-/* ================= RIGHT ================= */
-
-.right{
-  display:grid;
-  grid-template-rows:1fr 320px;
-  overflow:hidden;
-}
-
-.panel{
-  padding:12px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.output{
-  flex:1;
-  margin-top:8px;
-
-  background:rgba(0,0,0,.22);
-
-  border:1px solid var(--border);
-  border-radius:12px;
-
-  overflow:auto;
-  padding:8px;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* ================= GENERATED WORDS ONLY ================= */
-
-.word{
-
-  padding:7px 8px;
-  margin:2px 0;
-
-  border-left:2px solid transparent;
-  border-radius:0 6px 6px 0;
-
-  color:var(--text);
-
-  font-size:.72rem;
-
-  cursor:pointer;
-
-  overflow-wrap:anywhere;
-  word-break:break-word;
-  -webkit-user-select: text;
-  user-select: text;
-}
-
-.word:hover{
-  background:rgba(0,240,255,.05);
-  border-left-color:var(--glow);
-}
-
-.word.copied{
-  color:var(--success) !important;
-  border-left-color:var(--success) !important;
-}
-
-/* ================= SPIRAL ================= */
-
-.spiral-wrap{
-  position:relative;
-  flex:1;
-
-  background:rgba(0,0,0,.25);
-
-  border:1px solid var(--border);
-  border-radius:12px;
-
-  overflow:hidden;
-
-  min-height:260px;
-}
-
-canvas{
-  width:100%;
-  height:100%;
-  display:block;
-}
-
-.spiral-overlay{
-  position:absolute;
-  inset:0;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-
-  pointer-events:none;
-}
-
-.big{
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(2rem,5vw,4rem);
-  font-weight:900;
-
-  background:linear-gradient(135deg,var(--glow),var(--glow2),var(--glow3));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.label{
-  font-size:.6rem;
-  color:var(--dim);
-  letter-spacing:3px;
-}
-
-/* ================= MOBILE VIEWER ================= */
-
-.mobile-view{
-  display:none;
-
-  padding:12px;
-
-  border-top:1px solid var(--border);
-
-  background:rgba(0,0,0,.28);
-}
-
-.viewer{
-  background:rgba(0,0,0,.4);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-}
-
-.viewer-word{
-  min-height:70px;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  text-align:center;
-
-  color:var(--glow);
-
-  font-family:'Orbitron',sans-serif;
-  font-weight:700;
-
-  overflow-wrap:anywhere;
-  word-break:break-word;
-
-  font-size:clamp(.9rem,4vw,1.4rem);
-  cursor:pointer;
-  -webkit-user-select: text;
-  user-select: text;
-}
-
-.viewer-word.copied{
-  color:var(--success) !important;
-}
-
-.viewer-controls{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
-}
-
-.viewer-controls button{
-  flex:1;
-  padding:10px;
-
-  border:none;
-  border-radius:10px;
-
-  cursor:pointer;
-
-  font-family:'Orbitron',sans-serif;
-  font-size:.65rem;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.copy{
-  background:linear-gradient(135deg,var(--glow),#008ba5);
-  color:#000;
-}
-
-.nav{
-  background:rgba(168,85,247,.15);
-  border:1px solid rgba(168,85,247,.25);
-  color:var(--glow2);
-}
-
-/* ================= MODAL ================= */
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:999;
-  padding:20px;
-  overflow:auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.modal-card{
-  width:min(100%,900px);
-  max-height:90vh;
-  overflow:auto;
-  background:#0f0f18;
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:20px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.modal-title{
-  font-family:'Orbitron',sans-serif;
-  color:var(--glow);
-  margin-bottom:20px;
-}
-
-.guide{
-  display:grid;
-  gap:14px;
-}
-
-.guide-item{
-  padding:14px;
-  border-radius:12px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.05);
-}
-
-.guide-item h3{
-  color:var(--glow2);
-  margin-bottom:8px;
-}
-
-.guide-item
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>∞ Infinite Naming Engine</title>
-
-<style>
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-
-:root{
-  --bg:#090910;
-  --card:#101019;
-  --border:#1a1a2e;
-  --glow:#00f0ff;
-  --glow2:#a855f7;
-  --glow3:#f97316;
-  --text:#f2f2ff;
-  --dim:#727290;
-  --success:#22c55e;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-html,body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:var(--bg);
-  color:var(--text);
-
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
-}
-
-body{
-  font-family:'Share Tech Mono', monospace;
-}
-
-/* ================= BACKGROUND ================= */
-
-.bg{
-  position:fixed;
-  inset:0;
-  overflow:hidden;
-  pointer-events:none;
-  z-index:0;
-}
-
-.ring{
-  position:absolute;
-  top:50%;
-  left:50%;
-  border-radius:50%;
-  border:1px solid rgba(0,240,255,.04);
-
-  will-change:transform;
-  backface-visibility:hidden;
-
-  animation:spin linear infinite;
-}
-
-@keyframes spin{
-  from{
-    transform:translate(-50%,-50%) rotate(0deg) scale(1);
-  }
-  to{
-    transform:translate(-50%,-50%) rotate(360deg) scale(.3);
-  }
-}
-
-/* ================= APP ================= */
-
-.app{
-  position:relative;
-  z-index:2;
-  width:100vw;
-  height:100vh;
-  padding:10px;
-}
-
-.main{
-  width:100%;
-  height:100%;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-
-  transform:translateZ(0);
-  backface-visibility:hidden;
-}
-
-/* ================= HEADER ================= */
-
-.header{
-  padding:14px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  border-bottom:1px solid var(--border);
-  background:linear-gradient(90deg, rgba(0,240,255,.05), transparent);
-  flex-shrink:0;
-  gap:12px;
-}
-
-.header h1{
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(.8rem,2vw,1.15rem);
-  font-weight:900;
-  letter-spacing:2px;
-  margin:0;
-  text-align:left;
-  flex:1;
-  min-width:0;
-
-  background:linear-gradient(135deg,var(--glow),var(--glow2));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.badge{
-  padding:5px 12px;
-  border-radius:999px;
-  border:1px solid rgba(0,240,255,.25);
-  background:rgba(0,240,255,.08);
-  color:var(--glow);
-  font-size:.6rem;
-  white-space:nowrap;
-}
-
-.header-buttons{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-}
-
-.header-btn{
-  border:none;
-  cursor:pointer;
-  border-radius:10px;
-  padding:8px 12px;
-  font-family:'Orbitron',sans-serif;
-  font-size:.58rem;
-  letter-spacing:1px;
-  white-space:nowrap;
-}
-
-.info-btn{
-  background:rgba(0,240,255,.12);
-  border:1px solid rgba(0,240,255,.25);
-  color:var(--glow);
-}
-
-.message-btn{
-  background:rgba(168,85,247,.14);
-  border:1px solid rgba(168,85,247,.25);
-  color:var(--glow2);
-}
-
-/* ================= TABS ================= */
-
-.tabs{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:8px;
-  padding:10px;
-  border-bottom:1px solid var(--border);
-  background:rgba(0,0,0,.2);
-  overflow-x:auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.tabs::-webkit-scrollbar{
-  display:none;
-}
-
-.tab{
-  border:none;
-  cursor:pointer;
-  border-radius:10px;
-  padding:12px 8px;
-  background:rgba(255,255,255,.03);
-  border:1px solid var(--border);
-  color:var(--dim);
-  font-family:'Orbitron',sans-serif;
-  font-size:.58rem;
-  transition:.2s;
-  white-space:nowrap;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.tab.active{
-  background:linear-gradient(135deg,var(--glow),var(--glow2));
-  color:#000;
-  font-weight:900;
-}
-
-/* ================= TOP ================= */
-
-.top{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  padding:10px;
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;
-}
-
-.top-box{
-  min-height:110px;
-  background:rgba(0,0,0,.28);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:10px;
-  overflow:hidden;
-}
-
-.top-label{
-  font-family:'Orbitron',sans-serif;
-  color:var(--dim);
-  font-size:.55rem;
-  letter-spacing:2px;
-  margin-bottom:8px;
-}
-
-/* ================= SEQUENTIAL READER ================= */
-
-#ticker{
-
-  width:100%;
-  height:calc(100% - 20px);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  text-align:center;
-  line-height:1.2;
-
-  overflow-wrap:anywhere;
-  word-break:break-word;
-
-  color:var(--glow);
-  font-family:'Orbitron',sans-serif;
-  font-weight:700;
-
-  font-size:clamp(.7rem,2vw,1.5rem);
-
-  padding:4px;
-
-  transition:none;
-  opacity:1 !important;
-  cursor:pointer;
-  -webkit-user-select: text;
-  user-select: text;
-}
-
-#ticker.copied{
-  color:var(--success) !important;
-}
-
-/* ================= SHUFFLER ================= */
-
-#shuffleBox{
-  position:relative;
-  width:100%;
-  height:calc(100% - 20px);
-  overflow:hidden;
-}
-
-.shuffle-word{
-  position:absolute;
-  padding:4px 8px;
-  background:rgba(168,85,247,.12);
-  border:1px solid rgba(168,85,247,.3);
-  border-radius:6px;
-  color:var(--glow2);
-
-  font-size:.7rem;
-
-  max-width:90%;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-
-  animation:floatWord 2s linear forwards;
-  cursor:pointer;
-  -webkit-user-select: text;
-  user-select: text;
-}
-
-@keyframes floatWord{
-  from{
-    opacity:0;
-    transform:translateY(20px) scale(.7);
-  }
-  30%{
-    opacity:1;
-  }
-  to{
-    opacity:0;
-    transform:translateY(-40px) scale(1.1);
-  }
-}
-
-/* ================= CONTENT ================= */
-
-.content{
-  flex:1;
-  display:grid;
-  grid-template-columns:300px 1fr;
-  overflow:hidden;
-}
-
-/* ================= LEFT ================= */
-
-.left{
-  border-right:1px solid var(--border);
-  padding:12px;
-  overflow:auto;
-  background:rgba(0,0,0,.15);
-  -webkit-overflow-scrolling: touch;
-}
-
-.left::-webkit-scrollbar{
-  width:4px;
-}
-
-.left::-webkit-scrollbar-thumb{
-  background:var(--glow);
-}
-
-.section-title{
-  font-family:'Orbitron',sans-serif;
-  font-size:.55rem;
-  color:var(--glow);
-  letter-spacing:2px;
-  margin-bottom:6px;
-}
-
-.input-wrap{
-  position:relative;
-}
-
-/* ================= TEXTAREA FIX ================= */
-
-textarea{
-
-  width:100%;
-  height:90px;
-
-  resize:none;
-  outline:none;
-
-  background:#0b0b12 !important;
-
-  color:#ffffff !important;
-
-  caret-color:var(--glow);
-
-  border:1px solid var(--border);
-  border-radius:10px;
-
-  padding:12px;
-
-  font-family:'Share Tech Mono', monospace;
-  font-size:.75rem;
-
-  transition:none !important;
-  animation:none !important;
-
-  -webkit-text-fill-color:#ffffff;
-
-  appearance:none;
-  -webkit-appearance:none;
-}
-
-textarea:focus{
-  border-color:var(--glow);
-  background:#0b0b12 !important;
-  color:#ffffff !important;
+  animation:none;
+  box-shadow:0 0 0 2px var(--glow);
 }
 
 textarea::placeholder{
@@ -1518,6 +853,8 @@ canvas{
   max-width:90vw;
   overflow:hidden;
   text-overflow:ellipsis;
+  padding:2px 6px;
+  font-size:clamp(.7rem,2vw,1.2rem);
 }
 
 .stream-word.copied{
@@ -1554,6 +891,40 @@ canvas{
   user-select: none;
 }
 
+.live-instruction{
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:3;
+  padding:8px 16px;
+  background:rgba(34,197,94,.2);
+  border:1px solid var(--success);
+  border-radius:999px;
+  color:var(--success);
+  font-family:'Orbitron',sans-serif;
+  font-size:.65rem;
+  letter-spacing:1px;
+  animation:pulseInstruction 1.5s ease-in-out infinite;
+  cursor:default;
+  pointer-events:none;
+  white-space:nowrap;
+  max-width:90vw;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+@keyframes pulseInstruction{
+  0%,100%{
+    box-shadow:0 0 0 0 rgba(34,197,94,.5);
+    opacity:1;
+  }
+  50%{
+    box-shadow:0 0 0 10px rgba(34,197,94,0);
+    opacity:.8;
+  }
+}
+
 /* ================= FOOTER ================= */
 
 .log{
@@ -1566,6 +937,329 @@ canvas{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+}
+
+/* ================= WORDS LIST MODAL ================= */
+
+.words-list-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9998;
+  padding:20px;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.words-list-card{
+  width:min(100%,700px);
+  max-height:85vh;
+  overflow:auto;
+  background:#0f0f18;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.words-list-title{
+  font-family:'Orbitron',sans-serif;
+  color:var(--glow);
+  margin-bottom:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.words-list-container{
+  display:grid;
+  gap:6px;
+}
+
+.word-list-item{
+  padding:8px 12px;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text);
+  font-size:.75rem;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.word-list-item:hover{
+  background:rgba(0,240,255,.08);
+  border-color:var(--glow);
+}
+
+.word-list-item.copied{
+  color:var(--success);
+  border-color:var(--success);
+}
+
+.copy-icon{
+  color:var(--dim);
+  font-size:.7rem;
+  margin-left:8px;
+  flex-shrink:0;
+}
+
+.word-list-item.copied .copy-icon{
+  color:var(--success);
+}
+
+/* ================= COPY WARNING MODAL ================= */
+
+.copy-warning-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.92);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:10000;
+  padding:20px;
+  animation:fadeIn .3s ease-out;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+.copy-warning-card{
+  width:min(100%,500px);
+  background:#0f0f18;
+  border:2px solid var(--success);
+  border-radius:20px;
+  padding:24px;
+  text-align:center;
+  animation:pulseWarning 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseWarning{
+  0%,100%{
+    box-shadow:0 0 0 0 rgba(34,197,94,.5);
+  }
+  50%{
+    box-shadow:0 0 0 15px rgba(34,197,94,0);
+  }
+}
+
+.copy-warning-title{
+  font-family:'Orbitron',sans-serif;
+  color:var(--success);
+  font-size:1.1rem;
+  margin-bottom:16px;
+  letter-spacing:1px;
+}
+
+.copy-warning-text{
+  color:var(--text);
+  font-size:.85rem;
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+.copy-warning-text strong{
+  color:var(--glow);
+}
+
+.copy-warning-btn{
+  padding:10px 24px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--success),#15803d);
+  color:#fff;
+  font-family:'Orbitron',sans-serif;
+  font-size:.7rem;
+  cursor:pointer;
+  animation:pulseBtn 1.2s ease-in-out infinite;
+}
+
+@keyframes pulseBtn{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+}
+
+/* ================= TIMED BRAND OVERLAY ================= */
+
+.timed-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(9,9,16,.98);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:10001;
+  padding:20px;
+  animation:blinkOverlay .5s ease-in-out infinite alternate;
+}
+
+@keyframes blinkOverlay{
+  from{background:rgba(9,9,16,.95);}
+  to{background:rgba(9,9,16,1);}
+}
+
+.timed-overlay-card{
+  width:min(100%,600px);
+  max-height:80vh;
+  background:#101019;
+  border:2px solid var(--glow);
+  border-radius:20px;
+  padding:20px;
+  overflow:auto;
+  position:relative;
+}
+
+.timed-overlay-title{
+  font-family:'Orbitron',sans-serif;
+  color:var(--glow);
+  font-size:1rem;
+  margin-bottom:16px;
+  text-align:center;
+  letter-spacing:1px;
+}
+
+.timed-overlay-content{
+  color:var(--text);
+  font-size:.8rem;
+  line-height:1.8;
+  margin-bottom:20px;
+}
+
+.timed-overlay-content .highlight{
+  color:var(--success);
+  font-weight:700;
+}
+
+.timed-overlay-content .warning{
+  color:var(--glow2);
+  font-weight:700;
+}
+
+
+
+/* ================= READING INDICATOR ================= */
+
+.reading-guide-container{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-top:10px;
+}
+
+.reading-word{
+  display:block;
+  padding:6px 10px;
+  border-radius:6px;
+  color:var(--text);
+  font-size:.85rem;
+  line-height:1.6;
+  transition:all .3s ease;
+  animation:readingIndicator 8s ease-in-out infinite;
+  animation-delay:calc(var(--word-index) * 1.2s);
+  border-left:3px solid transparent;
+  background:rgba(255,255,255,.02);
+}
+
+.reading-word:hover{
+  background:rgba(34,197,94,.15);
+  border-left-color:var(--success);
+  transform:translateX(4px);
+  cursor:pointer;
+}
+
+@keyframes readingIndicator{
+  0%,100%{
+    background:rgba(255,255,255,.02);
+    border-left-color:transparent;
+    color:var(--text);
+    box-shadow:none;
+  }
+  20%,40%{
+    background:rgba(34,197,94,.2);
+    border-left-color:var(--success);
+    color:var(--success);
+    box-shadow:0 0 15px rgba(34,197,94,.3);
+  }
+  60%,80%{
+    background:rgba(0,240,255,.15);
+    border-left-color:var(--glow);
+    color:var(--glow);
+    box-shadow:0 0 12px rgba(0,240,255,.25);
+  }
+}
+
+.reading-word:hover{
+  animation-play-state:paused;
+  background:rgba(34,197,94,.25);
+  border-left-color:var(--success);
+  color:var(--success);
+}
+
+
+
+
+.reading-line{
+  display:block;
+  margin:4px 0;
+  padding:4px 8px;
+  border-radius:4px;
+  animation:readingHighlight 2s ease-in-out infinite;
+  animation-delay:calc(var(--line-index) * .3s);
+}
+
+@keyframes readingHighlight{
+  0%,100%{
+    background:transparent;
+    color:var(--text);
+  }
+  30%,70%{
+    background:rgba(34,197,94,.2);
+    color:var(--success);
+    box-shadow:0 0 10px rgba(34,197,94,.3);
+  }
+}
+
+.timed-overlay-buttons{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+}
+
+.timed-yes-btn{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--success),#15803d);
+  color:#fff;
+  font-family:'Orbitron',sans-serif;
+  font-size:.7rem;
+  cursor:pointer;
+}
+
+.timed-close-btn{
+  position:absolute;
+  top:12px;
+  right:12px;
+  padding:6px 12px;
+  border:none;
+  border-radius:8px;
+  background:rgba(255,255,255,.1);
+  color:var(--dim);
+  font-size:.65rem;
+  cursor:pointer;
 }
 
 /* ================= MOBILE ================= */
@@ -1627,6 +1321,18 @@ canvas{
   .header{
     flex-wrap:wrap;
   }
+  
+  .header-buttons{
+    width:100%;
+    justify-content:space-between;
+    margin-top:8px;
+  }
+  
+  .header-btn{
+    flex:1;
+    text-align:center;
+    margin:0 2px;
+  }
 }
 
 @media(max-width:600px){
@@ -1655,6 +1361,36 @@ canvas{
   .tabs{
     grid-template-columns:1fr 1fr;
   }
+  
+  .live-instruction{
+    font-size:.6rem;
+    padding:6px 12px;
+    top:8px;
+  }
+  
+  .copy-warning-card{
+    padding:18px;
+  }
+  
+  .copy-warning-title{
+    font-size:1rem;
+  }
+  
+  .copy-warning-text{
+    font-size:.8rem;
+  }
+  
+  .timed-overlay-card{
+    padding:16px;
+  }
+  
+  .timed-overlay-title{
+    font-size:.95rem;
+  }
+  
+  .timed-overlay-content{
+    font-size:.75rem;
+  }
 }
 
 </style>
@@ -1671,13 +1407,14 @@ canvas{
   <!-- HEADER -->
   <div class="header">
 
-    <h1>⚡ INFINITE NAMING ENGINE</h1>
+    <h1>⚡ INFINITE NAMING WORLD</h1>
 
     <div style="display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;justify-content:flex-end">
 
       <div class="header-buttons">
         <button class="header-btn info-btn" onclick="openInfo()">
           ℹ INFO
+          <span class="counter-badge" id="counterBadge"></span>
         </button>
 
         <button class="header-btn message-btn" onclick="messageUs()">
@@ -1687,10 +1424,14 @@ canvas{
         <button class="header-btn info-btn" onclick="openLiveViewer()">
           🌌 LIVE VIEW
         </button>
+        
+        <button class="header-btn info-btn" onclick="openWordsList()" style="background:rgba(34,197,94,.15);border-color:var(--success);color:var(--success)">
+          📋 ALL WORDS
+        </button>
       </div>
 
-      <div class="badge" id="status">
-        STANDBY
+      <div class="badge online" id="status">
+        Online
       </div>
 
     </div>
@@ -1916,13 +1657,25 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 <!-- INFO MODAL -->
 <div class="modal" id="infoModal">
 
-  <div class="modal-card">
+ <div class="modal-card">
 
     <div class="modal-title">
-      ⚡ Infinite Naming Engine Guide
+      ⚡ Infinite Naming World Guide
     </div>
 
     <div class="guide">
+
+      <div class="guide-item" style="border-color:var(--success);background:rgba(34,197,94,.08)">
+        <h3 style="color:var(--success)">⚠️ BRAND NAME CHECK - READ FIRST</h3>
+        <div class="reading-guide-container">
+          <span class="reading-word" style="--word-index:0">Important:</span>
+          <span class="reading-word" style="--word-index:1">Names like Facebook, TikTok, Google, and other brands are owned companies.</span>
+          <span class="reading-word" style="--word-index:2">Always verify if a generated name is already trademarked or owned</span>
+          <span class="reading-word" style="--word-index:3">before using it for your brand, domain, app, or product.</span>
+          <span class="reading-word" style="--word-index:4">Pick a unique, original name that is truly yours.</span>
+          <span class="reading-word" style="--word-index:5">Free keywords are available—choose wisely!</span>
+        </div>
+      </div>
 
       <div class="guide-item">
         <h3>1. Generate Unique Names</h3>
@@ -1969,7 +1722,7 @@ ARTIFICIAL INTELLIGENCE"></textarea>
     </div>
 
     <button class="close-btn" onclick="closeInfo()">
-      CLOSE GUIDE
+      COMPLETE
     </button>
 
   </div>
@@ -1996,12 +1749,61 @@ ARTIFICIAL INTELLIGENCE"></textarea>
   </div>
 </div>
 
+<!-- WORDS LIST MODAL -->
+<div class="words-list-modal" id="wordsListModal">
+  <div class="words-list-card">
+    <div class="words-list-title">
+      <span>📋 ALL GENERATED WORDS</span>
+      <button class="close-btn" style="width:auto;padding:8px 16px;margin:0" onclick="closeWordsList()">CLOSE</button>
+    </div>
+    <div class="words-list-container" id="wordsListContainer">
+      <div style="color:var(--dim);text-align:center;padding:20px">
+        Generate words first to see the list...
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COPY WARNING MODAL -->
+<div class="copy-warning-modal" id="copyWarningModal">
+  <div class="copy-warning-card">
+    <div class="copy-warning-title">⚠️ CHECK BRAND OWNERSHIP</div>
+    <div class="copy-warning-text">
+      Names like <strong>Facebook, TikTok, Google</strong> are owned brands. 
+      Always verify if your copied name is trademarked before using it for your business, domain, or product. 
+      Choose a <strong>unique, original name</strong> that is truly yours!
+    </div>
+    <button class="copy-warning-btn" onclick="closeCopyWarning()">GOT IT ✓</button>
+  </div>
+</div>
+
+<!-- TIMED BRAND OVERLAY -->
+<div class="timed-overlay" id="timedOverlay">
+  <div class="timed-overlay-card">
+    <button class="timed-close-btn" onclick="closeTimedOverlay()">✕</button>
+    <div class="timed-overlay-title">🆕 NEW NAMES AVAILABLE - BRAND CHECK</div>
+    <div class="timed-overlay-content">
+      <span class="reading-line" style="--line-index:0"><span class="highlight">Free keywords & names are available!</span> If you find one you like...</span>
+      <span class="reading-line" style="--line-index:1"><span class="warning">Check if the brand is already owned</span> like Facebook, Google, TikTok...</span>
+      <span class="reading-line" style="--line-index:2">If it has been owned, <span class="highlight">pick a unique name that is new</span>.</span>
+      <span class="reading-line" style="--line-index:3">Your identity deserves originality. ✦ Verify before you brand. ✦</span>
+    </div>
+    <div class="timed-overlay-buttons">
+      <button class="timed-yes-btn" onclick="closeTimedOverlay()">YES, I UNDERSTAND ✓</button>
+    </div>
+  </div>
+</div>
+
 <!-- LIVE VIEWER -->
 <div class="live-modal" id="liveModal">
 
   <button class="live-close" onclick="closeLiveViewer()">
     CLOSE
   </button>
+  
+  <div class="live-instruction">
+    👆 DOUBLE-CLICK ANY WORD TO COPY
+  </div>
 
   <div class="live-stream" id="liveStream"></div>
 
@@ -2042,6 +1844,11 @@ let recentShuffle = [];
 
 let lastTickerWord = '';
 
+let copyCounter = 0;
+
+let timedOverlayShown = false;
+let sessionStartTime = Date.now();
+
 /* ================= INIT ================= */
 
 document.addEventListener('DOMContentLoaded',()=>{
@@ -2061,6 +1868,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   initLiveSwipe();
 
   initTabsSwipe();
+  
+  initHeaderButtonsSwipe();
+  
+  startTimedOverlayCheck();
 
 });
 
@@ -2367,9 +2178,11 @@ function generate(){
   startShuffle();
 
   updateMobile();
+  
+  updateWordsList();
 
   document.getElementById('status').textContent =
-  'GENERATED';
+  'Online';
 
   log(`✓ Generated ${batch.length.toLocaleString()} words`);
 }
@@ -2409,6 +2222,8 @@ function renderWords(batch){
       mobileIndex =
       generated.indexOf(word);
       updateMobile();
+      incrementCopyCounter();
+      showCopyWarning();
     };
 
     frag.appendChild(div);
@@ -2450,6 +2265,24 @@ function updateStats(){
   generated.length.toLocaleString();
 }
 
+/* ================= COPY COUNTER ================= */
+
+function incrementCopyCounter(){
+  copyCounter++;
+  document.getElementById('counterBadge').textContent = copyCounter;
+}
+
+/* ================= COPY WARNING MODAL ================= */
+
+function showCopyWarning(){
+  const modal = document.getElementById('copyWarningModal');
+  modal.style.display = 'flex';
+}
+
+function closeCopyWarning(){
+  document.getElementById('copyWarningModal').style.display = 'none';
+}
+
 /* ================= TICKER ================= */
 
 function initTickerClick(){
@@ -2462,6 +2295,8 @@ function initTickerClick(){
       setTimeout(()=>{
         ticker.classList.remove('copied');
       }, 800);
+      incrementCopyCounter();
+      showCopyWarning();
     }
   };
 }
@@ -2512,6 +2347,8 @@ function initShuffleClick(){
       setTimeout(()=>{
         if(e.target.parentNode) e.target.remove();
       }, 300);
+      incrementCopyCounter();
+      showCopyWarning();
     }
   });
 }
@@ -2661,6 +2498,9 @@ function copyWord(){
   setTimeout(()=>{
     viewer.classList.remove('copied');
   }, 800);
+  
+  incrementCopyCounter();
+  showCopyWarning();
 }
 
 /* SWIPE */
@@ -2705,6 +2545,8 @@ mobile.onclick = ()=>{
     setTimeout(()=>{
       mobile.classList.remove('copied');
     }, 800);
+    incrementCopyCounter();
+    showCopyWarning();
   }
 };
 
@@ -2715,7 +2557,7 @@ function toggleCycle(){
   cycle = !cycle;
 
   document.getElementById('status').textContent =
-  cycle ? 'CYCLING ∞' : 'PAUSED';
+  cycle ? 'Online ∞' : 'Online';
 
   if(cycle){
 
@@ -2815,6 +2657,8 @@ function toggleCycle(){
       updateStats();
 
       updateMobile();
+      
+      updateWordsList();
 
       document.getElementById('progress').style.width =
       (Math.random()*100)+'%';
@@ -2995,6 +2839,54 @@ function closeMessageModal(){
   document.getElementById('messageModal').style.display = 'none';
 }
 
+/* ================= WORDS LIST MODAL ================= */
+
+function openWordsList(){
+  updateWordsList();
+  document.getElementById('wordsListModal').style.display = 'flex';
+}
+
+function closeWordsList(){
+  document.getElementById('wordsListModal').style.display = 'none';
+}
+
+function updateWordsList(){
+  const container = document.getElementById('wordsListContainer');
+  if(!generated.length){
+    container.innerHTML = '<div style="color:var(--dim);text-align:center;padding:20px">Generate words first to see the list...</div>';
+    return;
+  }
+  container.innerHTML = '';
+  generated.forEach((word, idx)=>{
+    const item = document.createElement('div');
+    item.className = 'word-list-item';
+    item.textContent = word;
+    
+    const icon = document.createElement('span');
+    icon.className = 'copy-icon';
+    icon.textContent = '📋';
+    item.appendChild(icon);
+    
+    item.onclick = (e)=>{
+      e.stopPropagation();
+      navigator.clipboard.writeText(word);
+      log(`📋 Copied ${word}`);
+      item.classList.add('copied');
+      icon.textContent = '✓';
+      setTimeout(()=>{
+        if(item.parentNode){
+          item.classList.remove('copied');
+          icon.textContent = '📋';
+        }
+      }, 800);
+      incrementCopyCounter();
+      showCopyWarning();
+    };
+    
+    container.appendChild(item);
+  });
+}
+
 /* ================= LIVE VIEWER ================= */
 
 function initLiveSwipe(){
@@ -3016,6 +2908,12 @@ function initLiveSwipe(){
   
   liveStream.addEventListener('click', (e)=>{
     if(e.target.classList.contains('stream-word')){
+      // Single click does nothing, double click copies
+    }
+  });
+  
+  liveStream.addEventListener('dblclick', (e)=>{
+    if(e.target.classList.contains('stream-word')){
       const word = e.target.textContent;
       navigator.clipboard.writeText(word);
       log(`📋 Copied ${word}`);
@@ -3024,6 +2922,8 @@ function initLiveSwipe(){
         if(e.target.parentNode) e.target.remove();
       }, 300);
       pauseLiveOnActivity();
+      incrementCopyCounter();
+      showCopyWarning();
     }
   });
 }
@@ -3082,19 +2982,19 @@ function startLiveMotion(){
 
     el.textContent = word;
 
-    const maxLeft = window.innerWidth - 100;
+    const maxLeft = Math.max(0, window.innerWidth - 120);
     el.style.left =
     Math.random()*maxLeft + 'px';
 
     el.style.top = '-50px';
 
     el.style.fontSize =
-    (.8 + Math.random()*2.4) + 'rem';
+    'clamp(.7rem, 2vw, 1.2rem)';
 
     el.style.animationDuration =
     (3 + Math.random()*4) + 's';
     
-    el.onclick = (e)=>{
+    el.ondblclick = (e)=>{
       e.stopPropagation();
       navigator.clipboard.writeText(word);
       log(`📋 Copied ${word}`);
@@ -3103,6 +3003,8 @@ function startLiveMotion(){
         if(el.parentNode) el.remove();
       }, 300);
       pauseLiveOnActivity();
+      incrementCopyCounter();
+      showCopyWarning();
     };
 
     stream.appendChild(el);
@@ -3144,6 +3046,55 @@ function initTabsSwipe(){
       }
     }
   });
+}
+
+/* ================= HEADER BUTTONS SWIPE ================= */
+
+function initHeaderButtonsSwipe(){
+  const headerBtns = document.querySelector('.header-buttons');
+  if(!headerBtns) return;
+  
+  let btnStartX = 0;
+  
+  headerBtns.addEventListener('touchstart', (e)=>{
+    btnStartX = e.changedTouches[0].screenX;
+  });
+  
+  headerBtns.addEventListener('touchend', (e)=>{
+    const btnEndX = e.changedTouches[0].screenX;
+    const diff = btnEndX - btnStartX;
+    
+    if(Math.abs(diff) > 30){
+      headerBtns.scrollBy({left: diff * -0.5, behavior: 'smooth'});
+    }
+  });
+}
+
+/* ================= TIMED OVERLAY ================= */
+
+function startTimedOverlayCheck(){
+  setInterval(()=>{
+    const elapsed = (Date.now() - sessionStartTime) / 1000;
+    if(elapsed >= 180 && !timedOverlayShown){
+      showTimedOverlay();
+      timedOverlayShown = true;
+    }
+  }, 5000);
+}
+
+function showTimedOverlay(){
+  const overlay = document.getElementById('timedOverlay');
+  overlay.style.display = 'flex';
+  
+  setTimeout(()=>{
+    if(overlay.style.display === 'flex'){
+      closeTimedOverlay();
+    }
+  }, 8000);
+}
+
+function closeTimedOverlay(){
+  document.getElementById('timedOverlay').style.display = 'none';
 }
 
 /* ================= LOG ================= */
