@@ -104,8 +104,6 @@ body{
   border-bottom:1px solid var(--border);
   background:linear-gradient(90deg, rgba(0,240,255,.05), transparent);
   flex-shrink:0;
-  gap:10px;
-  flex-wrap:wrap;
 }
 
 .header h1{
@@ -127,16 +125,20 @@ body{
   font-size:.6rem;
 }
 
+/* ================= HEADER BUTTONS ================= */
+
 .header-buttons{
   display:flex;
-  gap:8px;
+  gap:10px;
+  margin-left:auto;
+  margin-right:14px;
 }
 
 .header-btn{
   border:none;
   cursor:pointer;
-  padding:8px 12px;
   border-radius:10px;
+  padding:8px 14px;
   font-family:'Orbitron',sans-serif;
   font-size:.6rem;
   font-weight:700;
@@ -144,12 +146,12 @@ body{
 }
 
 .info-btn{
-  background:linear-gradient(135deg,var(--glow),#008ba5);
-  color:#000;
+  background:linear-gradient(135deg,var(--glow2),#7c3aed);
+  color:#fff;
 }
 
 .message-btn{
-  background:linear-gradient(135deg,var(--glow2),#7c3aed);
+  background:linear-gradient(135deg,var(--glow3),#ea580c);
   color:#fff;
 }
 
@@ -158,10 +160,10 @@ body{
 .tabs{
   display:flex;
   gap:8px;
-  overflow:auto;
   padding:10px;
   border-bottom:1px solid var(--border);
-  background:rgba(0,0,0,.2);
+  overflow:auto;
+  background:rgba(0,0,0,.18);
   flex-shrink:0;
 }
 
@@ -173,24 +175,25 @@ body{
   background:var(--glow);
 }
 
-.tab{
-  flex-shrink:0;
+.tab-btn{
+  min-width:130px;
   border:none;
   cursor:pointer;
-  padding:10px 14px;
   border-radius:10px;
-  background:rgba(255,255,255,.04);
-  color:var(--dim);
-  border:1px solid var(--border);
+  padding:10px;
   font-family:'Orbitron',sans-serif;
   font-size:.6rem;
-  font-weight:700;
   letter-spacing:1px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  color:var(--text);
+  transition:.2s;
 }
 
-.tab.active{
-  background:linear-gradient(135deg,var(--glow),var(--glow2));
+.tab-btn.active{
+  background:linear-gradient(135deg,var(--glow),#008ba5);
   color:#000;
+  border-color:var(--glow);
 }
 
 /* ================= TOP ================= */
@@ -427,7 +430,6 @@ textarea::placeholder{
   display:grid;
   grid-template-rows:1fr 340px;
   overflow:hidden;
-  min-height:0;
 }
 
 .panel{
@@ -435,7 +437,6 @@ textarea::placeholder{
   display:flex;
   flex-direction:column;
   overflow:hidden;
-  min-height:0;
 }
 
 .output{
@@ -446,7 +447,7 @@ textarea::placeholder{
   border-radius:12px;
   overflow:auto;
   padding:8px;
-  min-height:0;
+  min-height:300px;
 }
 
 /* ================= GENERATED WORDS ONLY ================= */
@@ -477,7 +478,7 @@ textarea::placeholder{
   border:1px solid var(--border);
   border-radius:12px;
   overflow:hidden;
-  min-height:300px;
+  min-height:280px;
 }
 
 canvas{
@@ -573,7 +574,7 @@ canvas{
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.8);
+  background:rgba(0,0,0,.72);
   display:none;
   justify-content:center;
   align-items:center;
@@ -585,7 +586,7 @@ canvas{
   width:min(700px,100%);
   max-height:90vh;
   overflow:auto;
-  background:#0f0f18;
+  background:var(--card);
   border:1px solid var(--border);
   border-radius:20px;
   padding:20px;
@@ -594,40 +595,39 @@ canvas{
 .modal-title{
   font-family:'Orbitron',sans-serif;
   font-size:1rem;
-  margin-bottom:20px;
   color:var(--glow);
+  margin-bottom:20px;
 }
 
 .guide-item{
-  margin-bottom:16px;
-  padding:12px;
-  background:rgba(255,255,255,.03);
+  margin-bottom:18px;
+  padding:14px;
   border-radius:12px;
-  border:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
 }
 
 .guide-item h3{
-  margin-bottom:6px;
+  margin-bottom:8px;
   color:var(--glow2);
-  font-size:.8rem;
 }
 
 .guide-item p{
+  font-size:.8rem;
   color:var(--text);
-  font-size:.72rem;
   line-height:1.6;
 }
 
 .close-btn{
   width:100%;
   padding:12px;
-  margin-top:20px;
   border:none;
   border-radius:12px;
   cursor:pointer;
-  background:linear-gradient(135deg,var(--glow3),#c2410c);
-  color:#fff;
   font-family:'Orbitron',sans-serif;
+  background:linear-gradient(135deg,var(--glow),#008ba5);
+  color:#000;
+  margin-top:20px;
 }
 
 /* ================= FOOTER ================= */
@@ -689,6 +689,11 @@ canvas{
   .output{
     max-height:260px;
   }
+
+  .header{
+    flex-wrap:wrap;
+    gap:10px;
+  }
 }
 
 @media(max-width:600px){
@@ -714,12 +719,8 @@ canvas{
     font-size:2.7rem;
   }
 
-  .header-buttons{
-    width:100%;
-  }
-
-  .header-btn{
-    flex:1;
+  .tabs{
+    flex-wrap:nowrap;
   }
 }
 
@@ -762,27 +763,27 @@ canvas{
   <!-- TABS -->
   <div class="tabs">
 
-    <button class="tab active" onclick="switchTab(0,this)">
+    <button class="tab-btn active" onclick="switchTab(1,this)">
       LOGIC 1
     </button>
 
-    <button class="tab" onclick="switchTab(1,this)">
+    <button class="tab-btn" onclick="switchTab(2,this)">
       LOGIC 2
     </button>
 
-    <button class="tab" onclick="switchTab(2,this)">
+    <button class="tab-btn" onclick="switchTab(3,this)">
       LOGIC 3
     </button>
 
-    <button class="tab" onclick="switchTab(3,this)">
+    <button class="tab-btn" onclick="switchTab(4,this)">
       LOGIC 4
     </button>
 
-    <button class="tab" onclick="switchTab(4,this)">
+    <button class="tab-btn" onclick="switchTab(5,this)">
       LOGIC 5
     </button>
 
-    <button class="tab" onclick="switchTab(5,this)">
+    <button class="tab-btn" onclick="switchTab(6,this)">
       LOGIC 6
     </button>
 
@@ -829,8 +830,7 @@ canvas{
 
         <textarea id="input"
         placeholder="Paste words here...
-ARTIFICIAL
-INTELLIGENCE"></textarea>
+ARTIFICIAL INTELLIGENCE"></textarea>
 
         <button class="paste-btn"
         onclick="pasteClipboard()">
@@ -846,7 +846,7 @@ INTELLIGENCE"></textarea>
 
       <button class="btn cycle"
       onclick="toggleCycle()">
-        ∞ INFINITE CYCLE
+        ∞ INFINITE MAKER
       </button>
 
       <div class="progress">
@@ -908,7 +908,7 @@ INTELLIGENCE"></textarea>
       <div class="panel">
 
         <div class="section-title">
-          🌀 SPIRAL OF TIME
+          🌀 INFINITE SPIRAL OF TIME
         </div>
 
         <div class="spiral-wrap">
@@ -1016,7 +1016,7 @@ INTELLIGENCE"></textarea>
       <div class="guide-item">
         <h3>4. Infinite Cycle</h3>
         <p>
-          Activate Infinite Cycle to continuously generate evolving
+          Activate Infinite Maker to continuously generate evolving
           naming combinations in real time.
         </p>
       </div>
@@ -1050,27 +1050,6 @@ INTELLIGENCE"></textarea>
 
 <script>
 
-/* ================= ITERATORS ================= */
-
-const ITERATORS = [
-"A","B","C","D","E","F","G","H","I","J","K","L","M",
-"N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-"ARTIFICIAL","INTELLIGENCE","CONTI"
-];
-
-/* ================= TAB STATES ================= */
-
-const tabStates = [
-{words:[],generated:[]},
-{words:[],generated:[]},
-{words:[],generated:[]},
-{words:[],generated:[]},
-{words:[],generated:[]},
-{words:[],generated:[]}
-];
-
-let activeTab = 0;
-
 /* ================= STATE ================= */
 
 let words = [];
@@ -1083,6 +1062,23 @@ let shuffleInterval = null;
 
 let mobileIndex = 0;
 let tickerIndex = 0;
+
+let currentTab = 1;
+
+const tabStates = {
+  1:[],
+  2:[],
+  3:[],
+  4:[],
+  5:[],
+  6:[]
+};
+
+const ITERATION_SET = [
+"A","B","C","D","E","F","G","H","I","J","K","L","M",
+"N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+"ARTIFICIAL","INTELLIGENCE","CONTI"
+];
 
 /* ================= INIT ================= */
 
@@ -1122,39 +1118,43 @@ function initBG(){
   }
 }
 
-/* ================= TAB SWITCH ================= */
+/* ================= TABS ================= */
 
-function switchTab(index,btn){
+function switchTab(tab,el){
 
-  saveCurrentTab();
+  currentTab = tab;
 
-  activeTab = index;
-
-  document.querySelectorAll('.tab').forEach(t=>{
-    t.classList.remove('active');
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.classList.remove('active');
   });
 
-  btn.classList.add('active');
+  el.classList.add('active');
 
-  loadTab(index);
+  generated = [...tabStates[currentTab]];
 
-  log(`⚡ Switched to Logic ${index + 1}`);
+  renderAll();
+
+  log(`⚡ Switched to Logic ${tab}`);
 }
 
-function saveCurrentTab(){
+function renderAll(){
 
-  tabStates[activeTab].words = [...words];
-  tabStates[activeTab].generated = [...generated];
-}
+  const output =
+  document.getElementById('output');
 
-function loadTab(index){
+  output.innerHTML = '';
 
-  words = [...tabStates[index].words];
-  generated = [...tabStates[index].generated];
+  if(!generated.length){
 
-  updateStored();
+    output.innerHTML =
+    `<div style="padding:20px;text-align:center;color:var(--dim)">
+      ✦ Enter words and generate ✦
+    </div>`;
 
-  renderFullOutput();
+  }else{
+
+    renderWords(generated,true);
+  }
 
   updateStats();
 
@@ -1165,15 +1165,14 @@ function loadTab(index){
   updateMobile();
 }
 
-/* ================= GENERATION LOGICS ================= */
+/* ================= GENERATORS ================= */
 
 function logicOne(word){
 
   const results = [];
-
   const w = word.toUpperCase();
 
-  ITERATORS.forEach(prefix=>{
+  ITERATION_SET.forEach(prefix=>{
 
     for(let i=w.length;i>=0;i--){
 
@@ -1185,135 +1184,133 @@ function logicOne(word){
     }
   });
 
-  return results;
+  return [...new Set(
+    results.sort((a,b)=>a.length-b.length)
+  )];
 }
 
 function logicTwo(word){
 
   const results = [];
-
   const w = word.toUpperCase();
 
   for(let i=0;i<w.length;i++){
 
-    const left = w.substring(i);
+    const left = w.substring(i+1);
     const right = w.substring(0,i+1);
 
     results.push(left + right);
   }
 
-  return results;
+  return [...new Set(results)];
 }
 
 function logicThree(word){
 
   const results = [];
+  const upper = word.toUpperCase();
 
-  const w = word.toUpperCase();
+  for(let i=0;i<upper.length;i++){
 
-  ITERATORS.forEach(prefix=>{
+    let next = '';
 
-    for(let i=w.length;i>=0;i--){
+    for(let j=0;j<upper.length;j++){
 
-      results.push(prefix + w.substring(i));
-      results.push(w.substring(i) + prefix);
+      const code =
+      upper.charCodeAt(j);
+
+      next +=
+      String.fromCharCode(code + 1);
     }
-  });
 
-  return results;
+    results.push(next);
+  }
+
+  return [...new Set(results)];
 }
 
 function logicFour(word){
 
   const results = [];
 
-  const w = word.toUpperCase();
+  const vowels = {
+    A:'E',
+    E:'I',
+    I:'O',
+    O:'U',
+    U:'A'
+  };
 
-  for(let i=0;i<w.length;i++){
+  const upper = word.toUpperCase();
 
-    results.push(
-      w.substring(i) +
-      w.substring(0,i)
-    );
+  for(let i=0;i<10;i++){
+
+    let newWord = '';
+
+    for(const ch of upper){
+
+      if(vowels[ch]){
+
+        newWord += vowels[ch];
+
+      }else{
+
+        newWord +=
+        String.fromCharCode(ch.charCodeAt(0)+1);
+      }
+    }
+
+    results.push(newWord);
   }
 
-  return results;
+  return [...new Set(results)];
 }
 
 function logicFive(word){
 
   const results = [];
 
-  const w = word.toUpperCase();
+  const upper = word.toUpperCase();
 
-  ITERATORS.forEach(prefix=>{
+  for(let i=0;i<upper.length;i++){
 
-    results.push(prefix + w);
-    results.push(w + prefix);
-  });
+    const a = upper.substring(i);
+    const b = upper.substring(0,i);
 
-  return results;
+    results.push(a+b);
+  }
+
+  return [...new Set(results)];
 }
 
 function logicSix(word){
 
   const results = [];
 
-  const w = word.toUpperCase();
+  const upper = word.toUpperCase();
 
-  for(let i=w.length;i>=0;i--){
+  const syllables = [];
 
-    results.push(w.substring(i));
+  for(let i=0;i<upper.length;i+=3){
+
+    syllables.push(
+      upper.substring(i,i+3)
+    );
   }
 
-  return results;
-}
+  for(let i=0;i<syllables.length;i++){
 
-/* ================= MAIN GENERATOR ================= */
+    const rotated =
+    syllables.slice(i)
+    .concat(syllables.slice(0,i));
 
-function makeWord(word){
-
-  switch(activeTab){
-
-    case 0:
-      return logicOne(word);
-
-    case 1:
-      return logicTwo(word);
-
-    case 2:
-      return logicThree(word);
-
-    case 3:
-      return logicFour(word);
-
-    case 4:
-      return logicFive(word);
-
-    case 5:
-      return logicSix(word);
-
-    default:
-      return logicOne(word);
+    results.push(rotated.join(''));
   }
+
+  return [...new Set(results)];
 }
 
-function uniqueAndSort(arr){
-
-  const unique = [...new Set(arr)];
-
-  unique.sort((a,b)=>{
-
-    if(a.length === b.length){
-
-      return a.localeCompare(b);
-    }
-
-    return a.length - b.length;
-  });
-
-  return unique;
-}
+/* ================= GENERATION ================= */
 
 function generate(){
 
@@ -1348,14 +1345,55 @@ function generate(){
 
   words.forEach(w=>{
 
-    batch = batch.concat(makeWord(w));
+    if(currentTab === 1){
+
+      batch =
+      batch.concat(logicOne(w));
+    }
+
+    if(currentTab === 2){
+
+      batch =
+      batch.concat(logicTwo(w));
+    }
+
+    if(currentTab === 3){
+
+      batch =
+      batch.concat(logicThree(w));
+    }
+
+    if(currentTab === 4){
+
+      batch =
+      batch.concat(logicFour(w));
+    }
+
+    if(currentTab === 5){
+
+      batch =
+      batch.concat(logicFive(w));
+    }
+
+    if(currentTab === 6){
+
+      batch =
+      batch.concat(logicSix(w));
+    }
+
   });
 
-  batch = uniqueAndSort(batch);
+  batch = [...new Set(batch)];
 
-  generated = uniqueAndSort(
-    generated.concat(batch)
-  );
+  batch.sort((a,b)=>a.length-b.length);
+
+  generated = [...generated,...batch];
+
+  generated = [...new Set(generated)];
+
+  generated.sort((a,b)=>a.length-b.length);
+
+  tabStates[currentTab] = [...generated];
 
   renderWords(batch);
 
@@ -1367,8 +1405,6 @@ function generate(){
 
   updateMobile();
 
-  saveCurrentTab();
-
   document.getElementById('status').textContent =
   'GENERATED';
 
@@ -1377,12 +1413,12 @@ function generate(){
 
 /* ================= OUTPUT ================= */
 
-function renderWords(batch){
+function renderWords(batch,replace=false){
 
   const output =
   document.getElementById('output');
 
-  if(output.children.length === 1){
+  if(output.children.length === 1 || replace){
 
     output.innerHTML = '';
   }
@@ -1420,27 +1456,6 @@ function renderWords(batch){
   output.scrollHeight;
 }
 
-function renderFullOutput(){
-
-  const output =
-  document.getElementById('output');
-
-  output.innerHTML = '';
-
-  if(!generated.length){
-
-    output.innerHTML = `
-      <div style="padding:20px;text-align:center;color:var(--dim)">
-        ✦ Enter words and generate ✦
-      </div>
-    `;
-
-    return;
-  }
-
-  renderWords(generated);
-}
-
 /* ================= STORED ================= */
 
 function updateStored(){
@@ -1449,17 +1464,6 @@ function updateStored(){
   document.getElementById('stored');
 
   box.innerHTML = '';
-
-  if(!words.length){
-
-    box.innerHTML = `
-      <span style="color:var(--dim);font-size:.7rem">
-        No words stored yet...
-      </span>
-    `;
-
-    return;
-  }
 
   words.forEach(w=>{
 
@@ -1492,6 +1496,8 @@ function startTicker(){
 
   const ticker =
   document.getElementById('ticker');
+
+  generated.sort((a,b)=>a.length-b.length);
 
   ticker.textContent = generated[0];
 
@@ -1671,25 +1677,69 @@ function toggleCycle(){
         Math.floor(Math.random()*words.length)
       ];
 
-      const set =
-      makeWord(word);
+      let result = '';
 
-      const result =
-      set[
-        Math.floor(Math.random()*set.length)
-      ];
+      if(currentTab === 1){
+
+        const batch = logicOne(word);
+
+        result =
+        batch[Math.floor(Math.random()*batch.length)];
+      }
+
+      if(currentTab === 2){
+
+        const batch = logicTwo(word);
+
+        result =
+        batch[Math.floor(Math.random()*batch.length)];
+      }
+
+      if(currentTab === 3){
+
+        const batch = logicThree(word);
+
+        result =
+        batch[Math.floor(Math.random()*batch.length)];
+      }
+
+      if(currentTab === 4){
+
+        const batch = logicFour(word);
+
+        result =
+        batch[Math.floor(Math.random()*batch.length)];
+      }
+
+      if(currentTab === 5){
+
+        const batch = logicFive(word);
+
+        result =
+        batch[Math.floor(Math.random()*batch.length)];
+      }
+
+      if(currentTab === 6){
+
+        const batch = logicSix(word);
+
+        result =
+        batch[Math.floor(Math.random()*batch.length)];
+      }
 
       if(!generated.includes(result)){
 
         generated.push(result);
 
-        generated = uniqueAndSort(generated);
+        generated.sort((a,b)=>a.length-b.length);
 
-        renderFullOutput();
+        renderWords([result]);
 
         updateStats();
 
         updateMobile();
+
+        tabStates[currentTab] = [...generated];
       }
 
       document.getElementById('progress').style.width =
@@ -1697,7 +1747,7 @@ function toggleCycle(){
 
     },180);
 
-    log('⚡ Infinite cycle active');
+    log('⚡ Infinite maker active');
 
   }else{
 
@@ -1743,7 +1793,7 @@ function appendFile(){
 
   saveFile();
 
-  log('✓ Append mode prepared');
+  log('✓ Append mode ready');
 }
 
 /* ================= CLIPBOARD ================= */
@@ -1764,26 +1814,6 @@ async function pasteClipboard(){
 
     log('⚠ Clipboard blocked');
   }
-}
-
-/* ================= INFO ================= */
-
-function openInfo(){
-
-  document.getElementById('infoModal').style.display =
-  'flex';
-}
-
-function closeInfo(){
-
-  document.getElementById('infoModal').style.display =
-  'none';
-}
-
-function messageUs(){
-
-  window.location.href =
-  'mailto:contact@example.com?subject=Infinite Naming Engine';
 }
 
 /* ================= SPIRAL ================= */
@@ -1863,6 +1893,26 @@ function drawSpiral(){
   angle += .004;
 
   requestAnimationFrame(drawSpiral);
+}
+
+/* ================= MODAL ================= */
+
+function openInfo(){
+
+  document.getElementById('infoModal').style.display =
+  'flex';
+}
+
+function closeInfo(){
+
+  document.getElementById('infoModal').style.display =
+  'none';
+}
+
+function messageUs(){
+
+  window.location.href =
+  'mailto:contact@infiniteloop.com';
 }
 
 /* ================= LOG ================= */
