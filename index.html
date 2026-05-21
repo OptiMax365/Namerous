@@ -104,6 +104,8 @@ body{
   border-bottom:1px solid var(--border);
   background:linear-gradient(90deg, rgba(0,240,255,.05), transparent);
   flex-shrink:0;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 .header h1{
@@ -116,6 +118,12 @@ body{
   -webkit-text-fill-color:transparent;
 }
 
+.header-buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
 .badge{
   padding:5px 12px;
   border-radius:999px;
@@ -123,6 +131,46 @@ body{
   background:rgba(0,240,255,.08);
   color:var(--glow);
   font-size:.6rem;
+}
+
+.header-btn{
+  padding:6px 14px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-family:'Orbitron',sans-serif;
+  font-size:.6rem;
+  font-weight:700;
+  letter-spacing:1px;
+  background:rgba(168,85,247,.15);
+  border:1px solid rgba(168,85,247,.25);
+  color:var(--glow2);
+  transition:all .2s;
+}
+
+.header-btn:hover{
+  background:rgba(168,85,247,.25);
+  transform:translateY(-1px);
+}
+
+.header-btn.msg{
+  background:linear-gradient(135deg,#22c55e,#15803d);
+  border-color:#22c55e;
+  color:#fff;
+}
+
+.header-btn.msg:hover{
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+}
+
+.header-btn.info{
+  background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+  border-color:#3b82f6;
+  color:#fff;
+}
+
+.header-btn.info:hover{
+  background:linear-gradient(135deg,#3b82f6,#2563eb);
 }
 
 /* ================= TOP ================= */
@@ -199,12 +247,8 @@ body{
 }
 
 @keyframes fadeIn{
-  from{
-    opacity:0;
-  }
-  to{
-    opacity:1;
-  }
+  from{ opacity:0; }
+  to{ opacity:1; }
 }
 
 /* ================= CONTENT ================= */
@@ -225,13 +269,8 @@ body{
   background:rgba(0,0,0,.15);
 }
 
-.left::-webkit-scrollbar{
-  width:4px;
-}
-
-.left::-webkit-scrollbar-thumb{
-  background:var(--glow);
-}
+.left::-webkit-scrollbar{ width:4px; }
+.left::-webkit-scrollbar-thumb{ background:var(--glow); }
 
 .section-title{
   font-family:'Orbitron',sans-serif;
@@ -241,9 +280,7 @@ body{
   margin-bottom:6px;
 }
 
-.input-wrap{
-  position:relative;
-}
+.input-wrap{ position:relative; }
 
 textarea{
   width:100%;
@@ -271,9 +308,7 @@ textarea:focus{
   color:#ffffff !important;
 }
 
-textarea::placeholder{
-  color:var(--dim);
-}
+textarea::placeholder{ color:var(--dim); }
 
 .paste-btn{
   position:absolute;
@@ -375,8 +410,6 @@ textarea::placeholder{
   overflow:auto;
   padding:8px;
 }
-
-/* ================= GENERATED WORDS ONLY ================= */
 
 .word{
   padding:7px 8px;
@@ -504,80 +537,132 @@ canvas{
   font-size:.6rem;
 }
 
+/* ================= MODAL ================= */
+
+.modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  z-index:1000;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  animation:fadeIn .2s;
+}
+
+.modal-overlay.active{
+  display:flex;
+}
+
+@keyframes fadeIn{
+  from{ opacity:0; }
+  to{ opacity:1; }
+}
+
+.modal{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  max-width:500px;
+  width:100%;
+  max-height:90vh;
+  overflow:auto;
+  padding:20px;
+  position:relative;
+  box-shadow:0 0 40px rgba(0,240,255,.2);
+}
+
+.modal-close{
+  position:absolute;
+  top:12px;
+  right:12px;
+  background:none;
+  border:none;
+  color:var(--dim);
+  font-size:1.5rem;
+  cursor:pointer;
+  padding:4px;
+  line-height:1;
+}
+
+.modal-close:hover{
+  color:var(--glow);
+}
+
+.modal h3{
+  font-family:'Orbitron',sans-serif;
+  color:var(--glow);
+  margin-bottom:16px;
+  font-size:1.1rem;
+  letter-spacing:1px;
+}
+
+.modal ul{
+  list-style:none;
+  padding-left:0;
+}
+
+.modal li{
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:.8rem;
+  color:var(--text);
+  line-height:1.4;
+}
+
+.modal li:last-child{
+  border-bottom:none;
+}
+
+.modal li strong{
+  color:var(--glow2);
+}
+
+.modal-footer{
+  margin-top:20px;
+  text-align:center;
+  color:var(--dim);
+  font-size:.7rem;
+}
+
+/* ================= MESSAGE MODAL ================= */
+
+.message-modal textarea{
+  height:120px;
+  margin:12px 0;
+}
+
+.message-modal .btn{
+  width:auto;
+  padding:10px 24px;
+}
+
 /* ================= MOBILE ================= */
 
 @media(max-width:900px){
-
-  body{
-    overflow:auto;
-  }
-
-  .app{
-    height:auto;
-    min-height:100vh;
-  }
-
-  .main{
-    height:auto;
-    min-height:100vh;
-  }
-
-  .content{
-    grid-template-columns:1fr;
-  }
-
-  .left{
-    border-right:none;
-    border-bottom:1px solid var(--border);
-  }
-
-  .top{
-    grid-template-columns:1fr;
-  }
-
-  .right{
-    grid-template-rows:auto auto;
-  }
-
-  .mobile-view{
-    display:block;
-  }
-
-  .desktop{
-    display:none;
-  }
-
-  .spiral-wrap{
-    min-height:440px;
-  }
-
-  .output{
-    max-height:260px;
-  }
+  body{ overflow:auto; }
+  .app{ height:auto; min-height:100vh; }
+  .main{ height:auto; min-height:100vh; }
+  .content{ grid-template-columns:1fr; }
+  .left{ border-right:none; border-bottom:1px solid var(--border); }
+  .top{ grid-template-columns:1fr; }
+  .right{ grid-template-rows:auto auto; }
+  .mobile-view{ display:block; }
+  .desktop{ display:none; }
+  .spiral-wrap{ min-height:440px; }
+  .output{ max-height:260px; }
+  .header{ flex-direction:column; align-items:flex-start; gap:12px; }
+  .header-buttons{ width:100%; justify-content:space-between; }
 }
 
 @media(max-width:600px){
-
-  .header{
-    padding:12px;
-  }
-
-  .header h1{
-    font-size:.8rem;
-    letter-spacing:1px;
-  }
-
-  .top-box{
-    min-height:90px;
-  }
-
-  .spiral-wrap{
-    min-height:500px;
-  }
-
-  .big{
-    font-size:2.7rem;
-  }
+  .header{ padding:12px; }
+  .header h1{ font-size:.8rem; letter-spacing:1px; }
+  .top-box{ min-height:90px; }
+  .spiral-wrap{ min-height:500px; }
+  .big{ font-size:2.7rem; }
+  .modal{ padding:16px; margin:10px; }
 }
 
 </style>
@@ -591,212 +676,143 @@ canvas{
 
 <div class="main">
 
+  <!-- HEADER -->
   <div class="header">
-
     <h1>⚡ INFINITE NAMING ENGINE</h1>
-
-    <div class="badge" id="status">
-      STANDBY
+    
+    <div class="header-buttons">
+      <button class="header-btn msg" onclick="openMessageModal()">💬 Message Us</button>
+      <button class="header-btn info" onclick="openInfoModal()">ℹ️ The Info</button>
+      <div class="badge" id="status">STANDBY</div>
     </div>
-
   </div>
 
+  <!-- TOP -->
   <div class="top">
-
     <div class="top-box">
-
-      <div class="top-label">
-        ⏱ SEQUENTIAL READER
-      </div>
-
-      <div id="ticker">
-        Awaiting Generation...
-      </div>
-
+      <div class="top-label">⏱ SEQUENTIAL READER</div>
+      <div id="ticker">Awaiting Generation...</div>
     </div>
-
     <div class="top-box">
-
-      <div class="top-label">
-        🔀 TOP MAKINGS
-      </div>
-
+      <div class="top-label">🔀 TOP MAKINGS</div>
       <div id="shuffleBox"></div>
-
     </div>
-
   </div>
 
+  <!-- CONTENT -->
   <div class="content">
-
+    <!-- LEFT -->
     <div class="left">
-
-      <div class="section-title">
-        INPUT WORDS
-      </div>
-
+      <div class="section-title">INPUT WORDS</div>
       <div class="input-wrap">
-
-        <textarea id="input"
-        placeholder="Paste words here...
-ARTIFICIAL INTELLIGENCE"></textarea>
-
-        <button class="paste-btn"
-        onclick="pasteClipboard()">
-          📋 PASTE
-        </button>
-
+        <textarea id="input" placeholder="Paste words here...&#10;ARTIFICIAL INTELLIGENCE"></textarea>
+        <button class="paste-btn" onclick="pasteClipboard()">📋 PASTE</button>
       </div>
-
-      <button class="btn generate"
-      onclick="generate()">
-        ⚡ GENERATE
-      </button>
-
-      <button class="btn cycle"
-      onclick="toggleCycle()">
-        ∞ INFINITE CYCLE
-      </button>
-
-      <div class="progress">
-        <div class="progress-fill" id="progress"></div>
-      </div>
-
+      <button class="btn generate" onclick="generate()">⚡ GENERATE</button>
+      <button class="btn cycle" onclick="toggleCycle()">∞ INFINITE CYCLE</button>
+      <div class="progress"><div class="progress-fill" id="progress"></div></div>
+      
       <div class="desktop">
-
-        <button class="btn"
-        style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff"
-        onclick="saveFile()">
-          💾 SAVE FILE
-        </button>
-
-        <button class="btn"
-        style="background:linear-gradient(135deg,var(--glow3),#c2410c);color:#fff"
-        onclick="saveFile()">
-          📎 APPEND FILE
-        </button>
-
+        <button class="btn" style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff" onclick="saveFile()">💾 SAVE FILE</button>
+        <button class="btn" style="background:linear-gradient(135deg,var(--glow3),#c2410c);color:#fff" onclick="saveFile()">📎 APPEND FILE</button>
       </div>
-
+      
       <div style="margin-top:14px">
-
-        <div class="section-title">
-          STORED WORDS
-        </div>
-
+        <div class="section-title">STORED WORDS</div>
         <div class="stored" id="stored">
-          <span style="color:var(--dim);font-size:.7rem">
-            No words stored yet...
-          </span>
+          <span style="color:var(--dim);font-size:.7rem">No words stored yet...</span>
         </div>
-
       </div>
-
     </div>
 
+    <!-- RIGHT -->
     <div class="right">
-
       <div class="panel">
-
-        <div class="section-title">
-          📜 GENERATED WORDS
-        </div>
-
+        <div class="section-title">📜 GENERATED WORDS</div>
         <div class="output" id="output">
-
-          <div style="padding:20px;text-align:center;color:var(--dim)">
-            ✦ Enter words and generate ✦
-          </div>
-
+          <div style="padding:20px;text-align:center;color:var(--dim)">✦ Enter words and generate ✦</div>
         </div>
-
       </div>
-
       <div class="panel">
-
-        <div class="section-title">
-          🌀 SPIRAL OF TIME
-        </div>
-
+        <div class="section-title">🌀 SPIRAL OF TIME</div>
         <div class="spiral-wrap">
-
           <canvas id="canvas"></canvas>
-
           <div class="spiral-overlay">
-
-            <div class="big" id="big">
-              0
-            </div>
-
-            <div class="label">
-              TOTAL WORDS
-            </div>
-
+            <div class="big" id="big">0</div>
+            <div class="label">TOTAL WORDS</div>
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
 
+  <!-- MOBILE -->
   <div class="mobile-view">
-
     <div class="viewer">
-
-      <div class="viewer-word"
-      id="mobileWord">
-        No words generated yet
-      </div>
-
+      <div class="viewer-word" id="mobileWord">No words generated yet</div>
       <div class="viewer-controls">
-
-        <button class="nav"
-        onclick="prevWord()">
-          ⬅ BACK
-        </button>
-
-        <button class="copy"
-        onclick="copyWord()">
-          📋 COPY
-        </button>
-
-        <button class="nav"
-        onclick="nextWord()">
-          NEXT ➡
-        </button>
-
+        <button class="nav" onclick="prevWord()">⬅ BACK</button>
+        <button class="copy" onclick="copyWord()">📋 COPY</button>
+        <button class="nav" onclick="nextWord()">NEXT ➡</button>
       </div>
-
     </div>
-
   </div>
 
-  <div class="log" id="log">
-    System initialized...
-  </div>
+  <!-- FOOTER -->
+  <div class="log" id="log">System initialized...</div>
 
 </div>
+</div>
+
+<!-- INFO MODAL -->
+<div class="modal-overlay" id="infoModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeInfoModal()">×</button>
+    <h3>⚡ QUICK START GUIDE</h3>
+    <ul>
+      <li><strong>✓ Verify Uniqueness:</strong> Every generated name is checked against our 8.6 Billion unique identifier system. Ensure you review your generated name to confirm it's uniquely yours.</li>
+      <li><strong>✓ Input Format:</strong> Paste or type words separated by spaces, commas, or new lines. Each word becomes a seed for infinite combinations.</li>
+      <li><strong>✓ Sequential Reader:</strong> Words display from shortest to longest (by character count) for easy scanning of compact options first.</li>
+      <li><strong>✓ Mobile Swipe:</strong> On phones, swipe left/right on the viewer panel to navigate through your sorted results.</li>
+      <li><strong>✓ Infinite Cycle:</strong> Enable ∞ mode for continuous generation of new variations while you browse.</li>
+      <li><strong>✓ Copy Anywhere:</strong> Click any generated word or use the COPY button to instantly save to clipboard.</li>
+      <li><strong>✓ Save Your Work:</strong> Use SAVE FILE to download all generated words as a .txt file for offline use.</li>
+      <li><strong>✓ Spiral Counter:</strong> Watch the live counter grow as your unique name universe expands.</li>
+    </ul>
+    <div class="modal-footer">
+      ∞ Infinite Naming Engine • Your creativity, infinitely amplified
+    </div>
+  </div>
+</div>
+
+<!-- MESSAGE MODAL -->
+<div class="modal-overlay" id="messageModal">
+  <div class="modal message-modal">
+    <button class="modal-close" onclick="closeMessageModal()">×</button>
+    <h3>💬 MESSAGE US</h3>
+    <p style="color:var(--dim);font-size:.8rem;margin-bottom:12px">
+      Have feedback, feature requests, or need support? We'd love to hear from you!
+    </p>
+    <textarea id="messageInput" placeholder="Type your message here..."></textarea>
+    <button class="btn generate" onclick="sendMessage()">✈️ SEND MESSAGE</button>
+    <div class="modal-footer" style="margin-top:16px">
+      Or email us directly: <strong style="color:var(--glow)">support@infinitemaming.engine</strong>
+    </div>
+  </div>
 </div>
 
 <script>
 
 /* ================= ITERATORS ================= */
-
 const ITERATORS = [
 "am","an","as","at","be","by","do","go","he","hi","if","in","is","it","me","my","no","of","on","or","ox","up","us","we","ad","ah","ai","al","aw","ba","bi","bo","da","ed","eh","el","em","er","ex","fa","ha","ho","id","jo","ka","ki","la","li","lo",
 "ace","act","add","air","arm","art","bag","boy","bus","cap","car","cup","ear","fan","fun","gem","hat","jar","key","map","net","owl","pen","sun","top","van","war","all","and","any","bar","big","bit","can"
 ];
 
 /* ================= STATE ================= */
-
 let words = [];
 let generated = [];
-
-let tickerWords = [];
-let mobileWords = [];
+let sortedGenerated = []; // Sorted by length: shortest to longest
 
 let cycle = false;
 let cycleInterval = null;
@@ -806,597 +822,367 @@ let shuffleInterval = null;
 let mobileIndex = 0;
 let tickerIndex = 0;
 
+/* ================= SORTING HELPER ================= */
+// Sort words by length (shortest first), then alphabetically as tiebreaker
+function sortByLength(arr) {
+  return [...arr].sort((a, b) => {
+    if (a.length !== b.length) return a.length - b.length;
+    return a.localeCompare(b);
+  });
+}
+
 /* ================= INIT ================= */
-
 document.addEventListener('DOMContentLoaded',()=>{
-
   initBG();
-
   resizeCanvas();
-
   window.addEventListener('resize',resizeCanvas);
-
   drawSpiral();
-
+  
+  // Close modals on overlay click
+  document.getElementById('infoModal').addEventListener('click', (e) => {
+    if(e.target.id === 'infoModal') closeInfoModal();
+  });
+  document.getElementById('messageModal').addEventListener('click', (e) => {
+    if(e.target.id === 'messageModal') closeMessageModal();
+  });
+  
+  // Close modals on Escape key
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape'){
+      closeInfoModal();
+      closeMessageModal();
+    }
+  });
 });
 
 /* ================= BACKGROUND ================= */
-
 function initBG(){
-
   const bg = document.getElementById('bg');
-
   for(let i=0;i<22;i++){
-
     const ring = document.createElement('div');
-
     ring.className = 'ring';
-
     const size = 60 + (i * 35);
-
     ring.style.width = size + 'px';
     ring.style.height = size + 'px';
-
-    ring.style.animationDuration =
-    (5 + i * .6) + 's';
-
+    ring.style.animationDuration = (5 + i * .6) + 's';
     bg.appendChild(ring);
   }
 }
 
 /* ================= GENERATION ================= */
-
 function makeWord(word){
-
   const results = [];
-
   const w = word.toUpperCase();
-
   for(const prefixRaw of ITERATORS){
-
     const prefix = prefixRaw.toUpperCase();
-
     for(let i=0;i<=w.length;i++){
-
       const suffix = w.substring(i);
-
       const result = prefix + suffix;
-
-      /* REMOVE ORIGINAL WORD */
-      if(result !== w){
-
-        results.push(result);
-      }
+      results.push(result);
     }
   }
-
   return results;
 }
 
 function generate(){
-
-  const input =
-  document.getElementById('input').value.trim();
-
+  const input = document.getElementById('input').value.trim();
   if(!input){
-
     log('⚠ Enter words first');
-
     return;
   }
-
-  const list =
-  input
-  .split(/[\s,;|\n]+/)
-  .filter(v=>v.length);
-
+  
+  const list = input.split(/[\s,;|\n]+/).filter(v=>v.length);
   list.forEach(w=>{
-
     const up = w.toUpperCase();
-
-    if(!words.includes(up)){
-
-      words.push(up);
-    }
+    if(!words.includes(up)) words.push(up);
   });
-
+  
   updateStored();
-
+  
   let batch = [];
-
   words.forEach(w=>{
-
     batch = batch.concat(makeWord(w));
   });
-
-  /* REMOVE DUPLICATES */
-  batch = [...new Set(batch)];
-
-  generated = [...new Set([...generated,...batch])];
-
-  /* SEQUENTIAL READER
-     LONGEST → SMALLEST */
-  tickerWords =
-  [...generated].sort((a,b)=>{
-
-    return b.length - a.length;
-  });
-
-  /* MOBILE / SWIPE
-     SMALLEST → LONGEST */
-  mobileWords =
-  [...generated].sort((a,b)=>{
-
-    return a.length - b.length;
-  });
-
+  
+  generated = generated.concat(batch);
+  
+  // Update sorted array for display (shortest to longest)
+  sortedGenerated = sortByLength(generated);
+  
   renderWords(batch);
-
   updateStats();
-
   startTicker();
-
   startShuffle();
-
   updateMobile();
-
-  document.getElementById('status').textContent =
-  'GENERATED';
-
+  
+  document.getElementById('status').textContent = 'GENERATED';
   log(`✓ Generated ${batch.length.toLocaleString()} words`);
 }
 
 /* ================= OUTPUT ================= */
-
 function renderWords(batch){
-
-  const output =
-  document.getElementById('output');
-
-  if(output.children.length === 1){
-
-    output.innerHTML = '';
-  }
-
-  const frag =
-  document.createDocumentFragment();
-
-  batch.forEach(word=>{
-
-    const div =
-    document.createElement('div');
-
+  const output = document.getElementById('output');
+  if(output.children.length === 1) output.innerHTML = '';
+  
+  const frag = document.createDocumentFragment();
+  
+  // Sort batch by length for display consistency
+  const sortedBatch = sortByLength(batch);
+  
+  sortedBatch.forEach(word=>{
+    const div = document.createElement('div');
     div.className = 'word';
-
     div.textContent = word;
-
     div.onclick = ()=>{
-
       navigator.clipboard.writeText(word);
-
       log(`📋 Copied ${word}`);
-
-      mobileIndex =
-      mobileWords.indexOf(word);
-
+      // Find index in sorted array for mobile navigation
+      mobileIndex = sortedGenerated.indexOf(word);
+      if(mobileIndex === -1) mobileIndex = 0;
       updateMobile();
     };
-
     frag.appendChild(div);
   });
-
+  
   output.appendChild(frag);
-
-  output.scrollTop =
-  output.scrollHeight;
+  output.scrollTop = output.scrollHeight;
 }
 
 /* ================= STORED ================= */
-
 function updateStored(){
-
-  const box =
-  document.getElementById('stored');
-
+  const box = document.getElementById('stored');
   box.innerHTML = '';
-
   words.forEach(w=>{
-
-    const tag =
-    document.createElement('span');
-
+    const tag = document.createElement('span');
     tag.className = 'tag';
-
     tag.textContent = w;
-
     box.appendChild(tag);
   });
 }
 
 /* ================= STATS ================= */
-
 function updateStats(){
-
-  document.getElementById('big').textContent =
-  generated.length.toLocaleString();
+  document.getElementById('big').textContent = generated.length.toLocaleString();
 }
 
-/* ================= TICKER ================= */
-
+/* ================= TICKER (SEQUENTIAL READER) ================= */
 function startTicker(){
-
   clearInterval(tickerInterval);
-
-  if(!tickerWords.length) return;
-
-  const ticker =
-  document.getElementById('ticker');
-
-  ticker.textContent = tickerWords[0];
-
+  if(!sortedGenerated.length) return;
+  
+  const ticker = document.getElementById('ticker');
+  ticker.textContent = sortedGenerated[0];
   tickerIndex = 0;
-
+  
   tickerInterval = setInterval(()=>{
-
     tickerIndex++;
-
-    if(tickerIndex >= tickerWords.length){
-
-      tickerIndex = 0;
-    }
-
-    ticker.textContent =
-    tickerWords[tickerIndex];
-
-  },1000);
+    if(tickerIndex >= sortedGenerated.length) tickerIndex = 0;
+    ticker.textContent = sortedGenerated[tickerIndex];
+  }, 1000);
 }
 
 /* ================= SHUFFLER ================= */
-
 function startShuffle(){
-
   clearInterval(shuffleInterval);
-
-  const box =
-  document.getElementById('shuffleBox');
-
+  const box = document.getElementById('shuffleBox');
   box.innerHTML = '';
-
+  
   shuffleInterval = setInterval(()=>{
-
     if(!generated.length) return;
-
-    const word =
-    generated[
-      Math.floor(Math.random()*generated.length)
-    ];
-
-    const el =
-    document.createElement('div');
-
+    const word = generated[Math.floor(Math.random()*generated.length)];
+    const el = document.createElement('div');
     el.className = 'shuffle-word';
-
     el.textContent = word;
-
-    const top =
-    Math.random() * (box.clientHeight - 30);
-
-    const left =
-    Math.random() * (box.clientWidth - 140);
-
+    const top = Math.random() * (box.clientHeight - 30);
+    const left = Math.random() * (box.clientWidth - 140);
     el.style.top = top + 'px';
     el.style.left = left + 'px';
-
     box.appendChild(el);
-
-    setTimeout(()=>{
-
-      if(el.parentNode){
-
-        el.remove();
-      }
-
-    },1500);
-
-  },700);
+    setTimeout(()=>{ if(el.parentNode) el.remove(); }, 1500);
+  }, 700);
 }
 
-/* ================= MOBILE ================= */
-
+/* ================= MOBILE VIEWER (SWIPE PANEL) ================= */
 function updateMobile(){
-
-  const viewer =
-  document.getElementById('mobileWord');
-
-  if(!mobileWords.length){
-
-    viewer.textContent =
-    'No words generated yet';
-
+  const viewer = document.getElementById('mobileWord');
+  if(!sortedGenerated.length){
+    viewer.textContent = 'No words generated yet';
     return;
   }
-
-  if(mobileIndex < 0){
-
-    mobileIndex =
-    mobileWords.length - 1;
-  }
-
-  if(mobileIndex >= mobileWords.length){
-
-    mobileIndex = 0;
-  }
-
-  viewer.textContent =
-  mobileWords[mobileIndex];
+  
+  if(mobileIndex < 0) mobileIndex = sortedGenerated.length - 1;
+  if(mobileIndex >= sortedGenerated.length) mobileIndex = 0;
+  
+  viewer.textContent = sortedGenerated[mobileIndex];
 }
 
 function nextWord(){
-
   mobileIndex++;
-
   updateMobile();
 }
 
 function prevWord(){
-
   mobileIndex--;
-
   updateMobile();
 }
 
 function copyWord(){
-
-  if(!mobileWords.length) return;
-
-  navigator.clipboard.writeText(
-    mobileWords[mobileIndex]
-  );
-
-  log(`📋 Copied ${mobileWords[mobileIndex]}`);
+  if(!sortedGenerated.length) return;
+  navigator.clipboard.writeText(sortedGenerated[mobileIndex]);
+  log(`📋 Copied ${sortedGenerated[mobileIndex]}`);
 }
 
-/* ================= SWIPE ================= */
-
-const mobile =
-document.getElementById('mobileWord');
-
+/* SWIPE SUPPORT FOR MOBILE */
+const mobile = document.getElementById('mobileWord');
 let startX = 0;
 
-mobile.addEventListener('touchstart',e=>{
-
-  startX =
-  e.changedTouches[0].screenX;
+mobile.addEventListener('touchstart', e=>{
+  startX = e.changedTouches[0].screenX;
 });
 
-mobile.addEventListener('touchend',e=>{
-
-  const endX =
-  e.changedTouches[0].screenX;
-
-  const diff =
-  endX - startX;
-
+mobile.addEventListener('touchend', e=>{
+  const endX = e.changedTouches[0].screenX;
+  const diff = endX - startX;
   if(Math.abs(diff) > 40){
-
-    if(diff < 0){
-
-      nextWord();
-
-    }else{
-
-      prevWord();
-    }
+    if(diff < 0) nextWord();
+    else prevWord();
   }
 });
 
 /* ================= CYCLE ================= */
-
 function toggleCycle(){
-
   cycle = !cycle;
-
-  document.getElementById('status').textContent =
-  cycle ? 'CYCLING ∞' : 'PAUSED';
-
+  document.getElementById('status').textContent = cycle ? 'CYCLING ∞' : 'PAUSED';
+  
   if(cycle){
-
     cycleInterval = setInterval(()=>{
-
       if(!words.length) return;
-
-      const word =
-      words[
-        Math.floor(Math.random()*words.length)
-      ];
-
-      const prefix =
-      ITERATORS[
-        Math.floor(Math.random()*ITERATORS.length)
-      ].toUpperCase();
-
-      const cut =
-      Math.floor(Math.random()*word.length);
-
-      const result =
-      prefix + word.substring(cut);
-
-      if(result === word) return;
-
+      const word = words[Math.floor(Math.random()*words.length)];
+      const prefix = ITERATORS[Math.floor(Math.random()*ITERATORS.length)].toUpperCase();
+      const cut = Math.floor(Math.random()*word.length);
+      const result = prefix + word.substring(cut);
+      
       generated.push(result);
-
-      generated = [...new Set(generated)];
-
-      tickerWords =
-      [...generated].sort((a,b)=>{
-
-        return b.length - a.length;
-      });
-
-      mobileWords =
-      [...generated].sort((a,b)=>{
-
-        return a.length - b.length;
-      });
-
+      sortedGenerated = sortByLength(generated); // Re-sort on new addition
+      
       renderWords([result]);
-
       updateStats();
-
       updateMobile();
-
-      document.getElementById('progress').style.width =
-      (Math.random()*100)+'%';
-
-    },180);
-
+      document.getElementById('progress').style.width = (Math.random()*100)+'%';
+    }, 180);
     log('⚡ Infinite cycle active');
-
   }else{
-
     clearInterval(cycleInterval);
-
-    document.getElementById('progress').style.width =
-    '0%';
-
+    document.getElementById('progress').style.width = '0%';
     log('⏸ Cycle paused');
   }
 }
 
 /* ================= FILE ================= */
-
 function saveFile(){
-
   let txt = '';
-
-  generated.forEach(w=>{
-
-    txt += w + '\n';
-  });
-
-  const blob =
-  new Blob([txt], {type:'text/plain'});
-
-  const a =
-  document.createElement('a');
-
-  a.href =
-  URL.createObjectURL(blob);
-
+  // Save in sorted order (shortest to longest)
+  sortedGenerated.forEach(w=>{ txt += w + '\n'; });
+  
+  const blob = new Blob([txt], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
   a.download = 'generated-words.txt';
-
   a.click();
-
   URL.revokeObjectURL(a.href);
-
   log('✓ File downloaded');
 }
 
 /* ================= CLIPBOARD ================= */
-
 async function pasteClipboard(){
-
   try{
-
-    const txt =
-    await navigator.clipboard.readText();
-
-    document.getElementById('input').value =
-    txt;
-
+    const txt = await navigator.clipboard.readText();
+    document.getElementById('input').value = txt;
     log('📋 Pasted clipboard');
-
   }catch(err){
-
     log('⚠ Clipboard blocked');
   }
 }
 
 /* ================= SPIRAL ================= */
-
-const canvas =
-document.getElementById('canvas');
-
-const ctx =
-canvas.getContext('2d');
-
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 let angle = 0;
 
 function resizeCanvas(){
-
-  const p =
-  canvas.parentElement;
-
-  canvas.width =
-  p.clientWidth;
-
-  canvas.height =
-  p.clientHeight;
+  const p = canvas.parentElement;
+  canvas.width = p.clientWidth;
+  canvas.height = p.clientHeight;
 }
 
 function drawSpiral(){
-
-  const w = canvas.width;
-  const h = canvas.height;
-
-  const cx = w / 2;
-  const cy = h / 2;
-
+  const w = canvas.width, h = canvas.height;
+  const cx = w/2, cy = h/2;
   ctx.clearRect(0,0,w,h);
-
+  
   for(let s=0;s<3;s++){
-
     ctx.beginPath();
-
     for(let i=0;i<320;i++){
-
-      const a =
-      angle + (i * .08) + (s * 2);
-
-      const r =
-      i * 1.1;
-
-      const x =
-      cx + Math.cos(a) * r;
-
-      const y =
-      cy + Math.sin(a) * r;
-
-      if(i===0){
-
-        ctx.moveTo(x,y);
-
-      }else{
-
-        ctx.lineTo(x,y);
-      }
+      const a = angle + (i * .08) + (s * 2);
+      const r = i * 1.1;
+      const x = cx + Math.cos(a) * r;
+      const y = cy + Math.sin(a) * r;
+      if(i===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
     }
-
-    const colors = [
-      'rgba(0,240,255,.35)',
-      'rgba(168,85,247,.25)',
-      'rgba(249,115,22,.2)'
-    ];
-
-    ctx.strokeStyle =
-    colors[s];
-
+    const colors = ['rgba(0,240,255,.35)','rgba(168,85,247,.25)','rgba(249,115,22,.2)'];
+    ctx.strokeStyle = colors[s];
     ctx.lineWidth = 1.3;
-
     ctx.stroke();
   }
-
   angle += .004;
-
   requestAnimationFrame(drawSpiral);
 }
 
 /* ================= LOG ================= */
-
 function log(msg){
+  document.getElementById('log').textContent = msg;
+}
 
-  document.getElementById('log').textContent =
-  msg;
+/* ================= MODAL FUNCTIONS ================= */
+function openInfoModal(){
+  document.getElementById('infoModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeInfoModal(){
+  document.getElementById('infoModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function openMessageModal(){
+  document.getElementById('messageModal').classList.add('active');
+  document.getElementById('messageInput').focus();
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMessageModal(){
+  document.getElementById('messageModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function sendMessage(){
+  const msg = document.getElementById('messageInput').value.trim();
+  if(!msg){
+    log('⚠ Please type a message first');
+    return;
+  }
+  
+  // In a real app, this would send to a server
+  // For demo, we simulate success
+  log('✈️ Message sent! We\'ll get back to you soon.');
+  document.getElementById('messageInput').value = '';
+  closeMessageModal();
+  
+  // Show confirmation
+  setTimeout(()=>{
+    alert('✓ Thank you! Your message has been received.\n\nWe typically respond within 24 hours.\n\nSupport: support@infinitemaming.engine');
+  }, 300);
 }
 
 </script>
