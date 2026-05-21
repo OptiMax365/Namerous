@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>∞ Infinite Naming Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+  :root {
+    --bg: #0a0a0f; --card: #111119; --border: #1a1a2e;
+    --glow: #00f0ff; --glow2: #a855f7; --glow3: #f97316;
+    --text: #e0e0e8; --dim: #555570; --success: #22c55e;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Share Tech Mono', monospace; height: 100vh; width: 100vw; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+  /* BACKGROUND SPIRAL */
+  .spiral-bg { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 700px; pointer-events: none; z-index: 0; }
+  .spiral-ring { position: absolute; top: 50%; left: 50%; border: 1px solid rgba(0,240,255,0.06); border-radius: 50%; animation: spiralSpin linear infinite; }
+  @keyframes spiralSpin { 0% { transform: translate(-50%,-50%) rotate(0deg) scale(1); opacity: 0.6; } 50% { opacity: 0.15; } 100% { transform: translate(-50%,-50%) rotate(360deg) scale(0.3); opacity: 0; } }
+
+  /* MAIN CARD */
+  .main-card {
+    position: relative; z-index: 10; width: 98vw; max-width: 1400px; height: 98vh; max-height: 900px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    box-shadow: 0 0 60px rgba(0,240,255,0.06), inset 0 0 100px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(4px);
+  }
+
+  .header { padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: linear-gradient(90deg, rgba(0,240,255,0.04), transparent); flex-shrink: 0; }
+  .header h1 { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900; background: linear-gradient(135deg, var(--glow), var(--glow2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; }
+  .header .badge { font-size: 0.6rem; padding: 4px 12px; border-radius: 20px; background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.25); color: var(--glow); letter-spacing: 1px; }
+
+  /* TOP DISPLAY BAR */
+  .top-bar { display: flex; gap: 12px; padding: 10px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0; height: 140px; }
+  .top-box { flex: 1; background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  .top-label { font-family: 'Orbitron', sans-serif; font-size: 0.55rem; color: var(--dim); letter-spacing: 2px; margin-bottom: 8px; text-transform: uppercase; }
+  
+  #tickerDisplay { flex: 1; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--glow); text-align: center; }
+  #tickerDisplay.empty { color: var(--dim); font-size: 0.9rem; }
+
+  #shufflerDisplay { flex: 1; position: relative; }
+  .shuffle-word {
+    position: absolute; padding: 4px 10px; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.4);
+    border-radius: 6px; color: var(--glow2); font-size: 0.75rem; font-weight: bold;
+    animation: shuffleIn 0.4s ease forwards; white-space: nowrap; pointer-events: none;
+  }
+  @keyframes shuffleIn { 0% { opacity: 0; transform: scale(0.8) translateY(10px); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+  @keyframes shuffleOut { to { opacity: 0; transform: scale(0.9) translateY(-5px); } }
+
+  /* MAIN CONTENT GRID */
+  .content-grid { flex: 1; display: grid; grid-template-columns: 280px 1fr; overflow: hidden; }
+  .left-panel { border-right: 1px solid var(--border); padding: 14px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; background: rgba(0,0,0,0.2); }
+  .left-panel::-webkit-scrollbar { width: 3px; }
+  .left-panel::-webkit-scrollbar-thumb { background: var(--glow); border-radius: 10px; }
+  .section-title { font-family: 'Orbitron', sans-serif; font-size: 0.55rem; color: var(--glow); letter-spacing: 3px; margin-bottom: 4px; }
+  .word-input-area { position: relative; }
+  .word-input-area textarea { width: 100%; height: 70px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; padding: 10px; resize: none; outline: none; transition: 0.3s; }
+  .word-input-area textarea:focus { border-color: var(--glow); box-shadow: 0 0 12px rgba(0,240,255,0.1); }
+  .paste-btn { position: absolute; top: 5px; right: 5px; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: var(--glow2); font-size: 0.55rem; padding: 3px 8px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+  .paste-btn:hover { background: rgba(168,85,247,0.3); }
+  .btn { width: 100%; padding: 9px; border: none; border-radius: 8px; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+  .btn-generate { background: linear-gradient(135deg, var(--glow), #0090aa); color: #000; }
+  .btn-generate:hover { box-shadow: 0 0 20px rgba(0,240,255,0.25); transform: translateY(-1px); }
+  .btn-cycle { background: linear-gradient(135deg, var(--success), #15803d); color: #fff; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 5px rgba(34,197,94,0.2); } 50% { box-shadow: 0 0 18px rgba(34,197,94,0.4); } }
+  .progress-track { width: 100%; height: 2px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--glow), var(--glow2)); width: 0%; transition: 0.3s; }
+  .mode-toggle { display: flex; gap: 4px; }
+  .mode-btn { flex: 1; padding: 5px; font-size: 0.5rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 5px; color: var(--dim); cursor: pointer; text-align: center; transition: 0.3s; }
+  .mode-btn.active { border-color: var(--glow); color: var(--glow); background: rgba(0,240,255,0.06); }
+  .stored-words { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; padding: 8px; overflow-y: auto; }
+  .stored-words::-webkit-scrollbar { width: 3px; }
+  .stored-words::-webkit-scrollbar-thumb { background: var(--glow2); border-radius: 10px; }
+  .stored-word-tag { display: inline-block; margin: 2px 3px; padding: 2px 8px; background: rgba(0,240,255,0.06); border: 1px solid rgba(0,240,255,0.12); border-radius: 15px; font-size: 0.6rem; color: var(--glow); animation: fadeTag 0.3s ease; }
+  @keyframes fadeTag { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
+  .word-count { font-size: 0.55rem; color: var(--dim); text-align: right; margin-top: 3px; }
+  #cycleIndicator { font-size: 0.5rem; color: var(--success); text-align: center; padding: 3px; animation: blink 1s infinite; }
+  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+  .iter-info { font-size: 0.5rem; color: var(--dim); text-align: center; padding: 2px; background: rgba(168,85,247,0.1); border-radius: 4px; margin-top: 4px; }
+
+  .right-panel { display: grid; grid-template-rows: 1.2fr 0.8fr; overflow: hidden; }
+  .panel-section { padding: 12px 16px; display: flex; flex-direction: column; overflow: hidden; border-bottom: 1px solid var(--border); }
+  .panel-section:last-child { border-bottom: none; }
+  .output-box { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; padding: 8px; overflow-y: auto; margin-top: 8px; }
+  .output-box::-webkit-scrollbar { width: 6px; }
+  .output-box::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
+  .output-box::-webkit-scrollbar-thumb { background: linear-gradient(var(--glow), var(--glow2)); border-radius: 4px; }
+  .name-entry { font-size: 0.7rem; padding: 5px 8px; margin: 2px 0; border-left: 2px solid transparent; transition: 0.2s; animation: slideIn 0.25s ease; cursor: pointer; border-radius: 0 4px 4px 0; }
+  .name-entry:hover { background: rgba(0,240,255,0.05); border-left-color: var(--glow); }
+  .name-entry .pre { color: var(--glow); font-weight: bold; }
+  .name-entry .suf { color: var(--dim); }
+  .name-entry .res { color: var(--text); }
+  @keyframes slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
+  .placeholder { color: var(--dim); font-size: 0.7rem; text-align: center; padding: 30px 0; }
+
+  .stat-bar { display: flex; gap: 14px; margin-top: 6px; font-size: 0.55rem; color: var(--dim); }
+  .stat-bar span { display: flex; align-items: center; gap: 5px; }
+  .stat-bar .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+
+  .spiral-container { flex: 1; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; overflow: hidden; }
+  canvas { width: 100%; height: 100%; display: block; }
+  .spiral-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
+  .spiral-num { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--glow), var(--glow2), var(--glow3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: numPulse 1.5s infinite; }
+  @keyframes numPulse { 0%,100% { transform:scale(1); filter:brightness(1); } 50% { transform:scale(1.05); filter:brightness(1.3); } }
+  .spiral-label { font-size: 0.5rem; color: var(--dim); letter-spacing: 3px; margin-top: 4px; }
+
+  .log-bar { padding: 10px 20px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .log-text { flex: 1; font-size: 0.55rem; color: var(--dim); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .log-text span { color: var(--success); }
+
+  .save-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 100; background: var(--card); border: 1px solid var(--glow); border-radius: 12px; padding: 20px; box-shadow: 0 0 50px rgba(0,240,255,0.2); min-width: 300px; }
+  .save-modal.show { display: block; animation: modalIn 0.3s ease; }
+  @keyframes modalIn { from { opacity:0; transform:translate(-50%,-50%) scale(0.9); } to { opacity:1; transform:translate(-50%,-50%) scale(1); } }
+  .save-modal h3 { font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: var(--glow); margin-bottom: 10px; }
+  .save-modal input { width: 100%; padding: 7px 10px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; outline: none; margin-bottom: 10px; }
+  .save-modal input:focus { border-color: var(--glow); }
+  .save-modal .modal-btns { display: flex; gap: 8px; }
+  .save-modal .btn-cancel { background: rgba(255,255,255,0.05); color: var(--dim); }
+  .overlay-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99; }
+  .overlay-bg.show { display: block; }
+</style>
+</head>
+<body>
+
+<div class="spiral-bg" id="spiralBg"></div>
+
+<div class="main-card">
+  <div class="header">
+    <h1>⚡ INFINITE NAMING ENGINE</h1>
+    <span class="badge" id="statusBadge">STANDBY</span>
+  </div>
+
+  <div class="top-bar">
+    <div class="top-box">
+      <div class="top-label">⏱ SEQUENTIAL READER</div>
+      <div id="tickerDisplay" class="empty">Awaiting Generation...</div>
+    </div>
+    <div class="top-box">
+      <div class="top-label">🔀 Top Makings</div>
+      <div id="shufflerDisplay"></div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <div class="left-panel">
+      <div>
+        <div class="section-title">INPUT WORDS</div>
+        <div class="word-input-area">
+          <textarea id="wordInput" placeholder="Paste words here...&#10;e.g. ARTIFICIAL INTELLIGENCE"></textarea>
+          <button class="paste-btn" onclick="pasteFromClipboard()">📋 PASTE</button>
+        </div>
+      </div>
+
+      <button class="btn btn-generate" onclick="generateNames()">⚡ GENERATE</button>
+      <button class="btn btn-cycle" onclick="toggleInfiniteCycle()">∞ INFINITE CYCLE</button>
+      <div id="cycleIndicator" style="display:none">⚡ CYCLE ACTIVE — INFINITE GENERATION ⚡</div>
+
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="iter-info" id="iterInfo">Iterator discovery: 101 prefixes loaded</div>
+
+      <div class="mode-toggle">
+        <div class="mode-btn active" id="modeNew" onclick="setMode('new')">📄 NEW FILE</div>
+        <div class="mode-btn" id="modeAppend" onclick="setMode('append')">📎 APPEND</div>
+      </div>
+
+      <button class="btn" style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff" onclick="openSaveModal()">💾 SAVE FILE</button>
+      <button class="btn" style="background:linear-gradient(135deg,var(--glow3),#c2410c);color:#fff" onclick="appendToFile()">📎 APPEND TO FILE</button>
+
+      <div>
+        <div class="section-title">STORED WORDS</div>
+        <div class="stored-words" id="storedWords"><span style="color:var(--dim);font-size:0.6rem">No words stored yet...</span></div>
+        <div class="word-count" id="wordCount">0 words</div>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div class="panel-section">
+        <div class="section-title">📜 GENERATED NAMES (SCROLLABLE)</div>
+        <div class="output-box" id="outputBox"><div class="placeholder">✦ Enter words and press Generate ✦</div></div>
+        <div class="stat-bar">
+          <span><span class="dot" style="background:var(--glow)"></span> Total: <b id="totalCount">0</b></span>
+          <span><span class="dot" style="background:var(--glow2)"></span> Current: <b id="currentWordDisplay">—</b></span>
+          <span><span class="dot" style="background:var(--glow3)"></span> Cycles: <b id="cycleCount">0</b></span>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-title">🌀 SPIRAL OF TIME</div>
+        <div class="spiral-container">
+          <canvas id="spiralCanvas"></canvas>
+          <div class="spiral-overlay">
+            <div class="spiral-num" id="bigNum">0</div>
+            <div class="spiral-label">TOTAL NAMES</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="log-bar">
+    <span style="color:var(--glow)">▸</span>
+    <div class="log-text" id="logText">System initialized. Ready for input...</div>
+  </div>
+</div>
+
+<div class="overlay-bg" id="overlayBg"></div>
+<div class="save-modal" id="saveModal">
+  <h3>💾 SAVE GENERATIONS</h3>
+  <input type="text" id="filenameInput" placeholder="my-namelist.txt" value="namelist.txt">
+  <div class="modal-btns">
+    <button class="btn" style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff" onclick="saveToFile()">SAVE AS FILE</button>
+    <button class="btn btn-cancel" onclick="closeModal()">CANCEL</button>
+  </div>
+</div>
+
+<script>
+// ============ ITERATOR POOL ============
+const ITERATOR_LIST = [
+  "am","an","as","at","be","by","do","go","he","hi","if","in","is","it","me","my","no","of","on","or","ox","up","us","we","ad","ah","ai","al","aw","ba","bi","bo","da","ed","eh","el","em","er","ex","fa","ha","ho","id","jo","ka","ki","la","li","lo",
+  "ace","act","add","air","arm","art","bag","boy","bus","cap","car","cup","ear","fan","fun","gem","hat","jar","key","map","net","owl","pen","sun","top","van","war","all","and","any","bar","big","bit","can"
+];
+
+// ============ STATE ============
+let storedWords = [];
+let allGeneratedNames = [];
+let totalGenerated = 0;
+let cycleActive = false;
+let cycleInterval = null;
+let cycleCounter = 0;
+let appendMode = false;
+
+let seqInterval = null, seqIndex = 0;
+let shuffleInterval = null, shuffleQueue = [], shuffleIdx = 0;
+
+// ============ INIT ============
+document.addEventListener('DOMContentLoaded', () => {
+  initSpiralBg(); resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+  log('System initialized. ✦ Iterator pool loaded (101 prefixes)');
+});
+
+// ============ BACKGROUND SPIRAL ============
+function initSpiralBg() {
+  const c = document.getElementById('spiralBg');
+  for(let i=0;i<25;i++){ const r=document.createElement('div'); r.className='spiral-ring'; const s=40+i*22; r.style.cssText=`width:${s}px;height:${s}px;animation-duration:${3+i*0.4}s;animation-delay:${i*0.1}s;border-color:${i%3===0?'rgba(0,240,255,0.08)':i%3===1?'rgba(168,85,247,0.06)':'rgba(249,115,22,0.05)'}`; c.appendChild(r); }
+}
+
+// ============ CANVAS SPIRAL ============
+const canvas = document.getElementById('spiralCanvas'); const ctx = canvas.getContext('2d'); let spiralAngle = 0;
+function resizeCanvas(){ const p=canvas.parentElement; canvas.width=p.clientWidth; canvas.height=p.clientHeight; }
+function drawSpiral() {
+  const w=canvas.width, h=canvas.height, cx=w/2, cy=h/2, t=Date.now()*0.001;
+  ctx.clearRect(0,0,w,h);
+  for(let s=0;s<3;s++){ ctx.beginPath(); const cols=['rgba(0,240,255,','rgba(168,85,247,','rgba(249,115,22,'];
+    for(let i=0;i<250;i++){ const ang=spiralAngle+(i*0.08)+(s*2.1), rad=i*0.9+Math.sin(t+i*0.04)*4; i===0?ctx.moveTo(cx+Math.cos(ang)*rad,cy+Math.sin(ang)*rad):ctx.lineTo(cx+Math.cos(ang)*rad,cy+Math.sin(ang)*rad); }
+    ctx.strokeStyle=cols[s]+'0.35)'; ctx.lineWidth=1; ctx.stroke(); }
+  for(let r=0;r<5;r++){ ctx.beginPath(); ctx.arc(cx,cy,35+r*28,0,Math.PI*2); ctx.strokeStyle=`rgba(0,240,255,${0.04+r*0.01})`; ctx.lineWidth=0.5; ctx.stroke();
+    ctx.beginPath(); const st=t*0.4+r; ctx.arc(cx,cy,35+r*28,st,st+1.2); ctx.strokeStyle='rgba(168,85,247,0.25)'; ctx.lineWidth=1.2; ctx.stroke(); }
+  const g=ctx.createRadialGradient(cx,cy,0,cx,cy,70); g.addColorStop(0,'rgba(0,240,255,0.07)'); g.addColorStop(1,'transparent'); ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+  spiralAngle+=0.006; requestAnimationFrame(drawSpiral);
+}
+drawSpiral();
+
+// ============ CORE GENERATION LOGIC ============
+function generateForWord(word) {
+  const results = [];
+  const w = word.trim().toUpperCase();
+  for (const item of ITERATOR_LIST) {
+    const prefix = item.toUpperCase();
+    for (let i = 0; i <= w.length; i++) {
+      const suffix = w.substring(i);
+      results.push({ pre: prefix, suf: suffix, res: prefix + suffix });
+    }
+  }
+  return results;
+}
+
+function processAllWords() {
+  let all = [];
+  for (const w of storedWords) all = all.concat(generateForWord(w));
+  return all;
+}
+
+// ============ GENERATE ============
+function generateNames() {
+  const inp = document.getElementById('wordInput').value.trim();
+  if (!inp) { log('⚠ Please enter or paste words first!'); return; }
+  const words = inp.split(/[\s,;|\n]+/).filter(w => w.length > 0);
+  words.forEach(w => { if (!storedWords.includes(w.toUpperCase())) storedWords.push(w.toUpperCase()); });
+  updateStoredWordsDisplay();
+
+  const newBatch = processAllWords();
+  allGeneratedNames = allGeneratedNames.concat(newBatch);
+  displayResults(newBatch);
+  totalGenerated = allGeneratedNames.length;
+  updateStats();
+  startTicker();
+  initShuffler();
+  log(`✓ Generated <span>${newBatch.length}</span> names from <span>${words.length}</span> word(s). Total: <span>${totalGenerated}</span>`);
+  document.getElementById('statusBadge').textContent = 'GENERATED';
+}
+
+function displayResults(batch) {
+  const box = document.getElementById('outputBox');
+  if (box.querySelector('.placeholder')) box.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  batch.forEach(item => {
+    const d = document.createElement('div'); d.className = 'name-entry';
+    d.innerHTML = `<span class="pre">${item.pre}</span><span class="suf"> + ${item.suf}</span> = <span class="res">${item.res}</span>`;
+    d.onclick = () => { navigator.clipboard.writeText(item.res); log(`📋 Copied: <span>${item.res}</span>`); };
+    frag.appendChild(d);
+  });
+  box.appendChild(frag); box.scrollTop = box.scrollHeight;
+}
+
+function updateStoredWordsDisplay() {
+  const c = document.getElementById('storedWords'); c.innerHTML = '';
+  storedWords.forEach(w => { const t = document.createElement('span'); t.className = 'stored-word-tag'; t.textContent = w; c.appendChild(t); });
+  document.getElementById('wordCount').textContent = storedWords.length + ' word' + (storedWords.length !== 1 ? 's' : '');
+}
+function updateStats() {
+  document.getElementById('totalCount').textContent = totalGenerated.toLocaleString();
+  document.getElementById('bigNum').textContent = totalGenerated.toLocaleString();
+  document.getElementById('cycleCount').textContent = cycleCounter;
+}
+
+// ============ PASTE ============
+async function pasteFromClipboard() {
+  try { document.getElementById('wordInput').value = await navigator.clipboard.readText(); log('📋 Pasted from clipboard'); }
+  catch(e) { log('⚠ Clipboard access blocked. Paste manually.'); }
+}
+
+// ============ SAVE / APPEND ============
+function openSaveModal() { document.getElementById('overlayBg').classList.add('show'); document.getElementById('saveModal').classList.add('show'); }
+function closeModal() { document.getElementById('overlayBg').classList.remove('show'); document.getElementById('saveModal').classList.remove('show'); }
+function saveToFile() {
+  const fn = document.getElementById('filenameInput').value.trim() || 'namelist.txt';
+  let c = `═══════════════════════════════════════════════\n  INFINITE NAMING ENGINE — ${new Date().toISOString()}\n  Words: ${storedWords.join(', ')} | Total: ${allGeneratedNames.length}\n  Iterator discovery: 101 prefixes\n═══════════════════════════════════════════════\n\n`;
+  allGeneratedNames.forEach(i => c += `${i.pre} + ${i.suf} = ${i.res}\n`);
+  downloadBlob(c, fn); closeModal(); log(`✓ Saved as <span>${fn}</span>`);
+}
+function appendToFile() {
+  const fn = prompt('Filename to append to:', 'namelist.txt'); if (!fn) return;
+  let c = `\n--- APPENDED: ${new Date().toISOString()} ---\nNew Words: ${storedWords.join(', ')}\nNew Count: ${allGeneratedNames.length}\n\n`;
+  allGeneratedNames.forEach(i => c += `${i.pre} + ${i.suf} = ${i.res}\n`);
+  downloadBlob(c, fn); log(`✓ Appended to <span>${fn}</span>`);
+}
+function downloadBlob(txt, fn) { const b = new Blob([txt], { type: 'text/plain' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = fn; a.click(); URL.revokeObjectURL(a.href); }
+
+// ============ MODE ============
+function setMode(m) { appendMode = m === 'append'; document.getElementById('modeNew').classList.toggle('active', !appendMode); document.getElementById('modeAppend').classList.toggle('active', appendMode); log(`Mode: ${appendMode ? '📎 APPEND' : '📄 NEW'}`); }
+
+// ============ INFINITE CYCLE ============
+function toggleInfiniteCycle() {
+  cycleActive = !cycleActive;
+  document.getElementById('cycleIndicator').style.display = cycleActive ? 'block' : 'none';
+  document.getElementById('statusBadge').textContent = cycleActive ? 'CYCLING ∞' : 'PAUSED';
+  if (cycleActive) {
+    log('⚡ Infinite cycle <span>ACTIVATED</span>');
+    cycleInterval = setInterval(() => {
+      if (!storedWords.length) return;
+      const w = storedWords[Math.floor(Math.random() * storedWords.length)].toUpperCase();
+      const iter = ITERATOR_LIST[Math.floor(Math.random() * ITERATOR_LIST.length)].toUpperCase();
+      const cut = Math.floor(Math.random() * w.length);
+      const suffix = w.substring(cut);
+      const res = iter + suffix;
+      allGeneratedNames.push({ pre: iter, suf: suffix, result: res });
+      totalGenerated++; cycleCounter++; updateStats(); displayResults([{ pre: iter, suf: suffix, res: res }]);
+      document.getElementById('progressFill').style.width = Math.random() * 100 + '%';
+      if (cycleCounter % 10 === 0) log(`∞ Cycle <span>#${cycleCounter}</span> — ${totalGenerated.toLocaleString()} names`);
+    }, 150);
+  } else { clearInterval(cycleInterval); document.getElementById('progressFill').style.width = '0%'; log('⏸ Cycle paused'); }
+}
+
+// ============ TICKER LOGIC ============
+function startTicker() {
+  clearInterval(seqInterval); seqIndex = 0;
+  const d = document.getElementById('tickerDisplay');
+  if (!allGeneratedNames.length) { d.textContent = 'No names yet'; d.classList.add('empty'); return; }
+  d.classList.remove('empty'); d.textContent = allGeneratedNames[0].res; d.style.opacity = 1;
+  seqInterval = setInterval(() => {
+    seqIndex = (seqIndex + 1) % allGeneratedNames.length;
+    d.style.transition = 'opacity 0.15s'; d.style.opacity = 0;
+    setTimeout(() => { d.textContent = allGeneratedNames[seqIndex].res; d.style.opacity = 1; }, 150);
+  }, 1000);
+}
+
+// ============ SHUFFLER LOGIC ============
+function initShuffler() {
+  clearInterval(shuffleInterval);
+  const container = document.getElementById('shufflerDisplay'); container.innerHTML = '';
+  shuffleQueue = [...Array(allGeneratedNames.length).keys()];
+  for (let i = shuffleQueue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [shuffleQueue[i], shuffleQueue[j]] = [shuffleQueue[j], shuffleQueue[i]]; }
+  shuffleIdx = 0; if (!allGeneratedNames.length) return;
+  shuffleInterval = setInterval(() => {
+    if (shuffleIdx >= shuffleQueue.length) {
+      for (let i = shuffleQueue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [shuffleQueue[i], shuffleQueue[j]] = [shuffleQueue[j], shuffleQueue[i]]; }
+      shuffleIdx = 0;
+    }
+    spawnShuffleWord(container, allGeneratedNames[shuffleQueue[shuffleIdx++]]);
+  }, 700);
+}
+function spawnShuffleWord(container, item) {
+  const el = document.createElement('div'); el.className = 'shuffle-word'; el.textContent = item.res; el.title = `${item.pre} + ${item.suf}`;
+  const cw = container.clientWidth - 60, ch = container.clientHeight - 25;
+  const top = Math.random() * ch, left = Math.random() * cw, rot = Math.random() * 8 - 4;
+  el.style.cssText = `top:${top}px;left:${left}px;transform:rotate(${rot}deg)`;
+  container.appendChild(el);
+  setTimeout(() => { el.style.animation = 'shuffleOut 0.5s forwards'; setTimeout(() => el.remove(), 500); }, 1400);
+}
+
+// ============ LOG ============
+function log(msg) { document.getElementById('logText').innerHTML = msg; }
+</script>
+</body>
+</html>
