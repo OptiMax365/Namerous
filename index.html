@@ -1,17 +1,10 @@
-
-
-
-
-
-Sequential reader now sorts show:
-
-from small words → larger words for each set, than from large to small, just change this order, must be from the smallest word created not the default words used to create,  so it shows starting from the generated fewest keyword to the longest keyword for each unit, apply his setting to the Sequential reader and the bottom panel in mobile phone or the the panel that has the swipe feature so users can see from  from the generated fewest keyword to the longest keyword for each unit 
-
-other parts are perfect, apply this and write complete a to z, add buttons to Message Us, add this button, The Info, once this button is clicked, it shows a modal screen, a quick guide of the use of  for users, like ensure you check the name generated to ensure it is 8.6Billion unique yours, ensure other list of quick things to know, apply this update ensure the layout and the workings style of how it is is maintained, <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
 <title>∞ Infinite Naming Engine</title>
 
 <style>
@@ -42,8 +35,6 @@ html,body{
   overflow:hidden;
   background:var(--bg);
   color:var(--text);
-
-  /* FIX FLICKER */
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
 }
@@ -68,11 +59,8 @@ body{
   left:50%;
   border-radius:50%;
   border:1px solid rgba(0,240,255,.04);
-
-  /* STABLE */
   will-change:transform;
   backface-visibility:hidden;
-
   animation:spin linear infinite;
 }
 
@@ -104,8 +92,6 @@ body{
   overflow:hidden;
   display:flex;
   flex-direction:column;
-
-  /* STABLE */
   transform:translateZ(0);
   backface-visibility:hidden;
 }
@@ -120,6 +106,13 @@ body{
   border-bottom:1px solid var(--border);
   background:linear-gradient(90deg, rgba(0,240,255,.05), transparent);
   flex-shrink:0;
+  gap:10px;
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .header h1{
@@ -140,6 +133,33 @@ body{
   background:rgba(0,240,255,.08);
   color:var(--glow);
   font-size:.6rem;
+}
+
+.header-buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.header-btn{
+  border:none;
+  cursor:pointer;
+  border-radius:10px;
+  padding:8px 12px;
+  font-family:'Orbitron',sans-serif;
+  font-size:.58rem;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.info-btn{
+  background:linear-gradient(135deg,var(--glow2),#7c3aed);
+  color:#fff;
+}
+
+.message-btn{
+  background:linear-gradient(135deg,var(--glow3),#c2410c);
+  color:#fff;
 }
 
 /* ================= TOP ================= */
@@ -173,7 +193,6 @@ body{
 /* ================= SEQUENTIAL READER ================= */
 
 #ticker{
-
   width:100%;
   height:calc(100% - 20px);
 
@@ -195,7 +214,6 @@ body{
 
   padding:4px;
 
-  /* FIX FLICKER */
   transition:none;
   opacity:1 !important;
 }
@@ -274,10 +292,9 @@ body{
   position:relative;
 }
 
-/* ================= TEXTAREA FIX ================= */
+/* ================= TEXTAREA ================= */
 
 textarea{
-
   width:100%;
   height:90px;
 
@@ -298,7 +315,6 @@ textarea{
   font-family:'Share Tech Mono', monospace;
   font-size:.75rem;
 
-  /* STABLE */
   transition:none !important;
   animation:none !important;
 
@@ -310,8 +326,6 @@ textarea{
 
 textarea:focus{
   border-color:var(--glow);
-  background:#0b0b12 !important;
-  color:#ffffff !important;
 }
 
 textarea::placeholder{
@@ -435,10 +449,9 @@ textarea::placeholder{
   padding:8px;
 }
 
-/* ================= GENERATED WORDS ONLY ================= */
+/* ================= GENERATED WORDS ================= */
 
 .word{
-
   padding:7px 8px;
   margin:2px 0;
 
@@ -579,6 +592,86 @@ canvas{
   color:var(--glow2);
 }
 
+/* ================= MODAL ================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+
+  z-index:999;
+  padding:20px;
+}
+
+.modal.active{
+  display:flex;
+}
+
+.modal-card{
+  width:min(700px,100%);
+  max-height:90vh;
+  overflow:auto;
+
+  background:#11111b;
+  border:1px solid var(--border);
+  border-radius:20px;
+
+  padding:24px;
+}
+
+.modal-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:1.2rem;
+  color:var(--glow);
+  margin-bottom:18px;
+}
+
+.guide{
+  display:grid;
+  gap:12px;
+}
+
+.guide-item{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:12px;
+  padding:14px;
+}
+
+.guide-item h3{
+  color:var(--glow2);
+  margin-bottom:6px;
+  font-size:.9rem;
+}
+
+.guide-item p{
+  color:#d6d6f0;
+  font-size:.75rem;
+  line-height:1.5;
+}
+
+.close-btn{
+  width:100%;
+  margin-top:18px;
+  padding:12px;
+
+  border:none;
+  border-radius:12px;
+
+  cursor:pointer;
+
+  background:linear-gradient(135deg,var(--glow),#008ba5);
+  color:#000;
+
+  font-family:'Orbitron',sans-serif;
+  font-weight:700;
+}
+
 /* ================= FOOTER ================= */
 
 .log{
@@ -640,6 +733,19 @@ canvas{
   .output{
     max-height:260px;
   }
+
+  .header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .header-buttons{
+    width:100%;
+  }
+
+  .header-btn{
+    flex:1;
+  }
 }
 
 @media(max-width:600px){
@@ -673,22 +779,114 @@ canvas{
 
 <div class="bg" id="bg"></div>
 
+<!-- INFO MODAL -->
+
+<div class="modal" id="infoModal">
+
+  <div class="modal-card">
+
+    <div class="modal-title">
+      ⚡ Infinite Naming Engine Guide
+    </div>
+
+    <div class="guide">
+
+      <div class="guide-item">
+        <h3>1. Generate Unique Names</h3>
+        <p>
+          Enter one or multiple keywords and the engine creates massive
+          combinations from shortest generated words to longest generated words.
+        </p>
+      </div>
+
+      <div class="guide-item">
+        <h3>2. Sequential Reader Order</h3>
+        <p>
+          The sequential reader now shows generated names from the
+          fewest-length generated word to the longest generated word
+          for every generation batch.
+        </p>
+      </div>
+
+      <div class="guide-item">
+        <h3>3. Check Name Availability</h3>
+        <p>
+          Always verify generated names online before branding,
+          launching domains, apps, companies, channels, or products.
+        </p>
+      </div>
+
+      <div class="guide-item">
+        <h3>4. Infinite Cycle</h3>
+        <p>
+          Activate Infinite Cycle to continuously generate evolving
+          naming combinations in real time.
+        </p>
+      </div>
+
+      <div class="guide-item">
+        <h3>5. Swipe Mobile Viewer</h3>
+        <p>
+          On mobile phones, swipe left or right to browse generated
+          words from shortest generated words to longest generated words.
+        </p>
+      </div>
+
+      <div class="guide-item">
+        <h3>6. 8.6 Billion Possibilities</h3>
+        <p>
+          Ensure you inspect your generated names carefully to
+          maximize uniqueness and originality for your identity.
+        </p>
+      </div>
+
+    </div>
+
+    <button class="close-btn"
+    onclick="closeInfo()">
+      CLOSE GUIDE
+    </button>
+
+  </div>
+
+</div>
+
 <div class="app">
 
 <div class="main">
 
   <!-- HEADER -->
+
   <div class="header">
 
-    <h1>⚡ INFINITE NAMING ENGINE</h1>
+    <div class="header-left">
 
-    <div class="badge" id="status">
-      STANDBY
+      <h1>⚡ INFINITE NAMING ENGINE</h1>
+
+      <div class="badge" id="status">
+        STANDBY
+      </div>
+
+    </div>
+
+    <div class="header-buttons">
+
+      <button class="header-btn info-btn"
+      onclick="openInfo()">
+        ℹ INFO
+      </button>
+
+      <button class="header-btn message-btn"
+      onclick="messageUs()">
+        💬 MESSAGE US
+      </button>
+
     </div>
 
   </div>
 
   <!-- TOP -->
+
   <div class="top">
 
     <div class="top-box">
@@ -716,9 +914,11 @@ canvas{
   </div>
 
   <!-- CONTENT -->
+
   <div class="content">
 
     <!-- LEFT -->
+
     <div class="left">
 
       <div class="section-title">
@@ -728,7 +928,7 @@ canvas{
       <div class="input-wrap">
 
         <textarea id="input"
-        placeholder="Paste words here...
+placeholder="Paste words here...
 ARTIFICIAL INTELLIGENCE"></textarea>
 
         <button class="paste-btn"
@@ -752,18 +952,17 @@ ARTIFICIAL INTELLIGENCE"></textarea>
         <div class="progress-fill" id="progress"></div>
       </div>
 
-      <!-- DESKTOP -->
       <div class="desktop">
 
         <button class="btn"
-        style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff"
-        onclick="saveFile()">
+style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff"
+onclick="saveFile()">
           💾 SAVE FILE
         </button>
 
         <button class="btn"
-        style="background:linear-gradient(135deg,var(--glow3),#c2410c);color:#fff"
-        onclick="saveFile()">
+style="background:linear-gradient(135deg,var(--glow3),#c2410c);color:#fff"
+onclick="saveFile()">
           📎 APPEND FILE
         </button>
 
@@ -776,9 +975,11 @@ ARTIFICIAL INTELLIGENCE"></textarea>
         </div>
 
         <div class="stored" id="stored">
+
           <span style="color:var(--dim);font-size:.7rem">
             No words stored yet...
           </span>
+
         </div>
 
       </div>
@@ -786,6 +987,7 @@ ARTIFICIAL INTELLIGENCE"></textarea>
     </div>
 
     <!-- RIGHT -->
+
     <div class="right">
 
       <div class="panel">
@@ -834,7 +1036,8 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 
   </div>
 
-  <!-- MOBILE -->
+  <!-- MOBILE VIEW -->
+
   <div class="mobile-view">
 
     <div class="viewer">
@@ -868,6 +1071,7 @@ ARTIFICIAL INTELLIGENCE"></textarea>
   </div>
 
   <!-- FOOTER -->
+
   <div class="log" id="log">
     System initialized...
   </div>
@@ -935,6 +1139,23 @@ function initBG(){
   }
 }
 
+/* ================= SORTING ================= */
+
+/* GENERATED FEWEST WORD → LONGEST WORD */
+
+function sortGeneratedWords(arr){
+
+  return [...arr].sort((a,b)=>{
+
+    if(a.length !== b.length){
+
+      return a.length - b.length;
+    }
+
+    return a.localeCompare(b);
+  });
+}
+
 /* ================= GENERATION ================= */
 
 function makeWord(word){
@@ -957,7 +1178,9 @@ function makeWord(word){
     }
   }
 
-  return results;
+  /* SORT FEWEST GENERATED WORD → LONGEST */
+
+  return sortGeneratedWords(results);
 }
 
 function generate(){
@@ -996,7 +1219,15 @@ function generate(){
     batch = batch.concat(makeWord(w));
   });
 
+  /* FINAL GLOBAL SORT */
+
+  batch = sortGeneratedWords(batch);
+
   generated = generated.concat(batch);
+
+  /* KEEP EVERYTHING SORTED */
+
+  generated = sortGeneratedWords(generated);
 
   renderWords(batch);
 
@@ -1005,6 +1236,8 @@ function generate(){
   startTicker();
 
   startShuffle();
+
+  mobileIndex = 0;
 
   updateMobile();
 
@@ -1036,7 +1269,6 @@ function renderWords(batch){
 
     div.className = 'word';
 
-    /* GENERATED WORD ONLY */
     div.textContent = word;
 
     div.onclick = ()=>{
@@ -1056,8 +1288,7 @@ function renderWords(batch){
 
   output.appendChild(frag);
 
-  output.scrollTop =
-  output.scrollHeight;
+  output.scrollTop = 0;
 }
 
 /* ================= STORED ================= */
@@ -1101,11 +1332,11 @@ function startTicker(){
   const ticker =
   document.getElementById('ticker');
 
-  ticker.textContent = generated[0];
-
   tickerIndex = 0;
 
-  /* NO FLICKER */
+  ticker.textContent =
+  generated[tickerIndex];
+
   tickerInterval = setInterval(()=>{
 
     tickerIndex++;
@@ -1114,6 +1345,8 @@ function startTicker(){
 
       tickerIndex = 0;
     }
+
+    /* FEWEST → LONGEST */
 
     ticker.textContent =
     generated[tickerIndex];
@@ -1132,14 +1365,26 @@ function startShuffle(){
 
   box.innerHTML = '';
 
+  let shuffleIndex = 0;
+
+  const sorted =
+  [...generated];
+
   shuffleInterval = setInterval(()=>{
 
-    if(!generated.length) return;
+    if(!sorted.length) return;
+
+    /* FEWEST → LONGEST */
 
     const word =
-    generated[
-      Math.floor(Math.random()*generated.length)
-    ];
+    sorted[shuffleIndex];
+
+    shuffleIndex++;
+
+    if(shuffleIndex >= sorted.length){
+
+      shuffleIndex = 0;
+    }
 
     const el =
     document.createElement('div');
@@ -1197,6 +1442,8 @@ function updateMobile(){
     mobileIndex = 0;
   }
 
+  /* FEWEST → LONGEST */
+
   viewer.textContent =
   generated[mobileIndex];
 }
@@ -1226,7 +1473,7 @@ function copyWord(){
   log(`📋 Copied ${generated[mobileIndex]}`);
 }
 
-/* SWIPE */
+/* ================= SWIPE ================= */
 
 const mobile =
 document.getElementById('mobileWord');
@@ -1293,6 +1540,11 @@ function toggleCycle(){
 
       generated.push(result);
 
+      /* KEEP SORTED */
+
+      generated =
+      sortGeneratedWords(generated);
+
       renderWords([result]);
 
       updateStats();
@@ -1337,7 +1589,8 @@ function saveFile(){
   a.href =
   URL.createObjectURL(blob);
 
-  a.download = 'generated-words.txt';
+  a.download =
+  'generated-words.txt';
 
   a.click();
 
@@ -1364,6 +1617,28 @@ async function pasteClipboard(){
 
     log('⚠ Clipboard blocked');
   }
+}
+
+/* ================= MODAL ================= */
+
+function openInfo(){
+
+  document
+  .getElementById('infoModal')
+  .classList.add('active');
+}
+
+function closeInfo(){
+
+  document
+  .getElementById('infoModal')
+  .classList.remove('active');
+}
+
+function messageUs(){
+
+  window.location.href =
+  'mailto:contact@infiniteengine.com?subject=Infinite Naming Engine';
 }
 
 /* ================= SPIRAL ================= */
@@ -1456,4 +1731,4 @@ function log(msg){
 </script>
 
 </body>
-</html> 
+</html>
