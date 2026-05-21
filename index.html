@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>∞ Infinite Loop</title>
+<title>∞ Infinite Naming Engine</title>
 
 <style>
 
@@ -33,6 +33,7 @@ html,body{
   overflow:hidden;
   background:var(--bg);
   color:var(--text);
+
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
 }
@@ -57,8 +58,10 @@ body{
   left:50%;
   border-radius:50%;
   border:1px solid rgba(0,240,255,.04);
+
   will-change:transform;
   backface-visibility:hidden;
+
   animation:spin linear infinite;
 }
 
@@ -90,6 +93,7 @@ body{
   overflow:hidden;
   display:flex;
   flex-direction:column;
+
   transform:translateZ(0);
   backface-visibility:hidden;
 }
@@ -104,6 +108,7 @@ body{
   border-bottom:1px solid var(--border);
   background:linear-gradient(90deg, rgba(0,240,255,.05), transparent);
   flex-shrink:0;
+  gap:12px;
 }
 
 .header h1{
@@ -111,6 +116,7 @@ body{
   font-size:clamp(.8rem,2vw,1.15rem);
   font-weight:900;
   letter-spacing:2px;
+
   background:linear-gradient(135deg,var(--glow),var(--glow2));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -125,75 +131,61 @@ body{
   font-size:.6rem;
 }
 
-/* ================= HEADER BUTTONS ================= */
-
 .header-buttons{
   display:flex;
-  gap:10px;
-  margin-left:auto;
-  margin-right:14px;
+  gap:8px;
 }
 
 .header-btn{
   border:none;
   cursor:pointer;
   border-radius:10px;
-  padding:8px 14px;
+  padding:8px 12px;
   font-family:'Orbitron',sans-serif;
-  font-size:.6rem;
-  font-weight:700;
+  font-size:.58rem;
   letter-spacing:1px;
 }
 
 .info-btn{
-  background:linear-gradient(135deg,var(--glow2),#7c3aed);
-  color:#fff;
+  background:rgba(0,240,255,.12);
+  border:1px solid rgba(0,240,255,.25);
+  color:var(--glow);
 }
 
 .message-btn{
-  background:linear-gradient(135deg,var(--glow3),#ea580c);
-  color:#fff;
+  background:rgba(168,85,247,.14);
+  border:1px solid rgba(168,85,247,.25);
+  color:var(--glow2);
 }
 
 /* ================= TABS ================= */
 
 .tabs{
-  display:flex;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
   gap:8px;
   padding:10px;
   border-bottom:1px solid var(--border);
-  overflow:auto;
-  background:rgba(0,0,0,.18);
-  flex-shrink:0;
+  background:rgba(0,0,0,.2);
 }
 
-.tabs::-webkit-scrollbar{
-  height:4px;
-}
-
-.tabs::-webkit-scrollbar-thumb{
-  background:var(--glow);
-}
-
-.tab-btn{
-  min-width:130px;
+.tab{
   border:none;
   cursor:pointer;
   border-radius:10px;
-  padding:10px;
-  font-family:'Orbitron',sans-serif;
-  font-size:.6rem;
-  letter-spacing:1px;
-  background:rgba(255,255,255,.05);
+  padding:12px 8px;
+  background:rgba(255,255,255,.03);
   border:1px solid var(--border);
-  color:var(--text);
+  color:var(--dim);
+  font-family:'Orbitron',sans-serif;
+  font-size:.58rem;
   transition:.2s;
 }
 
-.tab-btn.active{
-  background:linear-gradient(135deg,var(--glow),#008ba5);
+.tab.active{
+  background:linear-gradient(135deg,var(--glow),var(--glow2));
   color:#000;
-  border-color:var(--glow);
+  font-weight:900;
 }
 
 /* ================= TOP ================= */
@@ -227,20 +219,28 @@ body{
 /* ================= SEQUENTIAL READER ================= */
 
 #ticker{
+
   width:100%;
   height:calc(100% - 20px);
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   text-align:center;
   line-height:1.2;
+
   overflow-wrap:anywhere;
   word-break:break-word;
+
   color:var(--glow);
   font-family:'Orbitron',sans-serif;
   font-weight:700;
+
   font-size:clamp(.7rem,2vw,1.5rem);
+
   padding:4px;
+
   transition:none;
   opacity:1 !important;
 }
@@ -261,20 +261,28 @@ body{
   border:1px solid rgba(168,85,247,.3);
   border-radius:6px;
   color:var(--glow2);
+
   font-size:.7rem;
+
   max-width:90%;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
-  animation:fadeIn .2s linear;
+
+  animation:floatWord 2s linear forwards;
 }
 
-@keyframes fadeIn{
+@keyframes floatWord{
   from{
     opacity:0;
+    transform:translateY(20px) scale(.7);
+  }
+  30%{
+    opacity:1;
   }
   to{
-    opacity:1;
+    opacity:0;
+    transform:translateY(-40px) scale(1.1);
   }
 }
 
@@ -319,21 +327,32 @@ body{
 /* ================= TEXTAREA FIX ================= */
 
 textarea{
+
   width:100%;
   height:90px;
+
   resize:none;
   outline:none;
+
   background:#0b0b12 !important;
+
   color:#ffffff !important;
+
   caret-color:var(--glow);
+
   border:1px solid var(--border);
   border-radius:10px;
+
   padding:12px;
+
   font-family:'Share Tech Mono', monospace;
   font-size:.75rem;
+
   transition:none !important;
   animation:none !important;
+
   -webkit-text-fill-color:#ffffff;
+
   appearance:none;
   -webkit-appearance:none;
 }
@@ -352,13 +371,19 @@ textarea::placeholder{
   position:absolute;
   top:6px;
   right:6px;
+
   border:none;
   cursor:pointer;
+
   border-radius:6px;
+
   padding:4px 8px;
+
   background:rgba(168,85,247,.15);
   border:1px solid rgba(168,85,247,.25);
+
   color:var(--glow2);
+
   font-size:.55rem;
 }
 
@@ -366,12 +391,16 @@ textarea::placeholder{
   width:100%;
   padding:10px;
   margin-top:10px;
+
   border:none;
   border-radius:10px;
+
   cursor:pointer;
+
   font-family:'Orbitron',sans-serif;
   font-size:.62rem;
   font-weight:700;
+
   letter-spacing:1px;
 }
 
@@ -418,9 +447,12 @@ textarea::placeholder{
   margin:3px;
   padding:4px 8px;
   border-radius:999px;
+
   background:rgba(0,240,255,.05);
   border:1px solid rgba(0,240,255,.15);
+
   color:var(--glow);
+
   font-size:.6rem;
 }
 
@@ -428,7 +460,7 @@ textarea::placeholder{
 
 .right{
   display:grid;
-  grid-template-rows:1fr 340px;
+  grid-template-rows:1fr 320px;
   overflow:hidden;
 }
 
@@ -442,24 +474,32 @@ textarea::placeholder{
 .output{
   flex:1;
   margin-top:8px;
+
   background:rgba(0,0,0,.22);
+
   border:1px solid var(--border);
   border-radius:12px;
+
   overflow:auto;
   padding:8px;
-  min-height:300px;
 }
 
 /* ================= GENERATED WORDS ONLY ================= */
 
 .word{
+
   padding:7px 8px;
   margin:2px 0;
+
   border-left:2px solid transparent;
   border-radius:0 6px 6px 0;
+
   color:var(--text);
+
   font-size:.72rem;
+
   cursor:pointer;
+
   overflow-wrap:anywhere;
   word-break:break-word;
 }
@@ -474,11 +514,15 @@ textarea::placeholder{
 .spiral-wrap{
   position:relative;
   flex:1;
+
   background:rgba(0,0,0,.25);
+
   border:1px solid var(--border);
   border-radius:12px;
+
   overflow:hidden;
-  min-height:280px;
+
+  min-height:260px;
 }
 
 canvas{
@@ -490,10 +534,12 @@ canvas{
 .spiral-overlay{
   position:absolute;
   inset:0;
+
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+
   pointer-events:none;
 }
 
@@ -501,6 +547,7 @@ canvas{
   font-family:'Orbitron',sans-serif;
   font-size:clamp(2rem,5vw,4rem);
   font-weight:900;
+
   background:linear-gradient(135deg,var(--glow),var(--glow2),var(--glow3));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -516,8 +563,11 @@ canvas{
 
 .mobile-view{
   display:none;
+
   padding:12px;
+
   border-top:1px solid var(--border);
+
   background:rgba(0,0,0,.28);
 }
 
@@ -530,15 +580,21 @@ canvas{
 
 .viewer-word{
   min-height:70px;
+
   display:flex;
   justify-content:center;
   align-items:center;
+
   text-align:center;
+
   color:var(--glow);
+
   font-family:'Orbitron',sans-serif;
   font-weight:700;
+
   overflow-wrap:anywhere;
   word-break:break-word;
+
   font-size:clamp(.9rem,4vw,1.4rem);
 }
 
@@ -551,9 +607,12 @@ canvas{
 .viewer-controls button{
   flex:1;
   padding:10px;
+
   border:none;
   border-radius:10px;
+
   cursor:pointer;
+
   font-family:'Orbitron',sans-serif;
   font-size:.65rem;
 }
@@ -574,7 +633,7 @@ canvas{
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.72);
+  background:rgba(0,0,0,.85);
   display:none;
   justify-content:center;
   align-items:center;
@@ -583,10 +642,10 @@ canvas{
 }
 
 .modal-card{
-  width:min(700px,100%);
+  width:min(100%,900px);
   max-height:90vh;
   overflow:auto;
-  background:var(--card);
+  background:#0f0f18;
   border:1px solid var(--border);
   border-radius:20px;
   padding:20px;
@@ -594,40 +653,94 @@ canvas{
 
 .modal-title{
   font-family:'Orbitron',sans-serif;
-  font-size:1rem;
   color:var(--glow);
   margin-bottom:20px;
 }
 
+.guide{
+  display:grid;
+  gap:14px;
+}
+
 .guide-item{
-  margin-bottom:18px;
   padding:14px;
   border-radius:12px;
   background:rgba(255,255,255,.03);
-  border:1px solid var(--border);
+  border:1px solid rgba(255,255,255,.05);
 }
 
 .guide-item h3{
-  margin-bottom:8px;
   color:var(--glow2);
+  margin-bottom:8px;
 }
 
 .guide-item p{
-  font-size:.8rem;
-  color:var(--text);
+  color:var(--dim);
   line-height:1.6;
+  font-size:.8rem;
 }
 
 .close-btn{
   width:100%;
-  padding:12px;
+  margin-top:20px;
+  padding:14px;
   border:none;
   border-radius:12px;
-  cursor:pointer;
-  font-family:'Orbitron',sans-serif;
-  background:linear-gradient(135deg,var(--glow),#008ba5);
+  background:linear-gradient(135deg,var(--glow),var(--glow2));
   color:#000;
-  margin-top:20px;
+  font-family:'Orbitron',sans-serif;
+  cursor:pointer;
+}
+
+.live-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(0,0,0,.95);
+  display:none;
+  overflow:hidden;
+}
+
+.live-stream{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+}
+
+.stream-word{
+  position:absolute;
+  color:var(--glow);
+  font-family:'Orbitron',sans-serif;
+  animation:streamDown linear forwards;
+  white-space:nowrap;
+}
+
+@keyframes streamDown{
+  from{
+    transform:translateY(-120px);
+    opacity:0;
+  }
+  10%{
+    opacity:1;
+  }
+  to{
+    transform:translateY(120vh);
+    opacity:0;
+  }
+}
+
+.live-close{
+  position:absolute;
+  top:16px;
+  right:16px;
+  z-index:2;
+  border:none;
+  border-radius:12px;
+  padding:12px 18px;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--glow),var(--glow2));
+  color:#000;
+  font-family:'Orbitron',sans-serif;
 }
 
 /* ================= FOOTER ================= */
@@ -635,7 +748,9 @@ canvas{
 .log{
   padding:10px 14px;
   border-top:1px solid var(--border);
+
   color:var(--dim);
+
   font-size:.6rem;
 }
 
@@ -690,9 +805,12 @@ canvas{
     max-height:260px;
   }
 
+  .tabs{
+    grid-template-columns:repeat(2,1fr);
+  }
+
   .header{
     flex-wrap:wrap;
-    gap:10px;
   }
 }
 
@@ -720,7 +838,7 @@ canvas{
   }
 
   .tabs{
-    flex-wrap:nowrap;
+    grid-template-columns:1fr 1fr;
   }
 }
 
@@ -738,24 +856,28 @@ canvas{
   <!-- HEADER -->
   <div class="header">
 
-    <h1>⚡ INFINITE LOOP</h1>
+    <h1>⚡ INFINITE NAMING ENGINE</h1>
 
-    <div class="header-buttons">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
 
-      <button class="header-btn info-btn"
-      onclick="openInfo()">
-        ℹ INFO
-      </button>
+      <div class="header-buttons">
+        <button class="header-btn info-btn" onclick="openInfo()">
+          ℹ INFO
+        </button>
 
-      <button class="header-btn message-btn"
-      onclick="messageUs()">
-        💬 MESSAGE US
-      </button>
+        <button class="header-btn message-btn" onclick="messageUs()">
+          💬 MESSAGE US
+        </button>
 
-    </div>
+        <button class="header-btn info-btn" onclick="openLiveViewer()">
+          🌌 LIVE VIEW
+        </button>
+      </div>
 
-    <div class="badge" id="status">
-      STANDBY
+      <div class="badge" id="status">
+        STANDBY
+      </div>
+
     </div>
 
   </div>
@@ -763,27 +885,27 @@ canvas{
   <!-- TABS -->
   <div class="tabs">
 
-    <button class="tab-btn active" onclick="switchTab(1,this)">
+    <button class="tab active" onclick="setLogic(1,this)">
       LOGIC 1
     </button>
 
-    <button class="tab-btn" onclick="switchTab(2,this)">
+    <button class="tab" onclick="setLogic(2,this)">
       LOGIC 2
     </button>
 
-    <button class="tab-btn" onclick="switchTab(3,this)">
+    <button class="tab" onclick="setLogic(3,this)">
       LOGIC 3
     </button>
 
-    <button class="tab-btn" onclick="switchTab(4,this)">
+    <button class="tab" onclick="setLogic(4,this)">
       LOGIC 4
     </button>
 
-    <button class="tab-btn" onclick="switchTab(5,this)">
+    <button class="tab" onclick="setLogic(5,this)">
       LOGIC 5
     </button>
 
-    <button class="tab-btn" onclick="switchTab(6,this)">
+    <button class="tab" onclick="setLogic(6,this)">
       LOGIC 6
     </button>
 
@@ -846,7 +968,7 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 
       <button class="btn cycle"
       onclick="toggleCycle()">
-        ∞ INFINITE MAKER
+        ∞ INFINITE CYCLE
       </button>
 
       <div class="progress">
@@ -864,7 +986,7 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 
         <button class="btn"
         style="background:linear-gradient(135deg,var(--glow3),#c2410c);color:#fff"
-        onclick="appendFile()">
+        onclick="saveFile()">
           📎 APPEND FILE
         </button>
 
@@ -908,7 +1030,7 @@ ARTIFICIAL INTELLIGENCE"></textarea>
       <div class="panel">
 
         <div class="section-title">
-          🌀 INFINITE SPIRAL OF TIME
+          🌀 SPIRAL OF TIME
         </div>
 
         <div class="spiral-wrap">
@@ -977,7 +1099,6 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 </div>
 
 <!-- INFO MODAL -->
-
 <div class="modal" id="infoModal">
 
   <div class="modal-card">
@@ -991,56 +1112,48 @@ ARTIFICIAL INTELLIGENCE"></textarea>
       <div class="guide-item">
         <h3>1. Generate Unique Names</h3>
         <p>
-          Enter one or multiple keywords and the engine creates massive
-          combinations from shortest generated words to longest generated words.
+          Enter one or multiple keywords and the engine creates massive combinations from shortest generated words to longest generated words.
         </p>
       </div>
 
       <div class="guide-item">
         <h3>2. Sequential Reader Order</h3>
         <p>
-          The sequential reader now shows generated names from the
-          fewest-length generated word to the longest generated word
-          for every generation batch.
+          The sequential reader now shows generated names from the longest generated word to the shortest generated word in grouped motion.
         </p>
       </div>
 
       <div class="guide-item">
         <h3>3. Check Name Availability</h3>
         <p>
-          Always verify generated names online before branding,
-          launching domains, apps, companies, channels, or products.
+          Always verify generated names online before branding, launching domains, apps, companies, channels, or products.
         </p>
       </div>
 
       <div class="guide-item">
         <h3>4. Infinite Cycle</h3>
         <p>
-          Activate Infinite Maker to continuously generate evolving
-          naming combinations in real time.
+          Activate Infinite Cycle to continuously generate evolving naming combinations in real time.
         </p>
       </div>
 
       <div class="guide-item">
         <h3>5. Swipe Mobile Viewer</h3>
         <p>
-          On mobile phones, swipe left or right to browse generated
-          words from shortest generated words to longest generated words.
+          On mobile phones, swipe left or right to browse generated words from shortest generated words to longest generated words.
         </p>
       </div>
 
       <div class="guide-item">
         <h3>6. 8.6 Billion Possibilities</h3>
         <p>
-          Ensure you inspect your generated names carefully to
-          maximize uniqueness and originality for your identity.
+          Ensure you inspect your generated names carefully to maximize uniqueness and originality for your identity.
         </p>
       </div>
 
     </div>
 
-    <button class="close-btn"
-    onclick="closeInfo()">
+    <button class="close-btn" onclick="closeInfo()">
       CLOSE GUIDE
     </button>
 
@@ -1048,7 +1161,29 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 
 </div>
 
+<!-- LIVE VIEWER -->
+<div class="live-modal" id="liveModal">
+
+  <button class="live-close" onclick="closeLiveViewer()">
+    CLOSE
+  </button>
+
+  <div class="live-stream" id="liveStream"></div>
+
+</div>
+
 <script>
+
+/* ================= ITERATORS ================= */
+
+const ITERATORS = [
+"am","an","as","at","be","by","do","go","he","hi","if","in","is","it","me","my","no","of","on","or","ox","up","us","we","ad","ah","ai","al","aw","ba","bi","bo","da","ed","eh","el","em","er","ex","fa","ha","ho","id","jo","ka","ki","la","li","lo",
+"ace","act","add","air","arm","art","bag","boy","bus","cap","car","cup","ear","fan","fun","gem","hat","jar","key","map","net","owl","pen","sun","top","van","war","all","and","any","bar","big","bit","can"
+];
+
+const VOWELS = ['A','E','I','O','U'];
+
+const CONSONANTS = 'BCDFGHJKLMNPQRSTVWXYZ'.split('');
 
 /* ================= STATE ================= */
 
@@ -1059,26 +1194,14 @@ let cycle = false;
 let cycleInterval = null;
 let tickerInterval = null;
 let shuffleInterval = null;
+let liveInterval = null;
 
 let mobileIndex = 0;
 let tickerIndex = 0;
 
-let currentTab = 1;
+let currentLogic = 1;
 
-const tabStates = {
-  1:[],
-  2:[],
-  3:[],
-  4:[],
-  5:[],
-  6:[]
-};
-
-const ITERATION_SET = [
-"A","B","C","D","E","F","G","H","I","J","K","L","M",
-"N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-"ARTIFICIAL","INTELLIGENCE","CONTI"
-];
+let recentShuffle = [];
 
 /* ================= INIT ================= */
 
@@ -1093,6 +1216,23 @@ document.addEventListener('DOMContentLoaded',()=>{
   drawSpiral();
 
 });
+
+/* ================= LOGIC TAB ================= */
+
+function setLogic(num,el){
+
+  currentLogic = num;
+
+  document.querySelectorAll('.tab').forEach(t=>{
+
+    t.classList.remove('active');
+
+  });
+
+  el.classList.add('active');
+
+  log(`⚡ Logic ${num} activated`);
+}
 
 /* ================= BACKGROUND ================= */
 
@@ -1118,63 +1258,19 @@ function initBG(){
   }
 }
 
-/* ================= TABS ================= */
+/* ================= LOGIC 1 ================= */
 
-function switchTab(tab,el){
-
-  currentTab = tab;
-
-  document.querySelectorAll('.tab-btn').forEach(btn=>{
-    btn.classList.remove('active');
-  });
-
-  el.classList.add('active');
-
-  generated = [...tabStates[currentTab]];
-
-  renderAll();
-
-  log(`⚡ Switched to Logic ${tab}`);
-}
-
-function renderAll(){
-
-  const output =
-  document.getElementById('output');
-
-  output.innerHTML = '';
-
-  if(!generated.length){
-
-    output.innerHTML =
-    `<div style="padding:20px;text-align:center;color:var(--dim)">
-      ✦ Enter words and generate ✦
-    </div>`;
-
-  }else{
-
-    renderWords(generated,true);
-  }
-
-  updateStats();
-
-  startTicker();
-
-  startShuffle();
-
-  updateMobile();
-}
-
-/* ================= GENERATORS ================= */
-
-function logicOne(word){
+function makeWord(word){
 
   const results = [];
+
   const w = word.toUpperCase();
 
-  ITERATION_SET.forEach(prefix=>{
+  for(const prefixRaw of ITERATORS){
 
-    for(let i=w.length;i>=0;i--){
+    const prefix = prefixRaw.toUpperCase();
+
+    for(let i=0;i<=w.length;i++){
 
       const suffix = w.substring(i);
 
@@ -1182,135 +1278,174 @@ function logicOne(word){
 
       results.push(result);
     }
-  });
-
-  return [...new Set(
-    results.sort((a,b)=>a.length-b.length)
-  )];
-}
-
-function logicTwo(word){
-
-  const results = [];
-  const w = word.toUpperCase();
-
-  for(let i=0;i<w.length;i++){
-
-    const left = w.substring(i+1);
-    const right = w.substring(0,i+1);
-
-    results.push(left + right);
   }
 
-  return [...new Set(results)];
+  return results;
 }
 
-function logicThree(word){
+/* ================= LOGIC 2 ================= */
 
-  const results = [];
-  const upper = word.toUpperCase();
+function splitAppendEngine(word){
 
-  for(let i=0;i<upper.length;i++){
+  const w = word.toUpperCase();
+
+  const out = [];
+
+  for(let i=1;i<w.length;i++){
+
+    const start = w.substring(i);
+
+    const end = w.substring(0,i);
+
+    out.push(start + end);
+  }
+
+  return out;
+}
+
+/* ================= LOGIC 3 ================= */
+
+function nextConsonant(char){
+
+  const idx = CONSONANTS.indexOf(char);
+
+  if(idx === -1) return char;
+
+  return CONSONANTS[(idx + 1) % CONSONANTS.length];
+}
+
+function nextVowel(char){
+
+  const idx = VOWELS.indexOf(char);
+
+  if(idx === -1) return char;
+
+  return VOWELS[(idx + 1) % VOWELS.length];
+}
+
+function alphabetShiftEngine(word){
+
+  let current = word.toUpperCase();
+
+  const arr = [];
+
+  for(let x=0;x<10;x++){
 
     let next = '';
 
-    for(let j=0;j<upper.length;j++){
+    for(const c of current){
 
-      const code =
-      upper.charCodeAt(j);
+      if(VOWELS.includes(c)){
 
-      next +=
-      String.fromCharCode(code + 1);
-    }
+        next += nextVowel(c);
 
-    results.push(next);
-  }
+      }else if(CONSONANTS.includes(c)){
 
-  return [...new Set(results)];
-}
-
-function logicFour(word){
-
-  const results = [];
-
-  const vowels = {
-    A:'E',
-    E:'I',
-    I:'O',
-    O:'U',
-    U:'A'
-  };
-
-  const upper = word.toUpperCase();
-
-  for(let i=0;i<10;i++){
-
-    let newWord = '';
-
-    for(const ch of upper){
-
-      if(vowels[ch]){
-
-        newWord += vowels[ch];
+        next += nextConsonant(c);
 
       }else{
 
-        newWord +=
-        String.fromCharCode(ch.charCodeAt(0)+1);
+        next += c;
       }
     }
 
-    results.push(newWord);
+    arr.push(next);
+
+    current = next;
   }
 
-  return [...new Set(results)];
+  return arr;
 }
 
-function logicFive(word){
+/* ================= LOGIC 4 ================= */
 
-  const results = [];
+function vowelMutationEngine(word){
 
-  const upper = word.toUpperCase();
+  const w = word.toUpperCase();
 
-  for(let i=0;i<upper.length;i++){
+  const arr = [];
 
-    const a = upper.substring(i);
-    const b = upper.substring(0,i);
+  for(let v=0;v<VOWELS.length;v++){
 
-    results.push(a+b);
+    let out = '';
+
+    for(const c of w){
+
+      if(VOWELS.includes(c)){
+
+        out += VOWELS[v];
+
+      }else{
+
+        out += nextConsonant(c);
+      }
+    }
+
+    arr.push(out);
   }
 
-  return [...new Set(results)];
+  return arr;
 }
 
-function logicSix(word){
+/* ================= LOGIC 5 ================= */
 
-  const results = [];
+function expansionEngine(word){
 
-  const upper = word.toUpperCase();
+  const w = word.toUpperCase();
 
-  const syllables = [];
+  const arr = [];
 
-  for(let i=0;i<upper.length;i+=3){
+  ITERATORS.forEach(prefix=>{
 
-    syllables.push(
-      upper.substring(i,i+3)
+    for(let i=0;i<w.length;i++){
+
+      const left = w.substring(i);
+
+      const right = w.substring(0,i);
+
+      arr.push(
+        prefix.toUpperCase() +
+        left +
+        right
+      );
+    }
+
+  });
+
+  return arr;
+}
+
+/* ================= LOGIC 6 ================= */
+
+function syllableEngine(word){
+
+  const w = word.toUpperCase();
+
+  const parts = [];
+
+  for(let i=0;i<w.length;i+=3){
+
+    parts.push(
+      w.substring(i,i+3)
     );
   }
 
-  for(let i=0;i<syllables.length;i++){
+  const out = [];
+
+  for(let i=0;i<parts.length;i++){
 
     const rotated =
-    syllables.slice(i)
-    .concat(syllables.slice(0,i));
+    parts.slice(i)
+    .concat(parts.slice(0,i))
+    .join('');
 
-    results.push(rotated.join(''));
+    out.push(rotated);
   }
 
-  return [...new Set(results)];
+  return out;
 }
 
-/* ================= GENERATION ================= */
+/* ================= MASTER GENERATE ================= */
 
 function generate(){
 
@@ -1345,55 +1480,36 @@ function generate(){
 
   words.forEach(w=>{
 
-    if(currentTab === 1){
+    switch(currentLogic){
 
-      batch =
-      batch.concat(logicOne(w));
-    }
+      case 1:
+      batch = batch.concat(makeWord(w));
+      break;
 
-    if(currentTab === 2){
+      case 2:
+      batch = batch.concat(splitAppendEngine(w));
+      break;
 
-      batch =
-      batch.concat(logicTwo(w));
-    }
+      case 3:
+      batch = batch.concat(alphabetShiftEngine(w));
+      break;
 
-    if(currentTab === 3){
+      case 4:
+      batch = batch.concat(vowelMutationEngine(w));
+      break;
 
-      batch =
-      batch.concat(logicThree(w));
-    }
+      case 5:
+      batch = batch.concat(expansionEngine(w));
+      break;
 
-    if(currentTab === 4){
-
-      batch =
-      batch.concat(logicFour(w));
-    }
-
-    if(currentTab === 5){
-
-      batch =
-      batch.concat(logicFive(w));
-    }
-
-    if(currentTab === 6){
-
-      batch =
-      batch.concat(logicSix(w));
+      case 6:
+      batch = batch.concat(syllableEngine(w));
+      break;
     }
 
   });
 
-  batch = [...new Set(batch)];
-
-  batch.sort((a,b)=>a.length-b.length);
-
-  generated = [...generated,...batch];
-
-  generated = [...new Set(generated)];
-
-  generated.sort((a,b)=>a.length-b.length);
-
-  tabStates[currentTab] = [...generated];
+  generated = generated.concat(batch);
 
   renderWords(batch);
 
@@ -1413,12 +1529,12 @@ function generate(){
 
 /* ================= OUTPUT ================= */
 
-function renderWords(batch,replace=false){
+function renderWords(batch){
 
   const output =
   document.getElementById('output');
 
-  if(output.children.length === 1 || replace){
+  if(output.children.length === 1){
 
     output.innerHTML = '';
   }
@@ -1497,28 +1613,81 @@ function startTicker(){
   const ticker =
   document.getElementById('ticker');
 
-  generated.sort((a,b)=>a.length-b.length);
+  const sorted =
+  [...generated]
+  .sort((a,b)=>b.length-a.length);
 
-  ticker.textContent = generated[0];
+  ticker.textContent = sorted[0];
 
   tickerIndex = 0;
 
   tickerInterval = setInterval(()=>{
 
-    tickerIndex++;
+    const nextThree = [];
 
-    if(tickerIndex >= generated.length){
+    for(let i=0;i<3;i++){
+
+      const idx =
+      (tickerIndex + i) % sorted.length;
+
+      nextThree.push(sorted[idx]);
+    }
+
+    ticker.innerHTML =
+    nextThree.join('<br>');
+
+    tickerIndex += 3;
+
+    if(tickerIndex >= sorted.length){
 
       tickerIndex = 0;
     }
 
-    ticker.textContent =
-    generated[tickerIndex];
-
-  },1000);
+  },1200);
 }
 
 /* ================= SHUFFLER ================= */
+
+function uniqueFreshWord(){
+
+  const shuffled =
+  [...generated]
+  .sort(()=>Math.random()-.5);
+
+  for(const word of shuffled){
+
+    const end =
+    word.slice(-4);
+
+    let bad = false;
+
+    recentShuffle.forEach(r=>{
+
+      if(
+        r === word ||
+        r.endsWith(end) ||
+        word.endsWith(r.slice(-4))
+      ){
+
+        bad = true;
+      }
+    });
+
+    if(!bad){
+
+      recentShuffle.push(word);
+
+      if(recentShuffle.length > 10){
+
+        recentShuffle.shift();
+      }
+
+      return word;
+    }
+  }
+
+  return shuffled[0];
+}
 
 function startShuffle(){
 
@@ -1533,10 +1702,7 @@ function startShuffle(){
 
     if(!generated.length) return;
 
-    const word =
-    generated[
-      Math.floor(Math.random()*generated.length)
-    ];
+    const word = uniqueFreshWord();
 
     const el =
     document.createElement('div');
@@ -1563,9 +1729,9 @@ function startShuffle(){
         el.remove();
       }
 
-    },1500);
+    },1900);
 
-  },700);
+  },450);
 }
 
 /* ================= MOBILE ================= */
@@ -1679,75 +1845,98 @@ function toggleCycle(){
 
       let result = '';
 
-      if(currentTab === 1){
+      switch(currentLogic){
 
-        const batch = logicOne(word);
+        case 1:
 
-        result =
-        batch[Math.floor(Math.random()*batch.length)];
-      }
+        const prefix =
+        ITERATORS[
+          Math.floor(Math.random()*ITERATORS.length)
+        ].toUpperCase();
 
-      if(currentTab === 2){
-
-        const batch = logicTwo(word);
-
-        result =
-        batch[Math.floor(Math.random()*batch.length)];
-      }
-
-      if(currentTab === 3){
-
-        const batch = logicThree(word);
+        const cut =
+        Math.floor(Math.random()*word.length);
 
         result =
-        batch[Math.floor(Math.random()*batch.length)];
-      }
+        prefix + word.substring(cut);
 
-      if(currentTab === 4){
+        break;
 
-        const batch = logicFour(word);
-
-        result =
-        batch[Math.floor(Math.random()*batch.length)];
-      }
-
-      if(currentTab === 5){
-
-        const batch = logicFive(word);
+        case 2:
 
         result =
-        batch[Math.floor(Math.random()*batch.length)];
-      }
+        splitAppendEngine(word)[
+          Math.floor(
+            Math.random()*
+            splitAppendEngine(word).length
+          )
+        ];
 
-      if(currentTab === 6){
+        break;
 
-        const batch = logicSix(word);
+        case 3:
 
         result =
-        batch[Math.floor(Math.random()*batch.length)];
+        alphabetShiftEngine(word)[
+          Math.floor(
+            Math.random()*
+            alphabetShiftEngine(word).length
+          )
+        ];
+
+        break;
+
+        case 4:
+
+        result =
+        vowelMutationEngine(word)[
+          Math.floor(
+            Math.random()*
+            vowelMutationEngine(word).length
+          )
+        ];
+
+        break;
+
+        case 5:
+
+        result =
+        expansionEngine(word)[
+          Math.floor(
+            Math.random()*
+            expansionEngine(word).length
+          )
+        ];
+
+        break;
+
+        case 6:
+
+        result =
+        syllableEngine(word)[
+          Math.floor(
+            Math.random()*
+            syllableEngine(word).length
+          )
+        ];
+
+        break;
       }
 
-      if(!generated.includes(result)){
+      generated.push(result);
 
-        generated.push(result);
+      renderWords([result]);
 
-        generated.sort((a,b)=>a.length-b.length);
+      updateStats();
 
-        renderWords([result]);
-
-        updateStats();
-
-        updateMobile();
-
-        tabStates[currentTab] = [...generated];
-      }
+      updateMobile();
 
       document.getElementById('progress').style.width =
       (Math.random()*100)+'%';
 
     },180);
 
-    log('⚡ Infinite maker active');
+    log('⚡ Infinite cycle active');
 
   }else{
 
@@ -1787,13 +1976,6 @@ function saveFile(){
   URL.revokeObjectURL(a.href);
 
   log('✓ File downloaded');
-}
-
-function appendFile(){
-
-  saveFile();
-
-  log('✓ Append mode ready');
 }
 
 /* ================= CLIPBOARD ================= */
@@ -1895,7 +2077,7 @@ function drawSpiral(){
   requestAnimationFrame(drawSpiral);
 }
 
-/* ================= MODAL ================= */
+/* ================= INFO ================= */
 
 function openInfo(){
 
@@ -1912,7 +2094,73 @@ function closeInfo(){
 function messageUs(){
 
   window.location.href =
-  'mailto:contact@infiniteloop.com';
+  'mailto:hello@infiniteengine.ai';
+}
+
+/* ================= LIVE VIEWER ================= */
+
+function openLiveViewer(){
+
+  document.getElementById('liveModal').style.display =
+  'block';
+
+  startLiveMotion();
+}
+
+function closeLiveViewer(){
+
+  document.getElementById('liveModal').style.display =
+  'none';
+
+  clearInterval(liveInterval);
+}
+
+function startLiveMotion(){
+
+  clearInterval(liveInterval);
+
+  const stream =
+  document.getElementById('liveStream');
+
+  liveInterval = setInterval(()=>{
+
+    if(!generated.length) return;
+
+    const word =
+    generated[
+      Math.floor(Math.random()*generated.length)
+    ];
+
+    const el =
+    document.createElement('div');
+
+    el.className = 'stream-word';
+
+    el.textContent = word;
+
+    el.style.left =
+    Math.random()*90 + 'vw';
+
+    el.style.top = '-50px';
+
+    el.style.fontSize =
+    (.8 + Math.random()*2.4) + 'rem';
+
+    el.style.animationDuration =
+    (3 + Math.random()*4) + 's';
+
+    stream.appendChild(el);
+
+    setTimeout(()=>{
+
+      if(el.parentNode){
+
+        el.remove();
+      }
+
+    },8000);
+
+  },120);
 }
 
 /* ================= LOG ================= */
