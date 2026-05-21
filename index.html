@@ -1,870 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>∞ Infinite Naming Engine</title>
-
-<style>
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-
-:root{
-  --bg:#090910;
-  --card:#101019;
-  --border:#1a1a2e;
-  --glow:#00f0ff;
-  --glow2:#a855f7;
-  --glow3:#f97316;
-  --text:#f2f2ff;
-  --dim:#727290;
-  --success:#22c55e;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-html,body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:var(--bg);
-  color:var(--text);
-
-  /* FIX FLICKER */
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
-}
-
-body{
-  font-family:'Share Tech Mono', monospace;
-}
-
-/* ================= BACKGROUND ================= */
-
-.bg{
-  position:fixed;
-  inset:0;
-  overflow:hidden;
-  pointer-events:none;
-  z-index:0;
-}
-
-.ring{
-  position:absolute;
-  top:50%;
-  left:50%;
-  border-radius:50%;
-  border:1px solid rgba(0,240,255,.04);
-
-  /* STABLE */
-  will-change:transform;
-  backface-visibility:hidden;
-
-  animation:spin linear infinite;
-}
-
-@keyframes spin{
-  from{
-    transform:translate(-50%,-50%) rotate(0deg) scale(1);
-  }
-  to{
-    transform:translate(-50%,-50%) rotate(360deg) scale(.3);
-  }
-}
-
-/* ================= APP ================= */
-
-.app{
-  position:relative;
-  z-index:2;
-  width:100vw;
-  height:100vh;
-  padding:10px;
-}
-
-.main{
-  width:100%;
-  height:100%;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-
-  /* STABLE */
-  transform:translateZ(0);
-  backface-visibility:hidden;
-}
-
-/* ================= HEADER ================= */
-
-.header{
-  padding:14px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid var(--border);
-  background:linear-gradient(90deg, rgba(0,240,255,.05), transparent);
-  flex-shrink:0;
-}
-
-.header h1{
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(.8rem,2vw,1.15rem);
-  font-weight:900;
-  letter-spacing:2px;
-
-  background:linear-gradient(135deg,var(--glow),var(--glow2));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.badge{
-  padding:5px 12px;
-  border-radius:999px;
-  border:1px solid rgba(0,240,255,.25);
-  background:rgba(0,240,255,.08);
-  color:var(--glow);
-  font-size:.6rem;
-}
-
-/* ================= TOP ================= */
-
-.top{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  padding:10px;
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;
-}
-
-.top-box{
-  min-height:110px;
-  background:rgba(0,0,0,.28);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:10px;
-  overflow:hidden;
-}
-
-.top-label{
-  font-family:'Orbitron',sans-serif;
-  color:var(--dim);
-  font-size:.55rem;
-  letter-spacing:2px;
-  margin-bottom:8px;
-}
-
-/* ================= SEQUENTIAL READER ================= */
-
-#ticker{
-
-  width:100%;
-  height:calc(100% - 20px);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  text-align:center;
-  line-height:1.2;
-
-  overflow-wrap:anywhere;
-  word-break:break-word;
-
-  color:var(--glow);
-  font-family:'Orbitron',sans-serif;
-  font-weight:700;
-
-  font-size:clamp(.7rem,2vw,1.5rem);
-
-  padding:4px;
-
-  /* FIX FLICKER */
-  transition:none;
-  opacity:1 !important;
-}
-
-/* ================= SHUFFLER ================= */
-
-#shuffleBox{
-  position:relative;
-  width:100%;
-  height:calc(100% - 20px);
-  overflow:hidden;
-}
-
-.shuffle-word{
-  position:absolute;
-  padding:4px 8px;
-  background:rgba(168,85,247,.12);
-  border:1px solid rgba(168,85,247,.3);
-  border-radius:6px;
-  color:var(--glow2);
-
-  font-size:.7rem;
-
-  max-width:90%;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-
-  animation:fadeIn .2s linear;
-}
-
-@keyframes fadeIn{
-  from{
-    opacity:0;
-  }
-  to{
-    opacity:1;
-  }
-}
-
-/* ================= CONTENT ================= */
-
-.content{
-  flex:1;
-  display:grid;
-  grid-template-columns:300px 1fr;
-  overflow:hidden;
-}
-
-/* ================= LEFT ================= */
-
-.left{
-  border-right:1px solid var(--border);
-  padding:12px;
-  overflow:auto;
-  background:rgba(0,0,0,.15);
-}
-
-.left::-webkit-scrollbar{
-  width:4px;
-}
-
-.left::-webkit-scrollbar-thumb{
-  background:var(--glow);
-}
-
-.section-title{
-  font-family:'Orbitron',sans-serif;
-  font-size:.55rem;
-  color:var(--glow);
-  letter-spacing:2px;
-  margin-bottom:6px;
-}
-
-.input-wrap{
-  position:relative;
-}
-
-/* ================= TEXTAREA FIX ================= */
-
-textarea{
-
-  width:100%;
-  height:90px;
-
-  resize:none;
-  outline:none;
-
-  background:#0b0b12 !important;
-
-  color:#ffffff !important;
-
-  caret-color:var(--glow);
-
-  border:1px solid var(--border);
-  border-radius:10px;
-
-  padding:12px;
-
-  font-family:'Share Tech Mono', monospace;
-  font-size:.75rem;
-
-  /* STABLE */
-  transition:none !important;
-  animation:none !important;
-
-  -webkit-text-fill-color:#ffffff;
-
-  appearance:none;
-  -webkit-appearance:none;
-}
-
-textarea:focus{
-  border-color:var(--glow);
-  background:#0b0b12 !important;
-  color:#ffffff !important;
-}
-
-textarea::placeholder{
-  color:var(--dim);
-}
-
-.paste-btn{
-  position:absolute;
-  top:6px;
-  right:6px;
-
-  border:none;
-  cursor:pointer;
-
-  border-radius:6px;
-
-  padding:4px 8px;
-
-  background:rgba(168,85,247,.15);
-  border:1px solid rgba(168,85,247,.25);
-
-  color:var(--glow2);
-
-  font-size:.55rem;
-}
-
-.btn{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-
-  border:none;
-  border-radius:10px;
-
-  cursor:pointer;
-
-  font-family:'Orbitron',sans-serif;
-  font-size:.62rem;
-  font-weight:700;
-
-  letter-spacing:1px;
-}
-
-.generate{
-  background:linear-gradient(135deg,var(--glow),#008ba5);
-  color:#000;
-}
-
-.cycle{
-  background:linear-gradient(135deg,var(--success),#15803d);
-  color:#fff;
-}
-
-.progress{
-  width:100%;
-  height:3px;
-  background:rgba(255,255,255,.05);
-  border-radius:999px;
-  overflow:hidden;
-  margin-top:12px;
-}
-
-.progress-fill{
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg,var(--glow),var(--glow2));
-}
-
-/* ================= STORED ================= */
-
-.stored{
-  margin-top:14px;
-  background:rgba(0,0,0,.2);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:8px;
-  min-height:120px;
-  max-height:220px;
-  overflow:auto;
-}
-
-.tag{
-  display:inline-block;
-  margin:3px;
-  padding:4px 8px;
-  border-radius:999px;
-
-  background:rgba(0,240,255,.05);
-  border:1px solid rgba(0,240,255,.15);
-
-  color:var(--glow);
-
-  font-size:.6rem;
-}
-
-/* ================= RIGHT ================= */
-
-.right{
-  display:grid;
-  grid-template-rows:1fr 320px;
-  overflow:hidden;
-}
-
-.panel{
-  padding:12px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.output{
-  flex:1;
-  margin-top:8px;
-
-  background:rgba(0,0,0,.22);
-
-  border:1px solid var(--border);
-  border-radius:12px;
-
-  overflow:auto;
-  padding:8px;
-}
-
-/* ================= GENERATED WORDS ONLY ================= */
-
-.word{
-
-  padding:7px 8px;
-  margin:2px 0;
-
-  border-left:2px solid transparent;
-  border-radius:0 6px 6px 0;
-
-  color:var(--text);
-
-  font-size:.72rem;
-
-  cursor:pointer;
-
-  overflow-wrap:anywhere;
-  word-break:break-word;
-}
-
-.word:hover{
-  background:rgba(0,240,255,.05);
-  border-left-color:var(--glow);
-}
-
-/* ================= SPIRAL ================= */
-
-.spiral-wrap{
-  position:relative;
-  flex:1;
-
-  background:rgba(0,0,0,.25);
-
-  border:1px solid var(--border);
-  border-radius:12px;
-
-  overflow:hidden;
-
-  min-height:260px;
-}
-
-canvas{
-  width:100%;
-  height:100%;
-  display:block;
-}
-
-.spiral-overlay{
-  position:absolute;
-  inset:0;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-
-  pointer-events:none;
-}
-
-.big{
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(2rem,5vw,4rem);
-  font-weight:900;
-
-  background:linear-gradient(135deg,var(--glow),var(--glow2),var(--glow3));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.label{
-  font-size:.6rem;
-  color:var(--dim);
-  letter-spacing:3px;
-}
-
-/* ================= MOBILE VIEWER ================= */
-
-.mobile-view{
-  display:none;
-
-  padding:12px;
-
-  border-top:1px solid var(--border);
-
-  background:rgba(0,0,0,.28);
-}
-
-.viewer{
-  background:rgba(0,0,0,.4);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-}
-
-.viewer-word{
-  min-height:70px;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  text-align:center;
-
-  color:var(--glow);
-
-  font-family:'Orbitron',sans-serif;
-  font-weight:700;
-
-  overflow-wrap:anywhere;
-  word-break:break-word;
-
-  font-size:clamp(.9rem,4vw,1.4rem);
-}
-
-.viewer-controls{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
-}
-
-.viewer-controls button{
-  flex:1;
-  padding:10px;
-
-  border:none;
-  border-radius:10px;
-
-  cursor:pointer;
-
-  font-family:'Orbitron',sans-serif;
-  font-size:.65rem;
-}
-
-.copy{
-  background:linear-gradient(135deg,var(--glow),#008ba5);
-  color:#000;
-}
-
-.nav{
-  background:rgba(168,85,247,.15);
-  border:1px solid rgba(168,85,247,.25);
-  color:var(--glow2);
-}
-
-/* ================= FOOTER ================= */
-
-.log{
-  padding:10px 14px;
-  border-top:1px solid var(--border);
-
-  color:var(--dim);
-
-  font-size:.6rem;
-}
-
-/* ================= MOBILE ================= */
-
-@media(max-width:900px){
-
-  body{
-    overflow:auto;
-  }
-
-  .app{
-    height:auto;
-    min-height:100vh;
-  }
-
-  .main{
-    height:auto;
-    min-height:100vh;
-  }
-
-  .content{
-    grid-template-columns:1fr;
-  }
-
-  .left{
-    border-right:none;
-    border-bottom:1px solid var(--border);
-  }
-
-  .top{
-    grid-template-columns:1fr;
-  }
-
-  .right{
-    grid-template-rows:auto auto;
-  }
-
-  .mobile-view{
-    display:block;
-  }
-
-  .desktop{
-    display:none;
-  }
-
-  .spiral-wrap{
-    min-height:440px;
-  }
-
-  .output{
-    max-height:260px;
-  }
-}
-
-@media(max-width:600px){
-
-  .header{
-    padding:12px;
-  }
-
-  .header h1{
-    font-size:.8rem;
-    letter-spacing:1px;
-  }
-
-  .top-box{
-    min-height:90px;
-  }
-
-  .spiral-wrap{
-    min-height:500px;
-  }
-
-  .big{
-    font-size:2.7rem;
-  }
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="bg" id="bg"></div>
-
-<div class="app">
-
-<div class="main">
-
-  <!-- HEADER -->
-  <div class="header">
-
-    <h1>⚡ INFINITE NAMING ENGINE</h1>
-
-    <div class="badge" id="status">
-      STANDBY
-    </div>
-
-  </div>
-
-  <!-- TOP -->
-  <div class="top">
-
-    <div class="top-box">
-
-      <div class="top-label">
-        ⏱ SEQUENTIAL READER
-      </div>
-
-      <div id="ticker">
-        Awaiting Generation...
-      </div>
-
-    </div>
-
-    <div class="top-box">
-
-      <div class="top-label">
-        🔀 TOP MAKINGS
-      </div>
-
-      <div id="shuffleBox"></div>
-
-    </div>
-
-  </div>
-
-  <!-- CONTENT -->
-  <div class="content">
-
-    <!-- LEFT -->
-    <div class="left">
-
-      <div class="section-title">
-        INPUT WORDS
-      </div>
-
-      <div class="input-wrap">
-
-        <textarea id="input"
-        placeholder="Paste words here...
-ARTIFICIAL INTELLIGENCE"></textarea>
-
-        <button class="paste-btn"
-        onclick="pasteClipboard()">
-          📋 PASTE
-        </button>
-
-      </div>
-
-      <button class="btn generate"
-      onclick="generate()">
-        ⚡ GENERATE
-      </button>
-
-      <button class="btn cycle"
-      onclick="toggleCycle()">
-        ∞ INFINITE CYCLE
-      </button>
-
-      <div class="progress">
-        <div class="progress-fill" id="progress"></div>
-      </div>
-
-      <!-- DESKTOP -->
-      <div class="desktop">
-
-        <button class="btn"
-        style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff"
-        onclick="saveFile()">
-          💾 SAVE FILE
-        </button>
-
-        <button class="btn"
-        style="background:linear-gradient(135deg,var(--glow3),#c2410c);color:#fff"
-        onclick="saveFile()">
-          📎 APPEND FILE
-        </button>
-
-      </div>
-
-      <div style="margin-top:14px">
-
-        <div class="section-title">
-          STORED WORDS
-        </div>
-
-        <div class="stored" id="stored">
-          <span style="color:var(--dim);font-size:.7rem">
-            No words stored yet...
-          </span>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- RIGHT -->
-    <div class="right">
-
-      <div class="panel">
-
-        <div class="section-title">
-          📜 GENERATED WORDS
-        </div>
-
-        <div class="output" id="output">
-
-          <div style="padding:20px;text-align:center;color:var(--dim)">
-            ✦ Enter words and generate ✦
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="panel">
-
-        <div class="section-title">
-          🌀 SPIRAL OF TIME
-        </div>
-
-        <div class="spiral-wrap">
-
-          <canvas id="canvas"></canvas>
-
-          <div class="spiral-overlay">
-
-            <div class="big" id="big">
-              0
-            </div>
-
-            <div class="label">
-              TOTAL WORDS
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- MOBILE -->
-  <div class="mobile-view">
-
-    <div class="viewer">
-
-      <div class="viewer-word"
-      id="mobileWord">
-        No words generated yet
-      </div>
-
-      <div class="viewer-controls">
-
-        <button class="nav"
-        onclick="prevWord()">
-          ⬅ BACK
-        </button>
-
-        <button class="copy"
-        onclick="copyWord()">
-          📋 COPY
-        </button>
-
-        <button class="nav"
-        onclick="nextWord()">
-          NEXT ➡
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- FOOTER -->
-  <div class="log" id="log">
-    System initialized...
-  </div>
-
-</div>
-</div>
+<!-- =========================
+UPDATED LOGIC PATCH
+REPLACE ONLY THE <script> SECTION
+========================= -->
 
 <script>
 
@@ -879,8 +16,10 @@ const ITERATORS = [
 
 let words = [];
 let generated = [];
+let uniqueGenerated = [];
 
 let cycle = false;
+
 let cycleInterval = null;
 let tickerInterval = null;
 let shuffleInterval = null;
@@ -926,6 +65,23 @@ function initBG(){
   }
 }
 
+/* ================= VALID NEW WORD CHECK ================= */
+
+/* REMOVE ORIGINAL ITERATOR WORDS */
+/* REMOVE ORIGINAL INPUT WORDS */
+/* ONLY KEEP TRUE GENERATED WORDS */
+
+function isValidGeneratedWord(word){
+
+  const upper = word.toUpperCase();
+
+  if(words.includes(upper)) return false;
+
+  if(ITERATORS.includes(word.toLowerCase())) return false;
+
+  return true;
+}
+
 /* ================= GENERATION ================= */
 
 function makeWord(word){
@@ -944,12 +100,19 @@ function makeWord(word){
 
       const result = prefix + suffix;
 
-      results.push(result);
+      if(
+        isValidGeneratedWord(result)
+      ){
+
+        results.push(result);
+      }
     }
   }
 
   return results;
 }
+
+/* ================= GENERATE ================= */
 
 function generate(){
 
@@ -987,9 +150,28 @@ function generate(){
     batch = batch.concat(makeWord(w));
   });
 
-  generated = generated.concat(batch);
+  /* REMOVE DUPLICATES */
+  batch = [...new Set(batch)];
 
-  renderWords(batch);
+  /* =========================
+  SMALL TO BIG ORDER
+  ========================= */
+
+  batch.sort((a,b)=>{
+
+    if(a.length === b.length){
+
+      return a.localeCompare(b);
+    }
+
+    return a.length - b.length;
+  });
+
+  generated = batch;
+
+  uniqueGenerated = [...generated];
+
+  renderWords(uniqueGenerated);
 
   updateStats();
 
@@ -997,12 +179,15 @@ function generate(){
 
   startShuffle();
 
+  randomizeMobileWord();
+
   updateMobile();
 
   document.getElementById('status').textContent =
   'GENERATED';
 
-  log(`✓ Generated ${batch.length.toLocaleString()} words`);
+  log(`✓ Generated ${generated.length.toLocaleString()} new words`);
+
 }
 
 /* ================= OUTPUT ================= */
@@ -1012,10 +197,7 @@ function renderWords(batch){
   const output =
   document.getElementById('output');
 
-  if(output.children.length === 1){
-
-    output.innerHTML = '';
-  }
+  output.innerHTML = '';
 
   const frag =
   document.createDocumentFragment();
@@ -1027,7 +209,6 @@ function renderWords(batch){
 
     div.className = 'word';
 
-    /* GENERATED WORD ONLY */
     div.textContent = word;
 
     div.onclick = ()=>{
@@ -1037,7 +218,7 @@ function renderWords(batch){
       log(`📋 Copied ${word}`);
 
       mobileIndex =
-      generated.indexOf(word);
+      uniqueGenerated.indexOf(word);
 
       updateMobile();
     };
@@ -1047,8 +228,6 @@ function renderWords(batch){
 
   output.appendChild(frag);
 
-  output.scrollTop =
-  output.scrollHeight;
 }
 
 /* ================= STORED ================= */
@@ -1081,7 +260,10 @@ function updateStats(){
   generated.length.toLocaleString();
 }
 
-/* ================= TICKER ================= */
+/* ================= SEQUENTIAL READER ================= */
+
+/* SMALL TO BIG */
+/* ONLY TRUE GENERATED WORDS */
 
 function startTicker(){
 
@@ -1092,11 +274,11 @@ function startTicker(){
   const ticker =
   document.getElementById('ticker');
 
-  ticker.textContent = generated[0];
-
   tickerIndex = 0;
 
-  /* NO FLICKER */
+  ticker.textContent =
+  generated[0];
+
   tickerInterval = setInterval(()=>{
 
     tickerIndex++;
@@ -1112,7 +294,9 @@ function startTicker(){
   },1000);
 }
 
-/* ================= SHUFFLER ================= */
+/* ================= TOP MAKINGS ================= */
+
+/* ONLY TRUE GENERATED WORDS */
 
 function startShuffle(){
 
@@ -1162,14 +346,28 @@ function startShuffle(){
   },700);
 }
 
-/* ================= MOBILE ================= */
+/* ================= MOBILE PANEL ================= */
+
+/* RANDOM NEW WORDS */
+/* NOT SMALL TO BIG */
+/* TRAVEL AROUND RANDOMLY */
+
+function randomizeMobileWord(){
+
+  if(!uniqueGenerated.length) return;
+
+  mobileIndex =
+  Math.floor(
+    Math.random() * uniqueGenerated.length
+  );
+}
 
 function updateMobile(){
 
   const viewer =
   document.getElementById('mobileWord');
 
-  if(!generated.length){
+  if(!uniqueGenerated.length){
 
     viewer.textContent =
     'No words generated yet';
@@ -1180,41 +378,77 @@ function updateMobile(){
   if(mobileIndex < 0){
 
     mobileIndex =
-    generated.length - 1;
+    uniqueGenerated.length - 1;
   }
 
-  if(mobileIndex >= generated.length){
+  if(mobileIndex >= uniqueGenerated.length){
 
     mobileIndex = 0;
   }
 
   viewer.textContent =
-  generated[mobileIndex];
+  uniqueGenerated[mobileIndex];
 }
+
+/* RANDOM NEXT */
 
 function nextWord(){
 
-  mobileIndex++;
+  if(!uniqueGenerated.length) return;
+
+  let next =
+  Math.floor(
+    Math.random() * uniqueGenerated.length
+  );
+
+  while(next === mobileIndex){
+
+    next =
+    Math.floor(
+      Math.random() * uniqueGenerated.length
+    );
+  }
+
+  mobileIndex = next;
 
   updateMobile();
 }
+
+/* RANDOM BACK */
 
 function prevWord(){
 
-  mobileIndex--;
+  if(!uniqueGenerated.length) return;
+
+  let prev =
+  Math.floor(
+    Math.random() * uniqueGenerated.length
+  );
+
+  while(prev === mobileIndex){
+
+    prev =
+    Math.floor(
+      Math.random() * uniqueGenerated.length
+    );
+  }
+
+  mobileIndex = prev;
 
   updateMobile();
 }
 
+/* COPY */
+
 function copyWord(){
 
-  if(!generated.length) return;
+  if(!uniqueGenerated.length) return;
 
   navigator.clipboard.writeText(
-    generated[mobileIndex]
+    uniqueGenerated[mobileIndex]
   );
 
-  log(`📋 Copied ${generated[mobileIndex]}`);
+  log(`📋 Copied ${uniqueGenerated[mobileIndex]}`);
 }
 
 /* SWIPE */
@@ -1251,7 +485,7 @@ mobile.addEventListener('touchend',e=>{
   }
 });
 
-/* ================= CYCLE ================= */
+/* ================= INFINITE CYCLE ================= */
 
 function toggleCycle(){
 
@@ -1282,13 +516,35 @@ function toggleCycle(){
       const result =
       prefix + word.substring(cut);
 
-      generated.push(result);
+      if(
+        !generated.includes(result)
+        &&
+        isValidGeneratedWord(result)
+      ){
 
-      renderWords([result]);
+        generated.push(result);
 
-      updateStats();
+        generated.sort((a,b)=>{
 
-      updateMobile();
+          if(a.length === b.length){
+
+            return a.localeCompare(b);
+          }
+
+          return a.length - b.length;
+        });
+
+        uniqueGenerated = [...generated];
+
+        renderWords(uniqueGenerated);
+
+        updateStats();
+
+        startTicker();
+
+        updateMobile();
+
+      }
 
       document.getElementById('progress').style.width =
       (Math.random()*100)+'%';
@@ -1308,11 +564,19 @@ function toggleCycle(){
   }
 }
 
-/* ================= FILE ================= */
+/* ================= DOWNLOAD ================= */
 
 function saveFile(){
 
-  let txt = '';
+  if(!generated.length){
+
+    log('⚠ No generated words');
+
+    return;
+  }
+
+  let txt =
+  'INFINITE NAMING ENGINE\n\n';
 
   generated.forEach(w=>{
 
@@ -1328,13 +592,14 @@ function saveFile(){
   a.href =
   URL.createObjectURL(blob);
 
-  a.download = 'generated-words.txt';
+  a.download =
+  'generated-words.txt';
 
   a.click();
 
   URL.revokeObjectURL(a.href);
 
-  log('✓ File downloaded');
+  log('✓ Downloaded generated words');
 }
 
 /* ================= CLIPBOARD ================= */
@@ -1445,6 +710,3 @@ function log(msg){
 }
 
 </script>
-
-</body>
-</html>
