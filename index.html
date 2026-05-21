@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>∞NameHuemerous</title>
+<title>∞ Infinite Naming World</title>
 
 <style>
 
@@ -1177,14 +1177,27 @@ canvas{
   animation-delay:calc(var(--word-index) * 1.2s);
   border-left:3px solid transparent;
   background:rgba(255,255,255,.02);
+  -webkit-animation:readingIndicator 8s ease-in-out infinite;
+  -webkit-animation-delay:calc(var(--word-index) * 1.2s);
+  will-change: background, border-left-color, color, box-shadow;
+  -webkit-tap-highlight-color: transparent;
+
 }
 
-.reading-word:hover{
+.reading-word:hover
+.reading-word.active{
   background:rgba(34,197,94,.15);
   border-left-color:var(--success);
   transform:translateX(4px);
   cursor:pointer;
 }
+
+.reading-word:active{
+  background:rgba(34,197,94,.25);
+  border-left-color:var(--success);
+  color:var(--success);
+}
+
 
 @keyframes readingIndicator{
   0%,100%{
@@ -1206,6 +1219,56 @@ canvas{
     box-shadow:0 0 12px rgba(0,240,255,.25);
   }
 }
+
+
+
+@-webkit-keyframes readingIndicator{
+  0%,100%{
+    background:rgba(255,255,255,.02);
+    border-left-color:transparent;
+    color:var(--text);
+    box-shadow:none;
+  }
+  20%,40%{
+    background:rgba(34,197,94,.2);
+    border-left-color:var(--success);
+    color:var(--success);
+    box-shadow:0 0 15px rgba(34,197,94,.3);
+  }
+  60%,80%{
+    background:rgba(0,240,255,.15);
+    border-left-color:var(--glow);
+    color:var(--glow);
+    box-shadow:0 0 12px rgba(0,240,255,.25);
+  }
+}
+
+/* Mobile touch support */
+@media(hover:none){
+  .reading-word:hover{
+    animation-play-state:running;
+    -webkit-animation-play-state:running;
+  }
+  .reading-word.touched{
+    animation-play-state:paused;
+    -webkit-animation-play-state:paused;
+    background:rgba(34,197,94,.25);
+    border-left-color:var(--success);
+    color:var(--success);
+  }
+}
+
+
+/* Ensure animations work on mobile Safari */
+@supports (-webkit-touch-callout:none){
+  .reading-word{
+    -webkit-transform:translateZ(0);
+    transform:translateZ(0);
+  }
+}
+
+
+
 
 .reading-word:hover{
   animation-play-state:paused;
@@ -1237,6 +1300,10 @@ canvas{
     box-shadow:0 0 10px rgba(34,197,94,.3);
   }
 }
+
+
+
+
 
 .timed-overlay-buttons{
   display:flex;
@@ -1346,9 +1413,33 @@ canvas{
   }
 
 
+  .modal{
+  position:fixed !important;
+  inset:0 !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  padding:10px !important;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  -webkit-transform:translateZ(0);
+  transform:translateZ(0);
+}
+
+.modal-card{
+  width:100% !important;
+  max-height:85vh !important;
+  margin:0 !important;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  -webkit-transform:translateZ(0);
+  transform:translateZ(0);
+  overflow-y:auto !important;
+  -webkit-overflow-scrolling:touch;
+}
 
 
 
+}
 
 
 
@@ -1410,7 +1501,17 @@ canvas{
     font-size:.75rem;
   }
 
+    .modal{
+    position:fixed !important;
+    inset:0 !important;
+    padding:0 !important;
+    }
 
+    .modal-card{
+    border-radius:0 !important;
+    max-height:100vh !important;
+    height:auto !important;
+    }
 
 
 }
@@ -2840,9 +2941,8 @@ function closeInfo(){
 
     document.getElementById('infoModal').style.display =
     'none';
+
     document.getElementById('counterBadge').classList.add('hidden')
-
-
 
 }
 
