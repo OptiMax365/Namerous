@@ -2,1467 +2,1449 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>∞ Infinite Naming Engine</title>
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
 
-  :root {
-    --bg: #0a0a0f; --card: #111119; --border: #1a1a2e;
-    --glow: #00f0ff; --glow2: #a855f7; --glow3: #f97316;
-    --text: #e0e0e8; --dim: #555570; --success: #22c55e;
-    --input-bg: rgba(17, 17, 25, 0.95);
-    --input-border: rgba(0, 240, 255, 0.3);
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+:root{
+  --bg:#090910;
+  --card:#101019;
+  --border:#1a1a2e;
+  --glow:#00f0ff;
+  --glow2:#a855f7;
+  --glow3:#f97316;
+  --text:#f2f2ff;
+  --dim:#727290;
+  --success:#22c55e;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
+
+  /* FIX FLICKER */
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+body{
+  font-family:'Share Tech Mono', monospace;
+}
+
+/* ================= BACKGROUND ================= */
+
+.bg{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+
+.ring{
+  position:absolute;
+  top:50%;
+  left:50%;
+  border-radius:50%;
+  border:1px solid rgba(0,240,255,.04);
+
+  /* STABLE */
+  will-change:transform;
+  backface-visibility:hidden;
+
+  animation:spin linear infinite;
+}
+
+@keyframes spin{
+  from{
+    transform:translate(-50%,-50%) rotate(0deg) scale(1);
+  }
+  to{
+    transform:translate(-50%,-50%) rotate(360deg) scale(.3);
+  }
+}
+
+/* ================= APP ================= */
+
+.app{
+  position:relative;
+  z-index:2;
+  width:100vw;
+  height:100vh;
+  padding:10px;
+}
+
+.main{
+  width:100%;
+  height:100%;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+
+  /* STABLE */
+  transform:translateZ(0);
+  backface-visibility:hidden;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+  padding:14px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(90deg, rgba(0,240,255,.05), transparent);
+  flex-shrink:0;
+}
+
+.header h1{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(.8rem,2vw,1.15rem);
+  font-weight:900;
+  letter-spacing:2px;
+
+  background:linear-gradient(135deg,var(--glow),var(--glow2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.badge{
+  padding:5px 12px;
+  border-radius:999px;
+  border:1px solid rgba(0,240,255,.25);
+  background:rgba(0,240,255,.08);
+  color:var(--glow);
+  font-size:.6rem;
+}
+
+/* ================= TOP ================= */
+
+.top{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:10px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+
+.top-box{
+  min-height:110px;
+  background:rgba(0,0,0,.28);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px;
+  overflow:hidden;
+}
+
+.top-label{
+  font-family:'Orbitron',sans-serif;
+  color:var(--dim);
+  font-size:.55rem;
+  letter-spacing:2px;
+  margin-bottom:8px;
+}
+
+/* ================= SEQUENTIAL READER ================= */
+
+#ticker{
+
+  width:100%;
+  height:calc(100% - 20px);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+  line-height:1.2;
+
+  overflow-wrap:anywhere;
+  word-break:break-word;
+
+  color:var(--glow);
+  font-family:'Orbitron',sans-serif;
+  font-weight:700;
+
+  font-size:clamp(.7rem,2vw,1.5rem);
+
+  padding:4px;
+
+  /* FIX FLICKER */
+  transition:none;
+  opacity:1 !important;
+}
+
+/* ================= SHUFFLER ================= */
+
+#shuffleBox{
+  position:relative;
+  width:100%;
+  height:calc(100% - 20px);
+  overflow:hidden;
+}
+
+.shuffle-word{
+  position:absolute;
+  padding:4px 8px;
+  background:rgba(168,85,247,.12);
+  border:1px solid rgba(168,85,247,.3);
+  border-radius:6px;
+  color:var(--glow2);
+
+  font-size:.7rem;
+
+  max-width:90%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+
+  animation:fadeIn .2s linear;
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+  }
+  to{
+    opacity:1;
+  }
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+  flex:1;
+  display:grid;
+  grid-template-columns:300px 1fr;
+  overflow:hidden;
+}
+
+/* ================= LEFT ================= */
+
+.left{
+  border-right:1px solid var(--border);
+  padding:12px;
+  overflow:auto;
+  background:rgba(0,0,0,.15);
+}
+
+.left::-webkit-scrollbar{
+  width:4px;
+}
+
+.left::-webkit-scrollbar-thumb{
+  background:var(--glow);
+}
+
+.section-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:.55rem;
+  color:var(--glow);
+  letter-spacing:2px;
+  margin-bottom:6px;
+}
+
+.input-wrap{
+  position:relative;
+}
+
+/* ================= TEXTAREA FIX ================= */
+
+textarea{
+
+  width:100%;
+  height:90px;
+
+  resize:none;
+  outline:none;
+
+  background:#0b0b12 !important;
+
+  color:#ffffff !important;
+
+  caret-color:var(--glow);
+
+  border:1px solid var(--border);
+  border-radius:10px;
+
+  padding:12px;
+
+  font-family:'Share Tech Mono', monospace;
+  font-size:.75rem;
+
+  /* STABLE */
+  transition:none !important;
+  animation:none !important;
+
+  -webkit-text-fill-color:#ffffff;
+
+  appearance:none;
+  -webkit-appearance:none;
+}
+
+textarea:focus{
+  border-color:var(--glow);
+  background:#0b0b12 !important;
+  color:#ffffff !important;
+}
+
+textarea::placeholder{
+  color:var(--dim);
+}
+
+.paste-btn{
+  position:absolute;
+  top:6px;
+  right:6px;
+
+  border:none;
+  cursor:pointer;
+
+  border-radius:6px;
+
+  padding:4px 8px;
+
+  background:rgba(168,85,247,.15);
+  border:1px solid rgba(168,85,247,.25);
+
+  color:var(--glow2);
+
+  font-size:.55rem;
+}
+
+.btn{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+
+  border:none;
+  border-radius:10px;
+
+  cursor:pointer;
+
+  font-family:'Orbitron',sans-serif;
+  font-size:.62rem;
+  font-weight:700;
+
+  letter-spacing:1px;
+}
+
+.generate{
+  background:linear-gradient(135deg,var(--glow),#008ba5);
+  color:#000;
+}
+
+.cycle{
+  background:linear-gradient(135deg,var(--success),#15803d);
+  color:#fff;
+}
+
+.progress{
+  width:100%;
+  height:3px;
+  background:rgba(255,255,255,.05);
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:12px;
+}
+
+.progress-fill{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,var(--glow),var(--glow2));
+}
+
+/* ================= STORED ================= */
+
+.stored{
+  margin-top:14px;
+  background:rgba(0,0,0,.2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  min-height:120px;
+  max-height:220px;
+  overflow:auto;
+}
+
+.tag{
+  display:inline-block;
+  margin:3px;
+  padding:4px 8px;
+  border-radius:999px;
+
+  background:rgba(0,240,255,.05);
+  border:1px solid rgba(0,240,255,.15);
+
+  color:var(--glow);
+
+  font-size:.6rem;
+}
+
+/* ================= RIGHT ================= */
+
+.right{
+  display:grid;
+  grid-template-rows:1fr 320px;
+  overflow:hidden;
+}
+
+.panel{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.output{
+  flex:1;
+  margin-top:8px;
+
+  background:rgba(0,0,0,.22);
+
+  border:1px solid var(--border);
+  border-radius:12px;
+
+  overflow:auto;
+  padding:8px;
+}
+
+/* ================= GENERATED WORDS ONLY ================= */
+
+.word{
+
+  padding:7px 8px;
+  margin:2px 0;
+
+  border-left:2px solid transparent;
+  border-radius:0 6px 6px 0;
+
+  color:var(--text);
+
+  font-size:.72rem;
+
+  cursor:pointer;
+
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+.word:hover{
+  background:rgba(0,240,255,.05);
+  border-left-color:var(--glow);
+}
+
+/* ================= SPIRAL ================= */
+
+.spiral-wrap{
+  position:relative;
+  flex:1;
+
+  background:rgba(0,0,0,.25);
+
+  border:1px solid var(--border);
+  border-radius:12px;
+
+  overflow:hidden;
+
+  min-height:260px;
+}
+
+canvas{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.spiral-overlay{
+  position:absolute;
+  inset:0;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  pointer-events:none;
+}
+
+.big{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(2rem,5vw,4rem);
+  font-weight:900;
+
+  background:linear-gradient(135deg,var(--glow),var(--glow2),var(--glow3));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.label{
+  font-size:.6rem;
+  color:var(--dim);
+  letter-spacing:3px;
+}
+
+/* ================= MOBILE VIEWER ================= */
+
+.mobile-view{
+  display:none;
+
+  padding:12px;
+
+  border-top:1px solid var(--border);
+
+  background:rgba(0,0,0,.28);
+}
+
+.viewer{
+  background:rgba(0,0,0,.4);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+}
+
+.viewer-word{
+  min-height:70px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  text-align:center;
+
+  color:var(--glow);
+
+  font-family:'Orbitron',sans-serif;
+  font-weight:700;
+
+  overflow-wrap:anywhere;
+  word-break:break-word;
+
+  font-size:clamp(.9rem,4vw,1.4rem);
+}
+
+.viewer-controls{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.viewer-controls button{
+  flex:1;
+  padding:10px;
+
+  border:none;
+  border-radius:10px;
+
+  cursor:pointer;
+
+  font-family:'Orbitron',sans-serif;
+  font-size:.65rem;
+}
+
+.copy{
+  background:linear-gradient(135deg,var(--glow),#008ba5);
+  color:#000;
+}
+
+.nav{
+  background:rgba(168,85,247,.15);
+  border:1px solid rgba(168,85,247,.25);
+  color:var(--glow2);
+}
+
+/* ================= FOOTER ================= */
+
+.log{
+  padding:10px 14px;
+  border-top:1px solid var(--border);
+
+  color:var(--dim);
+
+  font-size:.6rem;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:900px){
+
+  body{
+    overflow:auto;
   }
 
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-  body { 
-    background: var(--bg); 
-    color: var(--text); 
-    font-family: 'Share Tech Mono', monospace; 
-    height: 100vh; 
-    width: 100vw; 
-    overflow: hidden; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .app{
+    height:auto;
+    min-height:100vh;
   }
 
-  /* BACKGROUND SPIRAL - Optimized for performance */
-  .spiral-bg { 
-    position: fixed; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%,-50%); 
-    width: 700px; 
-    height: 700px; 
-    pointer-events: none; 
-    z-index: 0; 
-    will-change: transform;
-  }
-  .spiral-ring { 
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    border: 1px solid rgba(0,240,255,0.06); 
-    border-radius: 50%; 
-    animation: spiralSpin linear infinite; 
-    will-change: transform, opacity;
-  }
-  @keyframes spiralSpin { 
-    0% { transform: translate(-50%,-50%) rotate(0deg) scale(1); opacity: 0.6; } 
-    50% { opacity: 0.15; } 
-    100% { transform: translate(-50%,-50%) rotate(360deg) scale(0.3); opacity: 0; } 
+  .main{
+    height:auto;
+    min-height:100vh;
   }
 
-  /* MAIN CARD - Responsive */
-  .main-card {
-    position: relative; 
-    z-index: 10; 
-    width: 98vw; 
-    max-width: 1400px; 
-    height: 98vh; 
-    max-height: 900px;
-    background: var(--card); 
-    border: 1px solid var(--border); 
-    border-radius: 16px;
-    box-shadow: 0 0 60px rgba(0,240,255,0.06), inset 0 0 100px rgba(0,0,0,0.5);
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden; 
-    backdrop-filter: blur(4px);
-    transition: all 0.3s ease;
+  .content{
+    grid-template-columns:1fr;
   }
 
-  .header { 
-    padding: 12px 20px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    border-bottom: 1px solid var(--border); 
-    background: linear-gradient(90deg, rgba(0,240,255,0.04), transparent); 
-    flex-shrink: 0; 
-  }
-  .header h1 { 
-    font-family: 'Orbitron', sans-serif; 
-    font-size: 1.1rem; 
-    font-weight: 900; 
-    background: linear-gradient(135deg, var(--glow), var(--glow2)); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
-    letter-spacing: 2px; 
-    white-space: nowrap;
-  }
-  .header .badge { 
-    font-size: 0.6rem; 
-    padding: 4px 12px; 
-    border-radius: 20px; 
-    background: rgba(0,240,255,0.08); 
-    border: 1px solid rgba(0,240,255,0.25); 
-    color: var(--glow); 
-    letter-spacing: 1px; 
+  .left{
+    border-right:none;
+    border-bottom:1px solid var(--border);
   }
 
-  /* TOP DISPLAY BAR - Responsive */
-  .top-bar { 
-    display: flex; 
-    gap: 12px; 
-    padding: 10px 20px; 
-    border-bottom: 1px solid var(--border); 
-    flex-shrink: 0; 
-    height: auto;
-    min-height: 120px;
-  }
-  .top-box { 
-    flex: 1; 
-    background: rgba(0,0,0,0.35); 
-    border: 1px solid var(--border); 
-    border-radius: 10px; 
-    padding: 10px; 
-    display: flex; 
-    flex-direction: column; 
-    position: relative; 
-    overflow: hidden; 
-    min-width: 0;
-  }
-  .top-label { 
-    font-family: 'Orbitron', sans-serif; 
-    font-size: 0.55rem; 
-    color: var(--dim); 
-    letter-spacing: 2px; 
-    margin-bottom: 8px; 
-    text-transform: uppercase; 
-    white-space: nowrap;
-  }
-  
-  #tickerDisplay { 
-    flex: 1; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-family: 'Orbitron', sans-serif; 
-    font-size: clamp(0.9rem, 3vw, 1.5rem); 
-    font-weight: 700; 
-    color: var(--glow); 
-    text-align: center; 
-    word-break: break-all;
-    line-height: 1.3;
-    min-height: 2.5em;
-    transition: opacity 0.15s ease;
-    will-change: opacity;
-  }
-  #tickerDisplay.empty { 
-    color: var(--dim); 
-    font-size: 0.9rem; 
+  .top{
+    grid-template-columns:1fr;
   }
 
-  #shufflerDisplay { 
-    flex: 1; 
-    position: relative; 
-    min-height: 80px;
-  }
-  .shuffle-word {
-    position: absolute; 
-    padding: 4px 10px; 
-    background: rgba(168,85,247,0.15); 
-    border: 1px solid rgba(168,85,247,0.4);
-    border-radius: 6px; 
-    color: var(--glow2); 
-    font-size: 0.75rem; 
-    font-weight: bold;
-    animation: shuffleIn 0.4s ease forwards; 
-    white-space: nowrap; 
-    pointer-events: none;
-    max-width: 90%;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-  @keyframes shuffleIn { 
-    0% { opacity: 0; transform: scale(0.8) translateY(10px); } 
-    50% { opacity: 1; transform: scale(1.05); } 
-    100% { opacity: 1; transform: scale(1) translateY(0); } 
-  }
-  @keyframes shuffleOut { to { opacity: 0; transform: scale(0.9) translateY(-5px); } }
-
-  /* MAIN CONTENT GRID - Responsive */
-  .content-grid { 
-    flex: 1; 
-    display: grid; 
-    grid-template-columns: 280px 1fr; 
-    overflow: hidden; 
-  }
-  .left-panel { 
-    border-right: 1px solid var(--border); 
-    padding: 14px; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 10px; 
-    overflow-y: auto; 
-    background: rgba(0,0,0,0.2); 
-  }
-  .left-panel::-webkit-scrollbar { width: 3px; }
-  .left-panel::-webkit-scrollbar-thumb { background: var(--glow); border-radius: 10px; }
-  
-  .section-title { 
-    font-family: 'Orbitron', sans-serif; 
-    font-size: 0.55rem; 
-    color: var(--glow); 
-    letter-spacing: 3px; 
-    margin-bottom: 4px; 
-    white-space: nowrap;
-  }
-  
-  .word-input-area { position: relative; }
-  .word-input-area textarea { 
-    width: 100%; 
-    height: 70px; 
-    background: var(--input-bg); 
-    border: 1px solid var(--input-border); 
-    border-radius: 8px; 
-    color: var(--text); 
-    font-family: 'Share Tech Mono', monospace; 
-    font-size: 0.75rem; 
-    padding: 10px; 
-    resize: none; 
-    outline: none; 
-    transition: 0.3s; 
-    caret-color: var(--glow);
-  }
-  .word-input-area textarea:focus { 
-    border-color: var(--glow); 
-    box-shadow: 0 0 12px rgba(0,240,255,0.1); 
-  }
-  .paste-btn { 
-    position: absolute; 
-    top: 5px; 
-    right: 5px; 
-    background: rgba(168,85,247,0.15); 
-    border: 1px solid rgba(168,85,247,0.3); 
-    color: var(--glow2); 
-    font-size: 0.55rem; 
-    padding: 3px 8px; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    transition: 0.3s; 
-  }
-  .paste-btn:hover { background: rgba(168,85,247,0.3); }
-  
-  .btn { 
-    width: 100%; 
-    padding: 9px; 
-    border: none; 
-    border-radius: 8px; 
-    font-family: 'Orbitron', sans-serif; 
-    font-size: 0.6rem; 
-    font-weight: 700; 
-    letter-spacing: 1.5px; 
-    cursor: pointer; 
-    transition: 0.3s; 
-    text-transform: uppercase; 
-    white-space: nowrap;
-  }
-  .btn-generate { background: linear-gradient(135deg, var(--glow), #0090aa); color: #000; }
-  .btn-generate:hover { box-shadow: 0 0 20px rgba(0,240,255,0.25); transform: translateY(-1px); }
-  .btn-cycle { background: linear-gradient(135deg, var(--success), #15803d); color: #fff; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100% { box-shadow: 0 0 5px rgba(34,197,94,0.2); } 50% { box-shadow: 0 0 18px rgba(34,197,94,0.4); } }
-  
-  .progress-track { width: 100%; height: 2px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--glow), var(--glow2)); width: 0%; transition: width 0.3s ease; }
-  
-  .mode-toggle { display: flex; gap: 4px; }
-  .mode-btn { 
-    flex: 1; 
-    padding: 5px; 
-    font-size: 0.5rem; 
-    background: rgba(0,0,0,0.3); 
-    border: 1px solid var(--border); 
-    border-radius: 5px; 
-    color: var(--dim); 
-    cursor: pointer; 
-    text-align: center; 
-    transition: 0.3s; 
-  }
-  .mode-btn.active { border-color: var(--glow); color: var(--glow); background: rgba(0,240,255,0.06); }
-  
-  .stored-words { 
-    flex: 1; 
-    background: rgba(0,0,0,0.3); 
-    border: 1px solid var(--border); 
-    border-radius: 8px; 
-    padding: 8px; 
-    overflow-y: auto; 
-    min-height: 80px;
-  }
-  .stored-words::-webkit-scrollbar { width: 3px; }
-  .stored-words::-webkit-scrollbar-thumb { background: var(--glow2); border-radius: 10px; }
-  .stored-word-tag { 
-    display: inline-block; 
-    margin: 2px 3px; 
-    padding: 2px 8px; 
-    background: rgba(0,240,255,0.06); 
-    border: 1px solid rgba(0,240,255,0.12); 
-    border-radius: 15px; 
-    font-size: 0.6rem; 
-    color: var(--glow); 
-    animation: fadeTag 0.3s ease; 
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  @keyframes fadeTag { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
-  .word-count { font-size: 0.55rem; color: var(--dim); text-align: right; margin-top: 3px; }
-  
-  #cycleIndicator { 
-    font-size: 0.5rem; 
-    color: var(--success); 
-    text-align: center; 
-    padding: 3px; 
-    animation: blink 1s infinite; 
-    display: none;
-  }
-  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-  .iter-info { 
-    font-size: 0.5rem; 
-    color: var(--dim); 
-    text-align: center; 
-    padding: 2px; 
-    background: rgba(168,85,247,0.1); 
-    border-radius: 4px; 
-    margin-top: 4px; 
+  .right{
+    grid-template-rows:auto auto;
   }
 
-  .right-panel { 
-    display: grid; 
-    grid-template-rows: 1.2fr 0.8fr; 
-    overflow: hidden; 
-  }
-  
-  .panel-section { 
-    padding: 12px 16px; 
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden; 
-    border-bottom: 1px solid var(--border); 
-  }
-  .panel-section:last-child { border-bottom: none; }
-  
-  .output-box { 
-    flex: 1; 
-    background: rgba(0,0,0,0.3); 
-    border: 1px solid var(--border); 
-    border-radius: 8px; 
-    padding: 8px; 
-    overflow-y: auto; 
-    margin-top: 8px; 
-  }
-  .output-box::-webkit-scrollbar { width: 6px; }
-  .output-box::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
-  .output-box::-webkit-scrollbar-thumb { background: linear-gradient(var(--glow), var(--glow2)); border-radius: 4px; }
-  
-  .name-entry { 
-    font-size: 0.7rem; 
-    padding: 5px 8px; 
-    margin: 2px 0; 
-    border-left: 2px solid transparent; 
-    transition: 0.2s; 
-    animation: slideIn 0.25s ease; 
-    cursor: pointer; 
-    border-radius: 0 4px 4px 0; 
-    word-break: break-all;
-  }
-  .name-entry:hover { background: rgba(0,240,255,0.05); border-left-color: var(--glow); }
-  .name-entry .res { color: var(--text); font-weight: 600; }
-  @keyframes slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
-  .placeholder { color: var(--dim); font-size: 0.7rem; text-align: center; padding: 30px 0; }
-
-  .stat-bar { 
-    display: flex; 
-    gap: 14px; 
-    margin-top: 6px; 
-    font-size: 0.55rem; 
-    color: var(--dim); 
-    flex-wrap: wrap;
-  }
-  .stat-bar span { display: flex; align-items: center; gap: 5px; }
-  .stat-bar .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
-
-  .spiral-container { 
-    flex: 1; 
-    position: relative; 
-    background: rgba(0,0,0,0.3); 
-    border: 1px solid var(--border); 
-    border-radius: 8px; 
-    margin-top: 8px; 
-    overflow: hidden; 
-    min-height: 150px;
-  }
-  canvas { width: 100%; height: 100%; display: block; }
-  .spiral-overlay { 
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%,-50%); 
-    text-align: center; 
-    pointer-events: none; 
-    width: 90%;
-  }
-  .spiral-num { 
-    font-family: 'Orbitron', sans-serif; 
-    font-size: clamp(1.2rem, 4vw, 2rem); 
-    font-weight: 900; 
-    background: linear-gradient(135deg, var(--glow), var(--glow2), var(--glow3)); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
-    animation: numPulse 1.5s infinite; 
-    word-break: break-all;
-  }
-  @keyframes numPulse { 0%,100% { transform:scale(1); filter:brightness(1); } 50% { transform:scale(1.05); filter:brightness(1.3); } }
-  .spiral-label { 
-    font-size: 0.5rem; 
-    color: var(--dim); 
-    letter-spacing: 3px; 
-    margin-top: 4px; 
+  .mobile-view{
+    display:block;
   }
 
-  .log-bar { 
-    padding: 10px 20px; 
-    border-top: 1px solid var(--border); 
-    background: rgba(0,0,0,0.2); 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    flex-shrink: 0; 
-  }
-  .log-text { 
-    flex: 1; 
-    font-size: 0.55rem; 
-    color: var(--dim); 
-    overflow: hidden; 
-    white-space: nowrap; 
-    text-overflow: ellipsis; 
-  }
-  .log-text span { color: var(--success); }
-
-  /* Save Modal */
-  .save-modal { 
-    display: none; 
-    position: fixed; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%,-50%); 
-    z-index: 100; 
-    background: var(--card); 
-    border: 1px solid var(--glow); 
-    border-radius: 12px; 
-    padding: 20px; 
-    box-shadow: 0 0 50px rgba(0,240,255,0.2); 
-    min-width: 300px; 
-    width: 90%;
-    max-width: 400px;
-  }
-  .save-modal.show { display: block; animation: modalIn 0.3s ease; }
-  @keyframes modalIn { from { opacity:0; transform:translate(-50%,-50%) scale(0.9); } to { opacity:1; transform:translate(-50%,-50%) scale(1); } }
-  .save-modal h3 { 
-    font-family: 'Orbitron', sans-serif; 
-    font-size: 0.75rem; 
-    color: var(--glow); 
-    margin-bottom: 10px; 
-  }
-  .save-modal input { 
-    width: 100%; 
-    padding: 7px 10px; 
-    background: rgba(0,0,0,0.4); 
-    border: 1px solid var(--border); 
-    border-radius: 6px; 
-    color: var(--text); 
-    font-family: 'Share Tech Mono', monospace; 
-    font-size: 0.75rem; 
-    outline: none; 
-    margin-bottom: 10px; 
-  }
-  .save-modal input:focus { border-color: var(--glow); }
-  .save-modal .modal-btns { display: flex; gap: 8px; }
-  .save-modal .btn-cancel { background: rgba(255,255,255,0.05); color: var(--dim); }
-  .overlay-bg { 
-    display: none; 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0,0,0,0.6); 
-    z-index: 99; 
-  }
-  .overlay-bg.show { display: block; }
-
-  /* MOBILE SWIPE PANEL - Hidden on desktop */
-  .mobile-swipe-panel {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--card);
-    border-top: 1px solid var(--border);
-    padding: 12px 16px;
-    z-index: 50;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .swipe-display {
-    background: rgba(0,0,0,0.35);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 15px;
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1rem, 4vw, 1.4rem);
-    font-weight: 700;
-    color: var(--glow);
-    word-break: break-all;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-  .swipe-controls {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-  }
-  .swipe-btn {
-    flex: 1;
-    padding: 8px;
-    background: rgba(0,240,255,0.1);
-    border: 1px solid var(--glow);
-    border-radius: 6px;
-    color: var(--glow);
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  .swipe-btn:active { background: rgba(0,240,255,0.25); }
-  .copy-btn {
-    background: linear-gradient(135deg, var(--success), #15803d);
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-    margin-top: 4px;
-  }
-  .copy-btn:active { transform: scale(0.98); }
-  .copy-feedback {
-    text-align: center;
-    font-size: 0.55rem;
-    color: var(--success);
-    min-height: 1.2em;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .copy-feedback.show { opacity: 1; }
-
-  /* DESKTOP SAVE BUTTONS - Hidden on mobile */
-  .desktop-save-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 4px;
+  .desktop{
+    display:none;
   }
 
-  /* RESPONSIVE MEDIA QUERIES */
-  @media (max-width: 768px) {
-    .main-card {
-      width: 100vw;
-      height: 100vh;
-      max-width: none;
-      max-height: none;
-      border-radius: 0;
-    }
-    
-    .content-grid {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
-    }
-    
-    .left-panel {
-      border-right: none;
-      border-bottom: 1px solid var(--border);
-      max-height: 40vh;
-      padding: 10px;
-    }
-    
-    .right-panel {
-      grid-template-rows: 1fr auto;
-    }
-    
-    .top-bar {
-      flex-direction: column;
-      height: auto;
-      min-height: auto;
-      padding: 8px 12px;
-    }
-    
-    .top-box {
-      min-height: 100px;
-    }
-    
-    #tickerDisplay {
-      font-size: clamp(1rem, 5vw, 1.6rem);
-      min-height: 3em;
-    }
-    
-    .panel-section {
-      padding: 10px 12px;
-    }
-    
-    .output-box {
-      margin-top: 6px;
-      font-size: 0.65rem;
-    }
-    
-    .spiral-container {
-      min-height: 180px;
-    }
-    
-    .spiral-num {
-      font-size: clamp(1.5rem, 6vw, 2.2rem);
-    }
-    
-    .header h1 {
-      font-size: 0.95rem;
-    }
-    
-    .header .badge {
-      font-size: 0.55rem;
-      padding: 3px 10px;
-    }
-    
-    .word-input-area textarea {
-      height: 60px;
-      font-size: 0.7rem;
-    }
-    
-    .btn {
-      padding: 8px;
-      font-size: 0.55rem;
-    }
-    
-    .section-title {
-      font-size: 0.5rem;
-    }
-    
-    .stored-words {
-      min-height: 60px;
-      font-size: 0.55rem;
-    }
-    
-    .log-bar {
-      padding: 8px 12px;
-      font-size: 0.5rem;
-    }
-    
-    /* Hide desktop save buttons on mobile */
-    .desktop-save-buttons {
-      display: none;
-    }
-    
-    /* Show mobile swipe panel */
-    .mobile-swipe-panel {
-      display: flex;
-    }
-    
-    .log-bar {
-      padding-bottom: 70px; /* Space for swipe panel */
-    }
+  .spiral-wrap{
+    min-height:440px;
   }
-  
-  @media (max-width: 480px) {
-    .top-bar {
-      padding: 6px 10px;
-    }
-    
-    .top-box {
-      padding: 8px;
-      min-height: 90px;
-    }
-    
-    .top-label {
-      font-size: 0.5rem;
-      margin-bottom: 6px;
-    }
-    
-    #tickerDisplay {
-      font-size: clamp(0.95rem, 6vw, 1.5rem);
-      min-height: 2.8em;
-    }
-    
-    .left-panel {
-      max-height: 35vh;
-      padding: 8px;
-    }
-    
-    .word-input-area textarea {
-      height: 55px;
-      font-size: 0.65rem;
-      padding: 8px;
-    }
-    
-    .paste-btn {
-      font-size: 0.5rem;
-      padding: 2px 6px;
-      top: 4px;
-      right: 4px;
-    }
-    
-    .mode-toggle {
-      gap: 2px;
-    }
-    
-    .mode-btn {
-      font-size: 0.45rem;
-      padding: 4px 2px;
-    }
-    
-    .spiral-container {
-      min-height: 160px;
-    }
-    
-    .spiral-num {
-      font-size: clamp(1.3rem, 7vw, 2rem);
-    }
-    
-    .spiral-label {
-      font-size: 0.45rem;
-    }
-    
-    .stat-bar {
-      gap: 8px;
-      font-size: 0.5rem;
-    }
-    
-    .output-box {
-      font-size: 0.6rem;
-    }
-    
-    .name-entry {
-      font-size: 0.65rem;
-      padding: 4px 6px;
-    }
-    
-    .mobile-swipe-panel {
-      padding: 10px 12px;
-    }
-    
-    .swipe-display {
-      font-size: clamp(0.95rem, 5.5vw, 1.3rem);
-      padding: 12px;
-      min-height: 55px;
-    }
-    
-    .swipe-btn, .copy-btn {
-      font-size: 0.6rem;
-      padding: 7px;
-    }
-    
-    .copy-feedback {
-      font-size: 0.5rem;
-    }
+
+  .output{
+    max-height:260px;
   }
-  
-  /* Prevent text selection flicker */
-  [contenteditable], textarea, input {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
+}
+
+@media(max-width:600px){
+
+  .header{
+    padding:12px;
   }
-  
-  /* Smooth scrolling for output */
-  .output-box {
-    scroll-behavior: smooth;
+
+  .header h1{
+    font-size:.8rem;
+    letter-spacing:1px;
   }
-  
-  /* Optimize animations for performance */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+
+  .top-box{
+    min-height:90px;
   }
+
+  .spiral-wrap{
+    min-height:500px;
+  }
+
+  .big{
+    font-size:2.7rem;
+  }
+}
+
 </style>
 </head>
+
 <body>
 
-<div class="spiral-bg" id="spiralBg"></div>
+<div class="bg" id="bg"></div>
 
-<div class="main-card">
+<div class="app">
+
+<div class="main">
+
+  <!-- HEADER -->
   <div class="header">
+
     <h1>⚡ INFINITE NAMING ENGINE</h1>
-    <span class="badge" id="statusBadge">STANDBY</span>
+
+    <div class="badge" id="status">
+      STANDBY
+    </div>
+
   </div>
 
-  <div class="top-bar">
+  <!-- TOP -->
+  <div class="top">
+
     <div class="top-box">
-      <div class="top-label">⏱ SEQUENTIAL READER</div>
-      <div id="tickerDisplay" class="empty">Awaiting Generation...</div>
+
+      <div class="top-label">
+        ⏱ SEQUENTIAL READER
+      </div>
+
+      <div id="ticker">
+        Awaiting Generation...
+      </div>
+
     </div>
+
     <div class="top-box">
-      <div class="top-label">🔀 Top Makings</div>
-      <div id="shufflerDisplay"></div>
+
+      <div class="top-label">
+        🔀 TOP MAKINGS
+      </div>
+
+      <div id="shuffleBox"></div>
+
     </div>
+
   </div>
 
-  <div class="content-grid">
-    <div class="left-panel">
-      <div>
-        <div class="section-title">INPUT WORDS</div>
-        <div class="word-input-area">
-          <textarea id="wordInput" placeholder="Paste words here...&#10;e.g. ARTIFICIAL INTELLIGENCE"></textarea>
-          <button class="paste-btn" onclick="pasteFromClipboard()">📋 PASTE</button>
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- LEFT -->
+    <div class="left">
+
+      <div class="section-title">
+        INPUT WORDS
+      </div>
+
+      <div class="input-wrap">
+
+        <textarea id="input"
+        placeholder="Paste words here...
+ARTIFICIAL INTELLIGENCE"></textarea>
+
+        <button class="paste-btn"
+        onclick="pasteClipboard()">
+          📋 PASTE
+        </button>
+
+      </div>
+
+      <button class="btn generate"
+      onclick="generate()">
+        ⚡ GENERATE
+      </button>
+
+      <button class="btn cycle"
+      onclick="toggleCycle()">
+        ∞ INFINITE CYCLE
+      </button>
+
+      <div class="progress">
+        <div class="progress-fill" id="progress"></div>
+      </div>
+
+      <!-- DESKTOP -->
+      <div class="desktop">
+
+        <button class="btn"
+        style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff"
+        onclick="saveFile()">
+          💾 SAVE FILE
+        </button>
+
+        <button class="btn"
+        style="background:linear-gradient(135deg,var(--glow3),#c2410c);color:#fff"
+        onclick="saveFile()">
+          📎 APPEND FILE
+        </button>
+
+      </div>
+
+      <div style="margin-top:14px">
+
+        <div class="section-title">
+          STORED WORDS
         </div>
+
+        <div class="stored" id="stored">
+          <span style="color:var(--dim);font-size:.7rem">
+            No words stored yet...
+          </span>
+        </div>
+
       </div>
 
-      <button class="btn btn-generate" onclick="generateNames()">⚡ GENERATE</button>
-      <button class="btn btn-cycle" onclick="toggleInfiniteCycle()">∞ INFINITE CYCLE</button>
-      <div id="cycleIndicator">⚡ CYCLE ACTIVE — INFINITE GENERATION ⚡</div>
-
-      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="iter-info" id="iterInfo">Iterator discovery: 101 prefixes loaded</div>
-
-      <div class="mode-toggle">
-        <div class="mode-btn active" id="modeNew" onclick="setMode('new')">📄 NEW FILE</div>
-        <div class="mode-btn" id="modeAppend" onclick="setMode('append')">📎 APPEND</div>
-      </div>
-
-      <!-- Desktop Save Buttons (hidden on mobile) -->
-      <div class="desktop-save-buttons">
-        <button class="btn" style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff" onclick="openSaveModal()">💾 SAVE FILE</button>
-        <button class="btn" style="background:linear-gradient(135deg,var(--glow3),#c2410c);color:#fff" onclick="appendToFile()">📎 APPEND TO FILE</button>
-      </div>
-
-      <div>
-        <div class="section-title">STORED WORDS</div>
-        <div class="stored-words" id="storedWords"><span style="color:var(--dim);font-size:0.6rem">No words stored yet...</span></div>
-        <div class="word-count" id="wordCount">0 words</div>
-      </div>
     </div>
 
-    <div class="right-panel">
-      <div class="panel-section">
-        <div class="section-title">📜 GENERATED NAMES (SCROLLABLE)</div>
-        <div class="output-box" id="outputBox"><div class="placeholder">✦ Enter words and press Generate ✦</div></div>
-        <div class="stat-bar">
-          <span><span class="dot" style="background:var(--glow)"></span> Total: <b id="totalCount">0</b></span>
-          <span><span class="dot" style="background:var(--glow2)"></span> Current: <b id="currentWordDisplay">—</b></span>
-          <span><span class="dot" style="background:var(--glow3)"></span> Cycles: <b id="cycleCount">0</b></span>
-        </div>
-      </div>
+    <!-- RIGHT -->
+    <div class="right">
 
-      <div class="panel-section">
-        <div class="section-title">🌀 SPIRAL OF TIME</div>
-        <div class="spiral-container">
-          <canvas id="spiralCanvas"></canvas>
-          <div class="spiral-overlay">
-            <div class="spiral-num" id="bigNum">0</div>
-            <div class="spiral-label">TOTAL NAMES</div>
+      <div class="panel">
+
+        <div class="section-title">
+          📜 GENERATED WORDS
+        </div>
+
+        <div class="output" id="output">
+
+          <div style="padding:20px;text-align:center;color:var(--dim)">
+            ✦ Enter words and generate ✦
           </div>
+
         </div>
+
       </div>
+
+      <div class="panel">
+
+        <div class="section-title">
+          🌀 SPIRAL OF TIME
+        </div>
+
+        <div class="spiral-wrap">
+
+          <canvas id="canvas"></canvas>
+
+          <div class="spiral-overlay">
+
+            <div class="big" id="big">
+              0
+            </div>
+
+            <div class="label">
+              TOTAL WORDS
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
+
   </div>
 
-  <div class="log-bar">
-    <span style="color:var(--glow)">▸</span>
-    <div class="log-text" id="logText">System initialized. Ready for input...</div>
+  <!-- MOBILE -->
+  <div class="mobile-view">
+
+    <div class="viewer">
+
+      <div class="viewer-word"
+      id="mobileWord">
+        No words generated yet
+      </div>
+
+      <div class="viewer-controls">
+
+        <button class="nav"
+        onclick="prevWord()">
+          ⬅ BACK
+        </button>
+
+        <button class="copy"
+        onclick="copyWord()">
+          📋 COPY
+        </button>
+
+        <button class="nav"
+        onclick="nextWord()">
+          NEXT ➡
+        </button>
+
+      </div>
+
+    </div>
+
   </div>
+
+  <!-- FOOTER -->
+  <div class="log" id="log">
+    System initialized...
+  </div>
+
 </div>
-
-<!-- Mobile Swipe Panel (visible only on mobile) -->
-<div class="mobile-swipe-panel" id="mobileSwipePanel">
-  <div class="swipe-display" id="swipeDisplay">Generate names to browse</div>
-  <div class="swipe-controls">
-    <button class="swipe-btn" onclick="swipePrev()">◀ PREV</button>
-    <button class="swipe-btn" onclick="swipeNext()">NEXT ▶</button>
-  </div>
-  <button class="copy-btn" onclick="copyCurrentWord()">📋 COPY SELECTED WORD</button>
-  <div class="copy-feedback" id="copyFeedback">✓ Copied to clipboard!</div>
-</div>
-
-<!-- Save Modal -->
-<div class="overlay-bg" id="overlayBg"></div>
-<div class="save-modal" id="saveModal">
-  <h3>💾 SAVE GENERATIONS</h3>
-  <input type="text" id="filenameInput" placeholder="my-namelist.txt" value="namelist.txt">
-  <div class="modal-btns">
-    <button class="btn" style="background:linear-gradient(135deg,var(--glow2),#7c3aed);color:#fff" onclick="saveToFile()">SAVE AS FILE</button>
-    <button class="btn btn-cancel" onclick="closeModal()">CANCEL</button>
-  </div>
 </div>
 
 <script>
-// ============ ITERATOR POOL ============
-const ITERATOR_LIST = [
-  "am","an","as","at","be","by","do","go","he","hi","if","in","is","it","me","my","no","of","on","or","ox","up","us","we","ad","ah","ai","al","aw","ba","bi","bo","da","ed","eh","el","em","er","ex","fa","ha","ho","id","jo","ka","ki","la","li","lo",
-  "ace","act","add","air","arm","art","bag","boy","bus","cap","car","cup","ear","fan","fun","gem","hat","jar","key","map","net","owl","pen","sun","top","van","war","all","and","any","bar","big","bit","can"
+
+/* ================= ITERATORS ================= */
+
+const ITERATORS = [
+"am","an","as","at","be","by","do","go","he","hi","if","in","is","it","me","my","no","of","on","or","ox","up","us","we","ad","ah","ai","al","aw","ba","bi","bo","da","ed","eh","el","em","er","ex","fa","ha","ho","id","jo","ka","ki","la","li","lo",
+"ace","act","add","air","arm","art","bag","boy","bus","cap","car","cup","ear","fan","fun","gem","hat","jar","key","map","net","owl","pen","sun","top","van","war","all","and","any","bar","big","bit","can"
 ];
 
-// ============ STATE ============
-let storedWords = [];
-let allGeneratedNames = [];
-let totalGenerated = 0;
-let cycleActive = false;
+/* ================= STATE ================= */
+
+let words = [];
+let generated = [];
+
+let cycle = false;
 let cycleInterval = null;
-let cycleCounter = 0;
-let appendMode = false;
-let isMobile = window.innerWidth <= 768;
+let tickerInterval = null;
+let shuffleInterval = null;
 
-let seqInterval = null, seqIndex = 0;
-let shuffleInterval = null, shuffleQueue = [], shuffleIdx = 0;
+let mobileIndex = 0;
+let tickerIndex = 0;
 
-// Mobile swipe state
-let swipeIndex = 0;
-let touchStartX = 0;
-let touchEndX = 0;
+/* ================= INIT ================= */
 
-// ============ INIT ============
-document.addEventListener('DOMContentLoaded', () => {
-  // Detect mobile
-  isMobile = window.innerWidth <= 768;
-  
-  initSpiralBg(); 
-  resizeCanvas(); 
-  window.addEventListener('resize', () => {
-    isMobile = window.innerWidth <= 768;
-    resizeCanvas();
-    // Update UI based on screen size
-    updateMobileUI();
-  });
-  
-  // Add touch events for swipe
-  const swipeDisplay = document.getElementById('swipeDisplay');
-  swipeDisplay.addEventListener('touchstart', handleTouchStart, { passive: true });
-  swipeDisplay.addEventListener('touchend', handleTouchEnd, { passive: true });
-  
-  log('System initialized. ✦ Iterator pool loaded (101 prefixes)');
+document.addEventListener('DOMContentLoaded',()=>{
+
+  initBG();
+
+  resizeCanvas();
+
+  window.addEventListener('resize',resizeCanvas);
+
+  drawSpiral();
+
 });
 
-// ============ MOBILE UI UPDATES ============
-function updateMobileUI() {
-  const mobilePanel = document.getElementById('mobileSwipePanel');
-  const desktopButtons = document.querySelector('.desktop-save-buttons');
-  
-  if (isMobile) {
-    if (mobilePanel) mobilePanel.style.display = 'flex';
-    if (desktopButtons) desktopButtons.style.display = 'none';
-  } else {
-    if (mobilePanel) mobilePanel.style.display = 'none';
-    if (desktopButtons) desktopButtons.style.display = 'flex';
+/* ================= BACKGROUND ================= */
+
+function initBG(){
+
+  const bg = document.getElementById('bg');
+
+  for(let i=0;i<22;i++){
+
+    const ring = document.createElement('div');
+
+    ring.className = 'ring';
+
+    const size = 60 + (i * 35);
+
+    ring.style.width = size + 'px';
+    ring.style.height = size + 'px';
+
+    ring.style.animationDuration =
+    (5 + i * .6) + 's';
+
+    bg.appendChild(ring);
   }
 }
 
-// ============ BACKGROUND SPIRAL ============
-function initSpiralBg() {
-  const c = document.getElementById('spiralBg');
-  c.innerHTML = ''; // Clear existing
-  for(let i=0; i<25; i++){ 
-    const r = document.createElement('div'); 
-    r.className = 'spiral-ring'; 
-    const s = 40 + i*22; 
-    r.style.cssText = `width:${s}px;height:${s}px;animation-duration:${3+i*0.4}s;animation-delay:${i*0.1}s;border-color:${i%3===0?'rgba(0,240,255,0.08)':i%3===1?'rgba(168,85,247,0.06)':'rgba(249,115,22,0.05)'}`; 
-    c.appendChild(r); 
-  }
-}
+/* ================= GENERATION ================= */
 
-// ============ CANVAS SPIRAL ============
-const canvas = document.getElementById('spiralCanvas'); 
-const ctx = canvas.getContext('2d'); 
-let spiralAngle = 0;
+function makeWord(word){
 
-function resizeCanvas(){ 
-  const p = canvas.parentElement; 
-  if (!p) return;
-  canvas.width = p.clientWidth; 
-  canvas.height = p.clientHeight; 
-}
-
-function drawSpiral() {
-  const w = canvas.width, h = canvas.height, cx = w/2, cy = h/2, t = Date.now()*0.001;
-  ctx.clearRect(0,0,w,h);
-  
-  // Draw spiral arms
-  for(let s=0; s<3; s++){ 
-    ctx.beginPath(); 
-    const cols = ['rgba(0,240,255,','rgba(168,85,247,','rgba(249,115,22,'];
-    for(let i=0; i<250; i++){ 
-      const ang = spiralAngle + (i*0.08) + (s*2.1), 
-            rad = i*0.9 + Math.sin(t + i*0.04)*4; 
-      if(i===0) {
-        ctx.moveTo(cx + Math.cos(ang)*rad, cy + Math.sin(ang)*rad);
-      } else {
-        ctx.lineTo(cx + Math.cos(ang)*rad, cy + Math.sin(ang)*rad); 
-      }
-    }
-    ctx.strokeStyle = cols[s] + '0.35)'; 
-    ctx.lineWidth = 1; 
-    ctx.stroke(); 
-  }
-  
-  // Draw concentric rings
-  for(let r=0; r<5; r++){ 
-    ctx.beginPath(); 
-    ctx.arc(cx, cy, 35 + r*28, 0, Math.PI*2); 
-    ctx.strokeStyle = `rgba(0,240,255,${0.04 + r*0.01})`; 
-    ctx.lineWidth = 0.5; 
-    ctx.stroke();
-    
-    // Animated pulse ring
-    ctx.beginPath(); 
-    const st = t*0.4 + r; 
-    ctx.arc(cx, cy, 35 + r*28, st, st+1.2); 
-    ctx.strokeStyle = 'rgba(168,85,247,0.25)'; 
-    ctx.lineWidth = 1.2; 
-    ctx.stroke(); 
-  }
-  
-  // Radial glow
-  const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 70); 
-  g.addColorStop(0, 'rgba(0,240,255,0.07)'); 
-  g.addColorStop(1, 'transparent'); 
-  ctx.fillStyle = g; 
-  ctx.fillRect(0, 0, w, h);
-  
-  spiralAngle += 0.006; 
-  requestAnimationFrame(drawSpiral);
-}
-drawSpiral();
-
-// ============ CORE GENERATION LOGIC ============
-function generateForWord(word) {
   const results = [];
-  const w = word.trim().toUpperCase();
-  for (const item of ITERATOR_LIST) {
-    const prefix = item.toUpperCase();
-    for (let i = 0; i <= w.length; i++) {
+
+  const w = word.toUpperCase();
+
+  for(const prefixRaw of ITERATORS){
+
+    const prefix = prefixRaw.toUpperCase();
+
+    for(let i=0;i<=w.length;i++){
+
       const suffix = w.substring(i);
-      // Only store the result word, not the formula
-      results.push({ 
-        pre: prefix, 
-        suf: suffix, 
-        res: prefix + suffix 
-      });
+
+      const result = prefix + suffix;
+
+      results.push(result);
     }
   }
+
   return results;
 }
 
-function processAllWords() {
-  let all = [];
-  for (const w of storedWords) {
-    all = all.concat(generateForWord(w));
-  }
-  return all;
-}
+function generate(){
 
-// ============ GENERATE ============
-function generateNames() {
-  const inp = document.getElementById('wordInput').value.trim();
-  if (!inp) { 
-    log('⚠ Please enter or paste words first!'); 
-    return; 
+  const input =
+  document.getElementById('input').value.trim();
+
+  if(!input){
+
+    log('⚠ Enter words first');
+
+    return;
   }
-  
-  const words = inp.split(/[\s,;|\n]+/).filter(w => w.length > 0);
-  words.forEach(w => { 
-    const upper = w.toUpperCase();
-    if (!storedWords.includes(upper)) {
-      storedWords.push(upper); 
+
+  const list =
+  input
+  .split(/[\s,;|\n]+/)
+  .filter(v=>v.length);
+
+  list.forEach(w=>{
+
+    const up = w.toUpperCase();
+
+    if(!words.includes(up)){
+
+      words.push(up);
     }
   });
-  
-  updateStoredWordsDisplay();
 
-  const newBatch = processAllWords();
-  allGeneratedNames = allGeneratedNames.concat(newBatch);
-  
-  // Display only the result words (no formula)
-  displayResults(newBatch);
-  
-  totalGenerated = allGeneratedNames.length;
+  updateStored();
+
+  let batch = [];
+
+  words.forEach(w=>{
+
+    batch = batch.concat(makeWord(w));
+  });
+
+  generated = generated.concat(batch);
+
+  renderWords(batch);
+
   updateStats();
+
   startTicker();
-  initShuffler();
-  
-  // Update mobile swipe panel
-  if (isMobile && allGeneratedNames.length > 0) {
-    updateSwipeDisplay();
-  }
-  
-  log(`✓ Generated <span>${newBatch.length}</span> names from <span>${words.length}</span> word(s). Total: <span>${totalGenerated}</span>`);
-  document.getElementById('statusBadge').textContent = 'GENERATED';
+
+  startShuffle();
+
+  updateMobile();
+
+  document.getElementById('status').textContent =
+  'GENERATED';
+
+  log(`✓ Generated ${batch.length.toLocaleString()} words`);
 }
 
-function displayResults(batch) {
-  const box = document.getElementById('outputBox');
-  // Remove placeholder if present
-  const placeholder = box.querySelector('.placeholder');
-  if (placeholder) {
-    box.innerHTML = '';
+/* ================= OUTPUT ================= */
+
+function renderWords(batch){
+
+  const output =
+  document.getElementById('output');
+
+  if(output.children.length === 1){
+
+    output.innerHTML = '';
   }
-  
-  const frag = document.createDocumentFragment();
-  batch.forEach(item => {
-    const d = document.createElement('div'); 
-    d.className = 'name-entry';
-    // ONLY show the result word, not the formula
-    d.innerHTML = `<span class="res">${item.res}</span>`;
-    d.title = item.res; // Tooltip with full word
-    d.onclick = () => { 
-      navigator.clipboard.writeText(item.res); 
-      log(`📋 Copied: <span>${item.res}</span>`); 
+
+  const frag =
+  document.createDocumentFragment();
+
+  batch.forEach(word=>{
+
+    const div =
+    document.createElement('div');
+
+    div.className = 'word';
+
+    /* GENERATED WORD ONLY */
+    div.textContent = word;
+
+    div.onclick = ()=>{
+
+      navigator.clipboard.writeText(word);
+
+      log(`📋 Copied ${word}`);
+
+      mobileIndex =
+      generated.indexOf(word);
+
+      updateMobile();
     };
-    frag.appendChild(d);
+
+    frag.appendChild(div);
   });
-  box.appendChild(frag); 
-  // Smooth scroll to bottom
-  requestAnimationFrame(() => {
-    box.scrollTop = box.scrollHeight;
+
+  output.appendChild(frag);
+
+  output.scrollTop =
+  output.scrollHeight;
+}
+
+/* ================= STORED ================= */
+
+function updateStored(){
+
+  const box =
+  document.getElementById('stored');
+
+  box.innerHTML = '';
+
+  words.forEach(w=>{
+
+    const tag =
+    document.createElement('span');
+
+    tag.className = 'tag';
+
+    tag.textContent = w;
+
+    box.appendChild(tag);
   });
 }
 
-function updateStoredWordsDisplay() {
-  const c = document.getElementById('storedWords'); 
-  c.innerHTML = '';
-  if (storedWords.length === 0) {
-    c.innerHTML = '<span style="color:var(--dim);font-size:0.6rem">No words stored yet...</span>';
-  } else {
-    storedWords.forEach(w => { 
-      const t = document.createElement('span'); 
-      t.className = 'stored-word-tag'; 
-      t.textContent = w; 
-      t.title = w;
-      c.appendChild(t); 
-    });
-  }
-  document.getElementById('wordCount').textContent = storedWords.length + ' word' + (storedWords.length !== 1 ? 's' : '');
+/* ================= STATS ================= */
+
+function updateStats(){
+
+  document.getElementById('big').textContent =
+  generated.length.toLocaleString();
 }
 
-function updateStats() {
-  document.getElementById('totalCount').textContent = totalGenerated.toLocaleString();
-  document.getElementById('bigNum').textContent = totalGenerated.toLocaleString();
-  document.getElementById('cycleCount').textContent = cycleCounter;
-  document.getElementById('currentWordDisplay').textContent = 
-    allGeneratedNames.length > 0 ? allGeneratedNames[seqIndex]?.res || '—' : '—';
-}
+/* ================= TICKER ================= */
 
-// ============ PASTE ============
-async function pasteFromClipboard() {
-  try { 
-    const text = await navigator.clipboard.readText(); 
-    document.getElementById('wordInput').value = text; 
-    log('📋 Pasted from clipboard'); 
-  }
-  catch(e) { 
-    log('⚠ Clipboard access blocked. Paste manually.'); 
-  }
-}
+function startTicker(){
 
-// ============ SAVE / APPEND ============
-function openSaveModal() { 
-  document.getElementById('overlayBg').classList.add('show'); 
-  document.getElementById('saveModal').classList.add('show'); 
-}
-function closeModal() { 
-  document.getElementById('overlayBg').classList.remove('show'); 
-  document.getElementById('saveModal').classList.remove('show'); 
-}
+  clearInterval(tickerInterval);
 
-function saveToFile() {
-  const fn = document.getElementById('filenameInput').value.trim() || 'namelist.txt';
-  let c = `═══════════════════════════════════════════════\n  INFINITE NAMING ENGINE — ${new Date().toISOString()}\n  Words: ${storedWords.join(', ')} | Total: ${allGeneratedNames.length}\n  Iterator discovery: 101 prefixes\n═══════════════════════════════════════════════\n\n`;
-  // Only save the result words, not formulas
-  allGeneratedNames.forEach(i => c += `${i.res}\n`);
-  downloadBlob(c, fn); 
-  closeModal(); 
-  log(`✓ Saved as <span>${fn}</span>`);
-}
+  if(!generated.length) return;
 
-function appendToFile() {
-  const fn = prompt('Filename to append to:', 'namelist.txt'); 
-  if (!fn) return;
-  let c = `\n--- APPENDED: ${new Date().toISOString()} ---\nNew Words: ${storedWords.join(', ')}\nNew Count: ${allGeneratedNames.length}\n\n`;
-  // Only append result words
-  allGeneratedNames.forEach(i => c += `${i.res}\n`);
-  downloadBlob(c, fn); 
-  log(`✓ Appended to <span>${fn}</span>`);
-}
+  const ticker =
+  document.getElementById('ticker');
 
-function downloadBlob(txt, fn) { 
-  const b = new Blob([txt], { type: 'text/plain' }), 
-        a = document.createElement('a'); 
-  a.href = URL.createObjectURL(b); 
-  a.download = fn; 
-  a.click(); 
-  URL.revokeObjectURL(a.href); 
-}
+  ticker.textContent = generated[0];
 
-// ============ MODE ============
-function setMode(m) { 
-  appendMode = m === 'append'; 
-  document.getElementById('modeNew').classList.toggle('active', !appendMode); 
-  document.getElementById('modeAppend').classList.toggle('active', appendMode); 
-  log(`Mode: ${appendMode ? '📎 APPEND' : '📄 NEW'}`); 
-}
+  tickerIndex = 0;
 
-// ============ INFINITE CYCLE ============
-function toggleInfiniteCycle() {
-  cycleActive = !cycleActive;
-  const indicator = document.getElementById('cycleIndicator');
-  if (indicator) {
-    indicator.style.display = cycleActive ? 'block' : 'none';
-  }
-  document.getElementById('statusBadge').textContent = cycleActive ? 'CYCLING ∞' : 'PAUSED';
-  
-  if (cycleActive) {
-    log('⚡ Infinite cycle <span>ACTIVATED</span>');
-    cycleInterval = setInterval(() => {
-      if (!storedWords.length) return;
-      const w = storedWords[Math.floor(Math.random() * storedWords.length)].toUpperCase();
-      const iter = ITERATOR_LIST[Math.floor(Math.random() * ITERATOR_LIST.length)].toUpperCase();
-      const cut = Math.floor(Math.random() * w.length);
-      const suffix = w.substring(cut);
-      const res = iter + suffix;
-      
-      // Add to generated names (only result)
-      allGeneratedNames.push({ pre: iter, suf: suffix, res: res });
-      totalGenerated++; 
-      cycleCounter++; 
-      updateStats(); 
-      
-      // Display only the result
-      displayResults([{ pre: iter, suf: suffix, res: res }]);
-      
-      // Update progress bar smoothly
-      const progress = document.getElementById('progressFill');
-      if (progress) {
-        progress.style.width = Math.random() * 100 + '%';
-      }
-      
-      if (cycleCounter % 10 === 0) {
-        log(`∞ Cycle <span>#${cycleCounter}</span> — ${totalGenerated.toLocaleString()} names`);
-      }
-      
-      // Update mobile swipe if active
-      if (isMobile && allGeneratedNames.length > 0) {
-        updateSwipeDisplay();
-      }
-    }, 150);
-  } else { 
-    clearInterval(cycleInterval); 
-    const progress = document.getElementById('progressFill');
-    if (progress) {
-      progress.style.width = '0%'; 
+  /* NO FLICKER */
+  tickerInterval = setInterval(()=>{
+
+    tickerIndex++;
+
+    if(tickerIndex >= generated.length){
+
+      tickerIndex = 0;
     }
-    log('⏸ Cycle paused'); 
-  }
+
+    ticker.textContent =
+    generated[tickerIndex];
+
+  },1000);
 }
 
-// ============ TICKER LOGIC (SEQUENTIAL READER) ============
-function startTicker() {
-  clearInterval(seqInterval); 
-  seqIndex = 0;
-  const d = document.getElementById('tickerDisplay');
-  if (!d) return;
-  
-  if (!allGeneratedNames.length) { 
-    d.textContent = 'No names yet'; 
-    d.classList.add('empty'); 
-    return; 
-  }
-  
-  d.classList.remove('empty'); 
-  // Show only the result word
-  d.textContent = allGeneratedNames[0].res; 
-  d.style.opacity = '1';
-  
-  seqInterval = setInterval(() => {
-    seqIndex = (seqIndex + 1) % allGeneratedNames.length;
-    // Smooth fade transition
-    d.style.transition = 'opacity 0.15s ease'; 
-    d.style.opacity = '0';
-    setTimeout(() => { 
-      // Show only the result word
-      d.textContent = allGeneratedNames[seqIndex].res; 
-      d.style.opacity = '1'; 
-    }, 150);
-  }, 1000);
-}
+/* ================= SHUFFLER ================= */
 
-// ============ SHUFFLER LOGIC ============
-function initShuffler() {
+function startShuffle(){
+
   clearInterval(shuffleInterval);
-  const container = document.getElementById('shufflerDisplay'); 
-  if (!container) return;
-  container.innerHTML = '';
-  
-  shuffleQueue = [...Array(allGeneratedNames.length).keys()];
-  // Fisher-Yates shuffle
-  for (let i = shuffleQueue.length - 1; i > 0; i--) { 
-    const j = Math.floor(Math.random() * (i + 1)); 
-    [shuffleQueue[i], shuffleQueue[j]] = [shuffleQueue[j], shuffleQueue[i]]; 
-  }
-  shuffleIdx = 0; 
-  if (!allGeneratedNames.length) return;
-  
-  shuffleInterval = setInterval(() => {
-    if (shuffleIdx >= shuffleQueue.length) {
-      // Reshuffle when done
-      for (let i = shuffleQueue.length - 1; i > 0; i--) { 
-        const j = Math.floor(Math.random() * (i + 1)); 
-        [shuffleQueue[i], shuffleQueue[j]] = [shuffleQueue[j], shuffleQueue[i]]; 
+
+  const box =
+  document.getElementById('shuffleBox');
+
+  box.innerHTML = '';
+
+  shuffleInterval = setInterval(()=>{
+
+    if(!generated.length) return;
+
+    const word =
+    generated[
+      Math.floor(Math.random()*generated.length)
+    ];
+
+    const el =
+    document.createElement('div');
+
+    el.className = 'shuffle-word';
+
+    el.textContent = word;
+
+    const top =
+    Math.random() * (box.clientHeight - 30);
+
+    const left =
+    Math.random() * (box.clientWidth - 140);
+
+    el.style.top = top + 'px';
+    el.style.left = left + 'px';
+
+    box.appendChild(el);
+
+    setTimeout(()=>{
+
+      if(el.parentNode){
+
+        el.remove();
       }
-      shuffleIdx = 0;
+
+    },1500);
+
+  },700);
+}
+
+/* ================= MOBILE ================= */
+
+function updateMobile(){
+
+  const viewer =
+  document.getElementById('mobileWord');
+
+  if(!generated.length){
+
+    viewer.textContent =
+    'No words generated yet';
+
+    return;
+  }
+
+  if(mobileIndex < 0){
+
+    mobileIndex =
+    generated.length - 1;
+  }
+
+  if(mobileIndex >= generated.length){
+
+    mobileIndex = 0;
+  }
+
+  viewer.textContent =
+  generated[mobileIndex];
+}
+
+function nextWord(){
+
+  mobileIndex++;
+
+  updateMobile();
+}
+
+function prevWord(){
+
+  mobileIndex--;
+
+  updateMobile();
+}
+
+function copyWord(){
+
+  if(!generated.length) return;
+
+  navigator.clipboard.writeText(
+    generated[mobileIndex]
+  );
+
+  log(`📋 Copied ${generated[mobileIndex]}`);
+}
+
+/* SWIPE */
+
+const mobile =
+document.getElementById('mobileWord');
+
+let startX = 0;
+
+mobile.addEventListener('touchstart',e=>{
+
+  startX =
+  e.changedTouches[0].screenX;
+});
+
+mobile.addEventListener('touchend',e=>{
+
+  const endX =
+  e.changedTouches[0].screenX;
+
+  const diff =
+  endX - startX;
+
+  if(Math.abs(diff) > 40){
+
+    if(diff < 0){
+
+      nextWord();
+
+    }else{
+
+      prevWord();
     }
-    spawnShuffleWord(container, allGeneratedNames[shuffleQueue[shuffleIdx++]]);
-  }, 700);
-}
-
-function spawnShuffleWord(container, item) {
-  const el = document.createElement('div'); 
-  el.className = 'shuffle-word'; 
-  // Show only the result word
-  el.textContent = item.res; 
-  el.title = item.res; // Tooltip
-  
-  const cw = container.clientWidth - 60, 
-        ch = container.clientHeight - 25;
-  const top = Math.random() * ch, 
-        left = Math.random() * cw, 
-        rot = Math.random() * 8 - 4;
-  
-  el.style.cssText = `top:${top}px;left:${left}px;transform:rotate(${rot}deg)`;
-  container.appendChild(el);
-  
-  // Animate out after delay
-  setTimeout(() => { 
-    el.style.animation = 'shuffleOut 0.5s forwards'; 
-    setTimeout(() => {
-      if (el.parentNode) el.remove();
-    }, 500); 
-  }, 1400);
-}
-
-// ============ MOBILE SWIPE FUNCTIONS ============
-function updateSwipeDisplay() {
-  if (!isMobile || allGeneratedNames.length === 0) return;
-  
-  const display = document.getElementById('swipeDisplay');
-  if (!display) return;
-  
-  // Ensure index is valid
-  if (swipeIndex >= allGeneratedNames.length) {
-    swipeIndex = 0;
-  }
-  if (swipeIndex < 0) {
-    swipeIndex = allGeneratedNames.length - 1;
-  }
-  
-  // Show only the result word
-  display.textContent = allGeneratedNames[swipeIndex].res;
-  display.title = allGeneratedNames[swipeIndex].res;
-}
-
-function swipeNext() {
-  if (allGeneratedNames.length === 0) return;
-  swipeIndex = (swipeIndex + 1) % allGeneratedNames.length;
-  updateSwipeDisplay();
-}
-
-function swipePrev() {
-  if (allGeneratedNames.length === 0) return;
-  swipeIndex = (swipeIndex - 1 + allGeneratedNames.length) % allGeneratedNames.length;
-  updateSwipeDisplay();
-}
-
-function copyCurrentWord() {
-  if (allGeneratedNames.length === 0) return;
-  
-  const word = allGeneratedNames[swipeIndex].res;
-  navigator.clipboard.writeText(word).then(() => {
-    // Show feedback
-    const feedback = document.getElementById('copyFeedback');
-    if (feedback) {
-      feedback.classList.add('show');
-      setTimeout(() => {
-        feedback.classList.remove('show');
-      }, 1500);
-    }
-    log(`📋 Copied: <span>${word}</span>`);
-  }).catch(err => {
-    log('⚠ Copy failed');
-    console.error('Copy error:', err);
-  });
-}
-
-// Touch swipe handlers
-function handleTouchStart(e) {
-  touchStartX = e.changedTouches[0].screenX;
-}
-
-function handleTouchEnd(e) {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipe();
-}
-
-function handleSwipe() {
-  const diff = touchStartX - touchEndX;
-  const threshold = 50; // Minimum swipe distance
-  
-  if (diff > threshold) {
-    // Swiped left - next
-    swipeNext();
-  } else if (diff < -threshold) {
-    // Swiped right - prev
-    swipePrev();
-  }
-}
-
-// ============ LOG ============
-function log(msg) { 
-  const el = document.getElementById('logText');
-  if (el) {
-    // Use innerHTML for colored spans, but sanitize to prevent XSS
-    el.innerHTML = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/\*([^*]+)\*/g, '<strong>$1</strong>')
-      .replace(/<span>/g, '<span style="color:var(--success)">')
-      .replace(/<\/span>/g, '</span>');
-  }
-}
-
-// Prevent text flicker on input focus
-document.addEventListener('DOMContentLoaded', () => {
-  const textarea = document.getElementById('wordInput');
-  if (textarea) {
-    textarea.addEventListener('focus', function() {
-      // Ensure text color stays visible
-      this.style.color = 'var(--text)';
-    });
-    textarea.addEventListener('blur', function() {
-      this.style.color = 'var(--text)';
-    });
   }
 });
 
-// Initialize mobile UI state
-updateMobileUI();
+/* ================= CYCLE ================= */
+
+function toggleCycle(){
+
+  cycle = !cycle;
+
+  document.getElementById('status').textContent =
+  cycle ? 'CYCLING ∞' : 'PAUSED';
+
+  if(cycle){
+
+    cycleInterval = setInterval(()=>{
+
+      if(!words.length) return;
+
+      const word =
+      words[
+        Math.floor(Math.random()*words.length)
+      ];
+
+      const prefix =
+      ITERATORS[
+        Math.floor(Math.random()*ITERATORS.length)
+      ].toUpperCase();
+
+      const cut =
+      Math.floor(Math.random()*word.length);
+
+      const result =
+      prefix + word.substring(cut);
+
+      generated.push(result);
+
+      renderWords([result]);
+
+      updateStats();
+
+      updateMobile();
+
+      document.getElementById('progress').style.width =
+      (Math.random()*100)+'%';
+
+    },180);
+
+    log('⚡ Infinite cycle active');
+
+  }else{
+
+    clearInterval(cycleInterval);
+
+    document.getElementById('progress').style.width =
+    '0%';
+
+    log('⏸ Cycle paused');
+  }
+}
+
+/* ================= FILE ================= */
+
+function saveFile(){
+
+  let txt = '';
+
+  generated.forEach(w=>{
+
+    txt += w + '\n';
+  });
+
+  const blob =
+  new Blob([txt], {type:'text/plain'});
+
+  const a =
+  document.createElement('a');
+
+  a.href =
+  URL.createObjectURL(blob);
+
+  a.download = 'generated-words.txt';
+
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+
+  log('✓ File downloaded');
+}
+
+/* ================= CLIPBOARD ================= */
+
+async function pasteClipboard(){
+
+  try{
+
+    const txt =
+    await navigator.clipboard.readText();
+
+    document.getElementById('input').value =
+    txt;
+
+    log('📋 Pasted clipboard');
+
+  }catch(err){
+
+    log('⚠ Clipboard blocked');
+  }
+}
+
+/* ================= SPIRAL ================= */
+
+const canvas =
+document.getElementById('canvas');
+
+const ctx =
+canvas.getContext('2d');
+
+let angle = 0;
+
+function resizeCanvas(){
+
+  const p =
+  canvas.parentElement;
+
+  canvas.width =
+  p.clientWidth;
+
+  canvas.height =
+  p.clientHeight;
+}
+
+function drawSpiral(){
+
+  const w = canvas.width;
+  const h = canvas.height;
+
+  const cx = w / 2;
+  const cy = h / 2;
+
+  ctx.clearRect(0,0,w,h);
+
+  for(let s=0;s<3;s++){
+
+    ctx.beginPath();
+
+    for(let i=0;i<320;i++){
+
+      const a =
+      angle + (i * .08) + (s * 2);
+
+      const r =
+      i * 1.1;
+
+      const x =
+      cx + Math.cos(a) * r;
+
+      const y =
+      cy + Math.sin(a) * r;
+
+      if(i===0){
+
+        ctx.moveTo(x,y);
+
+      }else{
+
+        ctx.lineTo(x,y);
+      }
+    }
+
+    const colors = [
+      'rgba(0,240,255,.35)',
+      'rgba(168,85,247,.25)',
+      'rgba(249,115,22,.2)'
+    ];
+
+    ctx.strokeStyle =
+    colors[s];
+
+    ctx.lineWidth = 1.3;
+
+    ctx.stroke();
+  }
+
+  angle += .004;
+
+  requestAnimationFrame(drawSpiral);
+}
+
+/* ================= LOG ================= */
+
+function log(msg){
+
+  document.getElementById('log').textContent =
+  msg;
+}
+
 </script>
+
 </body>
 </html>
