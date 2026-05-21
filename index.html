@@ -33,8 +33,6 @@ html,body{
   overflow:hidden;
   background:var(--bg);
   color:var(--text);
-
-  /* FIX FLICKER */
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
 }
@@ -59,11 +57,8 @@ body{
   left:50%;
   border-radius:50%;
   border:1px solid rgba(0,240,255,.04);
-
-  /* STABLE */
   will-change:transform;
   backface-visibility:hidden;
-
   animation:spin linear infinite;
 }
 
@@ -95,8 +90,6 @@ body{
   overflow:hidden;
   display:flex;
   flex-direction:column;
-
-  /* STABLE */
   transform:translateZ(0);
   backface-visibility:hidden;
 }
@@ -118,7 +111,6 @@ body{
   font-size:clamp(.8rem,2vw,1.15rem);
   font-weight:900;
   letter-spacing:2px;
-
   background:linear-gradient(135deg,var(--glow),var(--glow2));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -164,29 +156,20 @@ body{
 /* ================= SEQUENTIAL READER ================= */
 
 #ticker{
-
   width:100%;
   height:calc(100% - 20px);
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   text-align:center;
   line-height:1.2;
-
   overflow-wrap:anywhere;
   word-break:break-word;
-
   color:var(--glow);
   font-family:'Orbitron',sans-serif;
   font-weight:700;
-
   font-size:clamp(.7rem,2vw,1.5rem);
-
   padding:4px;
-
-  /* FIX FLICKER */
   transition:none;
   opacity:1 !important;
 }
@@ -207,14 +190,11 @@ body{
   border:1px solid rgba(168,85,247,.3);
   border-radius:6px;
   color:var(--glow2);
-
   font-size:.7rem;
-
   max-width:90%;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
-
   animation:fadeIn .2s linear;
 }
 
@@ -265,36 +245,22 @@ body{
   position:relative;
 }
 
-/* ================= TEXTAREA FIX ================= */
-
 textarea{
-
   width:100%;
   height:90px;
-
   resize:none;
   outline:none;
-
   background:#0b0b12 !important;
-
   color:#ffffff !important;
-
   caret-color:var(--glow);
-
   border:1px solid var(--border);
   border-radius:10px;
-
   padding:12px;
-
   font-family:'Share Tech Mono', monospace;
   font-size:.75rem;
-
-  /* STABLE */
   transition:none !important;
   animation:none !important;
-
   -webkit-text-fill-color:#ffffff;
-
   appearance:none;
   -webkit-appearance:none;
 }
@@ -313,19 +279,13 @@ textarea::placeholder{
   position:absolute;
   top:6px;
   right:6px;
-
   border:none;
   cursor:pointer;
-
   border-radius:6px;
-
   padding:4px 8px;
-
   background:rgba(168,85,247,.15);
   border:1px solid rgba(168,85,247,.25);
-
   color:var(--glow2);
-
   font-size:.55rem;
 }
 
@@ -333,16 +293,12 @@ textarea::placeholder{
   width:100%;
   padding:10px;
   margin-top:10px;
-
   border:none;
   border-radius:10px;
-
   cursor:pointer;
-
   font-family:'Orbitron',sans-serif;
   font-size:.62rem;
   font-weight:700;
-
   letter-spacing:1px;
 }
 
@@ -389,12 +345,9 @@ textarea::placeholder{
   margin:3px;
   padding:4px 8px;
   border-radius:999px;
-
   background:rgba(0,240,255,.05);
   border:1px solid rgba(0,240,255,.15);
-
   color:var(--glow);
-
   font-size:.6rem;
 }
 
@@ -416,12 +369,9 @@ textarea::placeholder{
 .output{
   flex:1;
   margin-top:8px;
-
   background:rgba(0,0,0,.22);
-
   border:1px solid var(--border);
   border-radius:12px;
-
   overflow:auto;
   padding:8px;
 }
@@ -429,19 +379,13 @@ textarea::placeholder{
 /* ================= GENERATED WORDS ONLY ================= */
 
 .word{
-
   padding:7px 8px;
   margin:2px 0;
-
   border-left:2px solid transparent;
   border-radius:0 6px 6px 0;
-
   color:var(--text);
-
   font-size:.72rem;
-
   cursor:pointer;
-
   overflow-wrap:anywhere;
   word-break:break-word;
 }
@@ -456,14 +400,10 @@ textarea::placeholder{
 .spiral-wrap{
   position:relative;
   flex:1;
-
   background:rgba(0,0,0,.25);
-
   border:1px solid var(--border);
   border-radius:12px;
-
   overflow:hidden;
-
   min-height:260px;
 }
 
@@ -476,12 +416,10 @@ canvas{
 .spiral-overlay{
   position:absolute;
   inset:0;
-
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-
   pointer-events:none;
 }
 
@@ -489,7 +427,6 @@ canvas{
   font-family:'Orbitron',sans-serif;
   font-size:clamp(2rem,5vw,4rem);
   font-weight:900;
-
   background:linear-gradient(135deg,var(--glow),var(--glow2),var(--glow3));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -505,11 +442,8 @@ canvas{
 
 .mobile-view{
   display:none;
-
   padding:12px;
-
   border-top:1px solid var(--border);
-
   background:rgba(0,0,0,.28);
 }
 
@@ -522,21 +456,15 @@ canvas{
 
 .viewer-word{
   min-height:70px;
-
   display:flex;
   justify-content:center;
   align-items:center;
-
   text-align:center;
-
   color:var(--glow);
-
   font-family:'Orbitron',sans-serif;
   font-weight:700;
-
   overflow-wrap:anywhere;
   word-break:break-word;
-
   font-size:clamp(.9rem,4vw,1.4rem);
 }
 
@@ -549,12 +477,9 @@ canvas{
 .viewer-controls button{
   flex:1;
   padding:10px;
-
   border:none;
   border-radius:10px;
-
   cursor:pointer;
-
   font-family:'Orbitron',sans-serif;
   font-size:.65rem;
 }
@@ -575,9 +500,7 @@ canvas{
 .log{
   padding:10px 14px;
   border-top:1px solid var(--border);
-
   color:var(--dim);
-
   font-size:.6rem;
 }
 
@@ -668,7 +591,6 @@ canvas{
 
 <div class="main">
 
-  <!-- HEADER -->
   <div class="header">
 
     <h1>⚡ INFINITE NAMING ENGINE</h1>
@@ -679,7 +601,6 @@ canvas{
 
   </div>
 
-  <!-- TOP -->
   <div class="top">
 
     <div class="top-box">
@@ -706,10 +627,8 @@ canvas{
 
   </div>
 
-  <!-- CONTENT -->
   <div class="content">
 
-    <!-- LEFT -->
     <div class="left">
 
       <div class="section-title">
@@ -743,7 +662,6 @@ ARTIFICIAL INTELLIGENCE"></textarea>
         <div class="progress-fill" id="progress"></div>
       </div>
 
-      <!-- DESKTOP -->
       <div class="desktop">
 
         <button class="btn"
@@ -776,7 +694,6 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 
     </div>
 
-    <!-- RIGHT -->
     <div class="right">
 
       <div class="panel">
@@ -825,7 +742,6 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 
   </div>
 
-  <!-- MOBILE -->
   <div class="mobile-view">
 
     <div class="viewer">
@@ -858,7 +774,6 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 
   </div>
 
-  <!-- FOOTER -->
   <div class="log" id="log">
     System initialized...
   </div>
@@ -879,6 +794,9 @@ const ITERATORS = [
 
 let words = [];
 let generated = [];
+
+let tickerWords = [];
+let mobileWords = [];
 
 let cycle = false;
 let cycleInterval = null;
@@ -944,7 +862,11 @@ function makeWord(word){
 
       const result = prefix + suffix;
 
-      results.push(result);
+      /* REMOVE ORIGINAL WORD */
+      if(result !== w){
+
+        results.push(result);
+      }
     }
   }
 
@@ -987,7 +909,26 @@ function generate(){
     batch = batch.concat(makeWord(w));
   });
 
-  generated = generated.concat(batch);
+  /* REMOVE DUPLICATES */
+  batch = [...new Set(batch)];
+
+  generated = [...new Set([...generated,...batch])];
+
+  /* SEQUENTIAL READER
+     LONGEST → SMALLEST */
+  tickerWords =
+  [...generated].sort((a,b)=>{
+
+    return b.length - a.length;
+  });
+
+  /* MOBILE / SWIPE
+     SMALLEST → LONGEST */
+  mobileWords =
+  [...generated].sort((a,b)=>{
+
+    return a.length - b.length;
+  });
 
   renderWords(batch);
 
@@ -1027,7 +968,6 @@ function renderWords(batch){
 
     div.className = 'word';
 
-    /* GENERATED WORD ONLY */
     div.textContent = word;
 
     div.onclick = ()=>{
@@ -1037,7 +977,7 @@ function renderWords(batch){
       log(`📋 Copied ${word}`);
 
       mobileIndex =
-      generated.indexOf(word);
+      mobileWords.indexOf(word);
 
       updateMobile();
     };
@@ -1087,27 +1027,26 @@ function startTicker(){
 
   clearInterval(tickerInterval);
 
-  if(!generated.length) return;
+  if(!tickerWords.length) return;
 
   const ticker =
   document.getElementById('ticker');
 
-  ticker.textContent = generated[0];
+  ticker.textContent = tickerWords[0];
 
   tickerIndex = 0;
 
-  /* NO FLICKER */
   tickerInterval = setInterval(()=>{
 
     tickerIndex++;
 
-    if(tickerIndex >= generated.length){
+    if(tickerIndex >= tickerWords.length){
 
       tickerIndex = 0;
     }
 
     ticker.textContent =
-    generated[tickerIndex];
+    tickerWords[tickerIndex];
 
   },1000);
 }
@@ -1169,7 +1108,7 @@ function updateMobile(){
   const viewer =
   document.getElementById('mobileWord');
 
-  if(!generated.length){
+  if(!mobileWords.length){
 
     viewer.textContent =
     'No words generated yet';
@@ -1180,16 +1119,16 @@ function updateMobile(){
   if(mobileIndex < 0){
 
     mobileIndex =
-    generated.length - 1;
+    mobileWords.length - 1;
   }
 
-  if(mobileIndex >= generated.length){
+  if(mobileIndex >= mobileWords.length){
 
     mobileIndex = 0;
   }
 
   viewer.textContent =
-  generated[mobileIndex];
+  mobileWords[mobileIndex];
 }
 
 function nextWord(){
@@ -1208,16 +1147,16 @@ function prevWord(){
 
 function copyWord(){
 
-  if(!generated.length) return;
+  if(!mobileWords.length) return;
 
   navigator.clipboard.writeText(
-    generated[mobileIndex]
+    mobileWords[mobileIndex]
   );
 
-  log(`📋 Copied ${generated[mobileIndex]}`);
+  log(`📋 Copied ${mobileWords[mobileIndex]}`);
 }
 
-/* SWIPE */
+/* ================= SWIPE ================= */
 
 const mobile =
 document.getElementById('mobileWord');
@@ -1282,7 +1221,23 @@ function toggleCycle(){
       const result =
       prefix + word.substring(cut);
 
+      if(result === word) return;
+
       generated.push(result);
+
+      generated = [...new Set(generated)];
+
+      tickerWords =
+      [...generated].sort((a,b)=>{
+
+        return b.length - a.length;
+      });
+
+      mobileWords =
+      [...generated].sort((a,b)=>{
+
+        return a.length - b.length;
+      });
 
       renderWords([result]);
 
