@@ -1172,25 +1172,26 @@ canvas{
   color:var(--text);
   font-size:.85rem;
   line-height:1.6;
-  transition:background .3s ease, border-left-color .3s ease, color .3s ease, box-shadow .3s ease;
+  transition:all .3s ease;
   animation:readingIndicator 8s ease-in-out infinite;
   animation-delay:calc(var(--word-index) * 1.2s);
   border-left:3px solid transparent;
   background:rgba(255,255,255,.02);
   -webkit-animation:readingIndicator 8s ease-in-out infinite;
   -webkit-animation-delay:calc(var(--word-index) * 1.2s);
-  will-change: transform;
+  will-change: background, border-left-color, color, box-shadow;
   -webkit-tap-highlight-color: transparent;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  contain: layout style paint;
+  -webkit-transform:translateZ(0);
+  transform:translateZ(0);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
 }
 
 .reading-word:hover,
 .reading-word.active{
   background:rgba(34,197,94,.15);
   border-left-color:var(--success);
-  transform:translateX(4px) translateZ(0);
+  transform:translateX(4px);
   cursor:pointer;
 }
 
@@ -1274,6 +1275,7 @@ canvas{
 
 .reading-word:hover{
   animation-play-state:paused;
+  -webkit-animation-play-state:paused;
   background:rgba(34,197,94,.25);
   border-left-color:var(--success);
   color:var(--success);
@@ -1339,6 +1341,9 @@ canvas{
 }
 
 /* ================= MOBILE ================= */
+
+
+
 
 @media(max-width:900px){
 
@@ -1436,62 +1441,17 @@ canvas{
   -webkit-overflow-scrolling:touch;
 }
 
-  /* Mobile optimization for reading animation */
-  .reading-word{
-    animation-duration: 10s !important;
-    -webkit-animation-duration: 10s !important;
-    will-change: transform !important;
-    transform: translate3d(0,0,0) !important;
-    -webkit-transform: translate3d(0,0,0) !important;
-  }
-  
-  @keyframes readingIndicator{
-    0%,100%{
-      background:rgba(255,255,255,.02);
-      border-left-color:transparent;
-      color:var(--text);
-      box-shadow:none;
-      transform: translate3d(0,0,0);
-    }
-    20%,40%{
-      background:rgba(34,197,94,.2);
-      border-left-color:var(--success);
-      color:var(--success);
-      box-shadow:0 0 15px rgba(34,197,94,.3);
-      transform: translate3d(0,0,0);
-    }
-    60%,80%{
-      background:rgba(0,240,255,.15);
-      border-left-color:var(--glow);
-      color:var(--glow);
-      box-shadow:0 0 12px rgba(0,240,255,.25);
-      transform: translate3d(0,0,0);
-    }
-  }
-  
-  @-webkit-keyframes readingIndicator{
-    0%,100%{
-      background:rgba(255,255,255,.02);
-      border-left-color:transparent;
-      color:var(--text);
-      box-shadow:none;
-      -webkit-transform: translate3d(0,0,0);
-    }
-    20%,40%{
-      background:rgba(34,197,94,.2);
-      border-left-color:var(--success);
-      color:var(--success);
-      box-shadow:0 0 15px rgba(34,197,94,.3);
-      -webkit-transform: translate3d(0,0,0);
-    }
-    60%,80%{
-      background:rgba(0,240,255,.15);
-      border-left-color:var(--glow);
-      color:var(--glow);
-      box-shadow:0 0 12px rgba(0,240,255,.25);
-      -webkit-transform: translate3d(0,0,0);
-    }
-  }
+.reading-word{
+  font-size:.8rem;
+  padding:5px 8px;
+  -webkit-animation-duration:10s;
+  animation-duration:10s;
+}
+
+.reading-guide-container{
+  gap:4px;
+}
+
 
 }
 
@@ -1567,19 +1527,10 @@ canvas{
     height:auto !important;
     }
 
-  /* Extra mobile optimization for small screens */
-  .reading-word{
-    animation: none !important;
-    -webkit-animation: none !important;
-    transition: background .2s ease, border-left-color .2s ease !important;
-  }
-  
-  .reading-word.active,
-  .reading-word.touched{
-    background:rgba(34,197,94,.25) !important;
-    border-left-color:var(--success) !important;
-    color:var(--success) !important;
-  }
+    .reading-word{
+    font-size:.75rem;
+    padding:4px 6px;
+    }
 
 }
 
@@ -2062,8 +2013,39 @@ document.addEventListener('DOMContentLoaded',()=>{
   initHeaderButtonsSwipe();
   
   startTimedOverlayCheck();
+  
+  initReadingGuideTouch();
 
 });
+
+/* ================= READING GUIDE MOBILE SUPPORT ================= */
+
+function initReadingGuideTouch(){
+  const readingWords = document.querySelectorAll('.reading-word');
+  
+  readingWords.forEach(word=>{
+    word.addEventListener('touchstart', (e)=>{
+      e.preventDefault();
+      readingWords.forEach(w=>w.classList.remove('touched'));
+      word.classList.add('touched');
+    }, {passive:false});
+    
+    word.addEventListener('touchend', (e)=>{
+      e.preventDefault();
+      setTimeout(()=>{
+        word.classList.remove('touched');
+      }, 300);
+    }, {passive:false});
+    
+    word.addEventListener('click', (e)=>{
+      readingWords.forEach(w=>w.classList.remove('active'));
+      word.classList.add('active');
+      setTimeout(()=>{
+        word.classList.remove('active');
+      }, 500);
+    });
+  });
+}
 
 /* ================= LOGIC TAB ================= */
 
@@ -2999,29 +2981,18 @@ function drawSpiral(){
 /* ================= INFO ================= */
 
 function openInfo(){
-  // Pause reading animations on mobile when opening info modal to prevent stuttering
-  if(window.innerWidth <= 900){
-    const readingWords = document.querySelectorAll('.reading-word');
-    readingWords.forEach(word => {
-      word.style.animationPlayState = 'paused';
-      word.style.webkitAnimationPlayState = 'paused';
-      word.style.transform = 'translate3d(0,0,0)';
-    });
-  }
-  document.getElementById('infoModal').style.display = 'flex';
+
+  document.getElementById('infoModal').style.display =
+  'flex';
 }
 
 function closeInfo(){
-    document.getElementById('infoModal').style.display = 'none';
-    document.getElementById('counterBadge').classList.add('hidden');
-    // Resume animations if needed when closing
-    if(window.innerWidth <= 900){
-      const readingWords = document.querySelectorAll('.reading-word');
-      readingWords.forEach(word => {
-        word.style.animationPlayState = 'running';
-        word.style.webkitAnimationPlayState = 'running';
-      });
-    }
+
+    document.getElementById('infoModal').style.display =
+    'none';
+
+    document.getElementById('counterBadge').classList.add('hidden')
+
 }
 
 /* ================= MESSAGE US ================= */
@@ -3112,7 +3083,6 @@ function initLiveSwipe(){
   
   liveStream.addEventListener('click', (e)=>{
     if(e.target.classList.contains('stream-word')){
-      // Single click does nothing, double click copies
     }
   });
   
