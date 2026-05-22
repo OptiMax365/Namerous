@@ -137,7 +137,7 @@ body{
   padding:5px 12px;
   border-radius:999px;
   border:1px solid rgba(0,240,255,.25);
-  background:rgb(0, 238, 255);
+  background:rgba(0,240,255,.08);
   color:var(--glow);
   font-size:.6rem;
   white-space:nowrap;
@@ -155,7 +155,7 @@ body{
     box-shadow:0 0 0 0 rgba(34,197,94,.4);
   }
   50%{
-    box-shadow:0 0 0 3px rgb(0, 174, 93);
+    box-shadow:0 0 0 8px rgba(34,197,94,0);
   }
 }
 
@@ -175,23 +175,12 @@ body{
   font-size:.58rem;
   letter-spacing:1px;
   white-space:nowrap;
-  position:relative;
 }
 
 .info-btn{
-  background:rgba(236, 247, 248, 0.12);
-  border:1px solid rgb(255, 255, 255);
+  background:rgba(0,240,255,.12);
+  border:1px solid rgba(0,240,255,.25);
   color:var(--glow);
-  animation:pulseInfoBtn 2s ease-in-out infinite;
-}
-
-@keyframes pulseInfoBtn{
-  0%,100%{
-    box-shadow:0 0 0 0 rgba(0, 255, 174, 0.4);
-  }
-  50%{
-    box-shadow:0 0 0 10px rgba(255, 255, 255, 0);
-  }
 }
 
 .message-btn{
@@ -199,42 +188,6 @@ body{
   border:1px solid rgba(168,85,247,.25);
   color:var(--glow2);
 }
-
-.counter-badge{
-  position:absolute;
-  top:-8px;
-  right:-8px;
-  background:#22c55e;
-  color:#00ff8c;
-  font-family:'Orbitron',sans-serif;
-  font-size:.55rem;
-  font-weight:700;
-  border-radius:50%;
-  width:20px;
-  height:20px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  animation:pulseCounter 1.2s ease-in-out infinite;
-}
-
-@keyframes pulseCounter{
-  0%,100%{
-    transform:scale(1);
-    box-shadow:0 0 0 0 rgba(0, 250, 100, 0.6);
-  }
-  50%{
-    transform:scale(1.15);
-    box-shadow:0 0 0 6px rgb(0, 255, 119);
-  }
-}
-
-
-
-.counter-badge.hidden{
-  display:none;
-}
-
 
 /* ================= TABS ================= */
 
@@ -261,7 +214,7 @@ body{
   cursor:pointer;
   border-radius:10px;
   padding:12px 16px;
-  background:rgba(255, 255, 255, 0.03);
+  background:rgba(255,255,255,.03);
   border:1px solid var(--border);
   color:var(--dim);
   font-family:'Orbitron',sans-serif;
@@ -459,7 +412,7 @@ textarea{
   -webkit-appearance:none;
   
   animation:pulseInput 2s ease-in-out infinite;
-  box-shadow:0 0 0 2px rgba(255, 255, 255, 0.2);
+  box-shadow:0 0 0 2px rgba(34,197,94,.2);
 }
 
 @keyframes pulseInput{
@@ -819,7 +772,7 @@ canvas{
   font-size:.8rem;
 }
 
-.close-btn{
+.yes-btn{
   width:100%;
   margin-top:20px;
   padding:14px;
@@ -882,7 +835,7 @@ canvas{
   }
 }
 
-.live-close{
+.live-yes{
   position:absolute;
   top:16px;
   right:16px;
@@ -1024,275 +977,7 @@ canvas{
   color:var(--success);
 }
 
-/* ================= COPY WARNING MODAL ================= */
-
-.copy-warning-modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.92);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:10000;
-  padding:20px;
-  animation:fadeIn .3s ease-out;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;}
-  to{opacity:1;}
-}
-
-.copy-warning-card{
-  width:min(100%,500px);
-  background:#0f0f18;
-  border:2px solid var(--success);
-  border-radius:20px;
-  padding:24px;
-  text-align:center;
-  animation:pulseWarning 1.5s ease-in-out infinite;
-}
-
-@keyframes pulseWarning{
-  0%,100%{
-    box-shadow:0 0 0 0 rgba(34,197,94,.5);
-  }
-  50%{
-    box-shadow:0 0 0 15px rgba(34,197,94,0);
-  }
-}
-
-.copy-warning-title{
-  font-family:'Orbitron',sans-serif;
-  color:var(--success);
-  font-size:1.1rem;
-  margin-bottom:16px;
-  letter-spacing:1px;
-}
-
-.copy-warning-text{
-  color:var(--text);
-  font-size:.85rem;
-  line-height:1.7;
-  margin-bottom:20px;
-}
-
-.copy-warning-text strong{
-  color:var(--glow);
-}
-
-.copy-warning-btn{
-  padding:10px 24px;
-  border:none;
-  border-radius:10px;
-  background:linear-gradient(135deg,var(--success),#15803d);
-  color:#fff;
-  font-family:'Orbitron',sans-serif;
-  font-size:.7rem;
-  cursor:pointer;
-  animation:pulseBtn 1.2s ease-in-out infinite;
-}
-
-@keyframes pulseBtn{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.05);}
-}
-
-/* ================= TIMED BRAND OVERLAY ================= */
-
-.timed-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(9,9,16,.98);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:10001;
-  padding:20px;
-  animation:blinkOverlay .5s ease-in-out infinite alternate;
-}
-
-@keyframes blinkOverlay{
-  from{background:rgba(9,9,16,.95);}
-  to{background:rgba(9,9,16,1);}
-}
-
-.timed-overlay-card{
-  width:min(100%,600px);
-  max-height:80vh;
-  background:#101019;
-  border:2px solid var(--glow);
-  border-radius:20px;
-  padding:20px;
-  overflow:auto;
-  position:relative;
-}
-
-.timed-overlay-title{
-  font-family:'Orbitron',sans-serif;
-  color:var(--glow);
-  font-size:1rem;
-  margin-bottom:16px;
-  text-align:center;
-  letter-spacing:1px;
-}
-
-.timed-overlay-content{
-  color:var(--text);
-  font-size:.8rem;
-  line-height:1.8;
-  margin-bottom:20px;
-}
-
-.timed-overlay-content .highlight{
-  color:var(--success);
-  font-weight:700;
-}
-
-.timed-overlay-content .warning{
-  color:var(--glow2);
-  font-weight:700;
-}
-
-
-
-/* ================= READING INDICATOR ================= */
-
-.reading-guide-container{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  margin-top:10px;
-}
-
-.reading-word{
-  display:block;
-  padding:6px 10px;
-  border-radius:6px;
-  color:var(--text);
-  font-size:.85rem;
-  line-height:1.6;
-  transition:all .3s ease;
-  animation:readingIndicator 8s ease-in-out infinite;
-  animation-delay:calc(var(--word-index) * 1.2s);
-  border-left:3px solid transparent;
-  background:rgba(255,255,255,.02);
-  -webkit-animation:readingIndicator 8s ease-in-out infinite;
-  -webkit-animation-delay:calc(var(--word-index) * 1.2s);
-  will-change: background, border-left-color, color, box-shadow;
-  -webkit-tap-highlight-color: transparent;
-
-}
-
-.reading-word:hover
-.reading-word.active{
-  background:rgba(34,197,94,.15);
-  border-left-color:var(--success);
-  transform:translateX(4px);
-  cursor:pointer;
-}
-
-.reading-word:active{
-  background:rgba(34,197,94,.25);
-  border-left-color:var(--success);
-  color:var(--success);
-}
-
-
-@keyframes readingIndicator{
-  0%,100%{
-    background:rgba(255,255,255,.02);
-    border-left-color:transparent;
-    color:var(--text);
-    box-shadow:none;
-  }
-  20%,40%{
-    background:rgba(34,197,94,.2);
-    border-left-color:var(--success);
-    color:var(--success);
-    box-shadow:0 0 15px rgba(34,197,94,.3);
-  }
-  60%,80%{
-    background:rgba(0,240,255,.15);
-    border-left-color:var(--glow);
-    color:var(--glow);
-    box-shadow:0 0 12px rgba(0,240,255,.25);
-  }
-}
-
-
-
-
-.reading-word:hover{
-  animation-play-state:paused;
-  background:rgba(34,197,94,.25);
-  border-left-color:var(--success);
-  color:var(--success);
-}
-
-
-
-
-.reading-line{
-  display:block;
-  margin:4px 0;
-  padding:4px 8px;
-  border-radius:4px;
-  animation:readingHighlight 2s ease-in-out infinite;
-  animation-delay:calc(var(--line-index) * .3s);
-}
-
-@keyframes readingHighlight{
-  0%,100%{
-    background:transparent;
-    color:var(--text);
-  }
-  30%,70%{
-    background:rgba(34,197,94,.2);
-    color:var(--success);
-    box-shadow:0 0 10px rgba(34,197,94,.3);
-  }
-}
-
-
-
-
-
-.timed-overlay-buttons{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-}
-
-.timed-yes-btn{
-  flex:1;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:linear-gradient(135deg,var(--success),#15803d);
-  color:#fff;
-  font-family:'Orbitron',sans-serif;
-  font-size:.7rem;
-  cursor:pointer;
-}
-
-.timed-close-btn{
-  position:absolute;
-  top:12px;
-  right:12px;
-  padding:6px 12px;
-  border:none;
-  border-radius:8px;
-  background:rgba(255,255,255,.1);
-  color:var(--dim);
-  font-size:.65rem;
-  cursor:pointer;
-}
-
 /* ================= MOBILE ================= */
-
-
-
 
 @media(max-width:900px){
 
@@ -1305,7 +990,6 @@ canvas{
     height:auto;
     min-height:100vh;
   }
-  
 
   .main{
     height:auto;
@@ -1364,12 +1048,7 @@ canvas{
     text-align:center;
     margin:0 2px;
   }
-
-
 }
-
-
-
 
 @media(max-width:600px){
 
@@ -1403,33 +1082,6 @@ canvas{
     padding:6px 12px;
     top:8px;
   }
-  
-  .copy-warning-card{
-    padding:18px;
-  }
-  
-  .copy-warning-title{
-    font-size:1rem;
-  }
-  
-  .copy-warning-text{
-    font-size:.8rem;
-  }
-  
-  .timed-overlay-card{
-    padding:16px;
-  }
-  
-  .timed-overlay-title{
-    font-size:.95rem;
-  }
-  
-  .timed-overlay-content{
-    font-size:.75rem;
-  }
-
-
-
 }
 
 </style>
@@ -1453,7 +1105,6 @@ canvas{
       <div class="header-buttons">
         <button class="header-btn info-btn" onclick="openInfo()">
           ℹ INFO
-          <span class="counter-badge" id="counterBadge"></span>
         </button>
 
         <button class="header-btn message-btn" onclick="messageUs()">
@@ -1696,25 +1347,13 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 <!-- INFO MODAL -->
 <div class="modal" id="infoModal">
 
- <div class="modal-card">
+  <div class="modal-card">
 
     <div class="modal-title">
       ⚡ Infinite Naming World Guide
     </div>
 
     <div class="guide">
-
-      <div class="guide-item" style="border-color:var(--success);background:rgba(34,197,94,.08)">
-        <h3 style="color:var(--success)">⚠️ BRAND NAME CHECK - READ FIRST</h3>
-        <div class="reading-guide-container">
-          <span class="reading-word" style="--word-index:0">Important:</span>
-          <span class="reading-word" style="--word-index:1">Names like Facebook, TikTok, Google, and other brands are owned companies.</span>
-          <span class="reading-word" style="--word-index:2">Always verify if a generated name is already trademarked or owned</span>
-          <span class="reading-word" style="--word-index:3">before using it for your brand, domain, app, or product.</span>
-          <span class="reading-word" style="--word-index:4">Pick a unique, original name that is truly yours.</span>
-          <span class="reading-word" style="--word-index:5">Free keywords are available—choose wisely!</span>
-        </div>
-      </div>
 
       <div class="guide-item">
         <h3>1. Generate Unique Names</h3>
@@ -1760,8 +1399,8 @@ ARTIFICIAL INTELLIGENCE"></textarea>
 
     </div>
 
-    <button class="close-btn" onclick="closeInfo()">
-      COMPLETE
+    <button class="yes-btn" onclick="yesInfo()">
+      GUIDE
     </button>
 
   </div>
@@ -1784,7 +1423,7 @@ ARTIFICIAL INTELLIGENCE"></textarea>
         <button class="btn cycle" onclick="openGmail()">📧 OPEN GMAIL</button>
       </div>
     </div>
-    <button class="close-btn" onclick="closeMessageModal()">CLOSE</button>
+    <button class="yes-btn" onclick="yesMessageModal()">Yes</button>
   </div>
 </div>
 
@@ -1793,7 +1432,7 @@ ARTIFICIAL INTELLIGENCE"></textarea>
   <div class="words-list-card">
     <div class="words-list-title">
       <span>📋 ALL GENERATED WORDS</span>
-      <button class="close-btn" style="width:auto;padding:8px 16px;margin:0" onclick="closeWordsList()">CLOSE</button>
+      <button class="yes-btn" style="width:auto;padding:8px 16px;margin:0" onclick="yesWordsList()">YES</button>
     </div>
     <div class="words-list-container" id="wordsListContainer">
       <div style="color:var(--dim);text-align:center;padding:20px">
@@ -1803,41 +1442,11 @@ ARTIFICIAL INTELLIGENCE"></textarea>
   </div>
 </div>
 
-<!-- COPY WARNING MODAL -->
-<div class="copy-warning-modal" id="copyWarningModal">
-  <div class="copy-warning-card">
-    <div class="copy-warning-title">⚠️ CHECK BRAND OWNERSHIP</div>
-    <div class="copy-warning-text">
-      Names like <strong>Facebook, TikTok, Google</strong> are owned brands. 
-      Always verify if your copied name is trademarked before using it for your business, domain, or product. 
-      Choose a <strong>unique, original name</strong> that is truly yours!
-    </div>
-    <button class="copy-warning-btn" onclick="closeCopyWarning()">GOT IT ✓</button>
-  </div>
-</div>
-
-<!-- TIMED BRAND OVERLAY -->
-<div class="timed-overlay" id="timedOverlay">
-  <div class="timed-overlay-card">
-    <button class="timed-close-btn" onclick="closeTimedOverlay()">✕</button>
-    <div class="timed-overlay-title">🆕 NEW NAMES AVAILABLE - BRAND CHECK</div>
-    <div class="timed-overlay-content">
-      <span class="reading-line" style="--line-index:0"><span class="highlight">Free keywords & names are available!</span> If you find one you like...</span>
-      <span class="reading-line" style="--line-index:1"><span class="warning">Check if the brand is already owned</span> like Facebook, Google, TikTok...</span>
-      <span class="reading-line" style="--line-index:2">If it has been owned, <span class="highlight">pick a unique name that is new</span>.</span>
-      <span class="reading-line" style="--line-index:3">Your identity deserves originality. ✦ Verify before you brand. ✦</span>
-    </div>
-    <div class="timed-overlay-buttons">
-      <button class="timed-yes-btn" onclick="closeTimedOverlay()">YES, I UNDERSTAND ✓</button>
-    </div>
-  </div>
-</div>
-
 <!-- LIVE VIEWER -->
 <div class="live-modal" id="liveModal">
 
-  <button class="live-close" onclick="closeLiveViewer()">
-    CLOSE
+  <button class="live-yes" onclick="yesLiveViewer()">
+    YES
   </button>
   
   <div class="live-instruction">
@@ -1883,11 +1492,6 @@ let recentShuffle = [];
 
 let lastTickerWord = '';
 
-let copyCounter = 0;
-
-let timedOverlayShown = false;
-let sessionStartTime = Date.now();
-
 /* ================= INIT ================= */
 
 document.addEventListener('DOMContentLoaded',()=>{
@@ -1909,8 +1513,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   initTabsSwipe();
   
   initHeaderButtonsSwipe();
-  
-  startTimedOverlayCheck();
 
 });
 
@@ -2261,8 +1863,6 @@ function renderWords(batch){
       mobileIndex =
       generated.indexOf(word);
       updateMobile();
-      incrementCopyCounter();
-      showCopyWarning();
     };
 
     frag.appendChild(div);
@@ -2304,24 +1904,6 @@ function updateStats(){
   generated.length.toLocaleString();
 }
 
-/* ================= COPY COUNTER ================= */
-
-function incrementCopyCounter(){
-  copyCounter++;
-  document.getElementById('counterBadge').textContent = copyCounter;
-}
-
-/* ================= COPY WARNING MODAL ================= */
-
-function showCopyWarning(){
-  const modal = document.getElementById('copyWarningModal');
-  modal.style.display = 'flex';
-}
-
-function closeCopyWarning(){
-  document.getElementById('copyWarningModal').style.display = 'none';
-}
-
 /* ================= TICKER ================= */
 
 function initTickerClick(){
@@ -2334,8 +1916,6 @@ function initTickerClick(){
       setTimeout(()=>{
         ticker.classList.remove('copied');
       }, 800);
-      incrementCopyCounter();
-      showCopyWarning();
     }
   };
 }
@@ -2386,8 +1966,6 @@ function initShuffleClick(){
       setTimeout(()=>{
         if(e.target.parentNode) e.target.remove();
       }, 300);
-      incrementCopyCounter();
-      showCopyWarning();
     }
   });
 }
@@ -2537,9 +2115,6 @@ function copyWord(){
   setTimeout(()=>{
     viewer.classList.remove('copied');
   }, 800);
-  
-  incrementCopyCounter();
-  showCopyWarning();
 }
 
 /* SWIPE */
@@ -2584,8 +2159,6 @@ mobile.onclick = ()=>{
     setTimeout(()=>{
       mobile.classList.remove('copied');
     }, 800);
-    incrementCopyCounter();
-    showCopyWarning();
   }
 };
 
@@ -2853,12 +2426,10 @@ function openInfo(){
   'flex';
 }
 
-function closeInfo(){
+function yesInfo(){
 
-    document.getElementById('infoModal').style.display =
-    'none';
-
-
+  document.getElementById('infoModal').style.display =
+  'none';
 }
 
 /* ================= MESSAGE US ================= */
@@ -2876,7 +2447,7 @@ function openGmail(){
   window.location.href = 'mailto:hello@infiniteengine.ai';
 }
 
-function closeMessageModal(){
+function yesMessageModal(){
   document.getElementById('messageModal').style.display = 'none';
 }
 
@@ -2887,7 +2458,7 @@ function openWordsList(){
   document.getElementById('wordsListModal').style.display = 'flex';
 }
 
-function closeWordsList(){
+function yesWordsList(){
   document.getElementById('wordsListModal').style.display = 'none';
 }
 
@@ -2920,8 +2491,6 @@ function updateWordsList(){
           icon.textContent = '📋';
         }
       }, 800);
-      incrementCopyCounter();
-      showCopyWarning();
     };
     
     container.appendChild(item);
@@ -2963,8 +2532,6 @@ function initLiveSwipe(){
         if(e.target.parentNode) e.target.remove();
       }, 300);
       pauseLiveOnActivity();
-      incrementCopyCounter();
-      showCopyWarning();
     }
   });
 }
@@ -2990,7 +2557,7 @@ function openLiveViewer(){
   startLiveMotion();
 }
 
-function closeLiveViewer(){
+function yesLiveViewer(){
 
   document.getElementById('liveModal').style.display =
   'none';
@@ -3044,8 +2611,6 @@ function startLiveMotion(){
         if(el.parentNode) el.remove();
       }, 300);
       pauseLiveOnActivity();
-      incrementCopyCounter();
-      showCopyWarning();
     };
 
     stream.appendChild(el);
@@ -3109,33 +2674,6 @@ function initHeaderButtonsSwipe(){
       headerBtns.scrollBy({left: diff * -0.5, behavior: 'smooth'});
     }
   });
-}
-
-/* ================= TIMED OVERLAY ================= */
-
-function startTimedOverlayCheck(){
-  setInterval(()=>{
-    const elapsed = (Date.now() - sessionStartTime) / 1000;
-    if(elapsed >= 180 && !timedOverlayShown){
-      showTimedOverlay();
-      timedOverlayShown = true;
-    }
-  }, 5000);
-}
-
-function showTimedOverlay(){
-  const overlay = document.getElementById('timedOverlay');
-  overlay.style.display = 'flex';
-  
-  setTimeout(()=>{
-    if(overlay.style.display === 'flex'){
-      closeTimedOverlay();
-    }
-  }, 8000);
-}
-
-function closeTimedOverlay(){
-  document.getElementById('timedOverlay').style.display = 'none';
 }
 
 /* ================= LOG ================= */
