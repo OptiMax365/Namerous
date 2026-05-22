@@ -1179,19 +1179,24 @@ canvas{
   background:rgba(255,255,255,.02);
   -webkit-animation:readingIndicator 8s ease-in-out infinite;
   -webkit-animation-delay:calc(var(--word-index) * 1.2s);
-  will-change: background, border-left-color, color, box-shadow;
+  will-change: transform, background, border-left-color, color, box-shadow;
   -webkit-tap-highlight-color: transparent;
-  -webkit-transform:translateZ(0);
-  transform:translateZ(0);
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  contain: layout style paint;
+  touch-action: manipulation;
 }
 
 .reading-word:hover,
 .reading-word.active{
   background:rgba(34,197,94,.15);
   border-left-color:var(--success);
-  transform:translateX(4px);
+  transform:translate3d(4px,0,0);
+  -webkit-transform:translate3d(4px,0,0);
   cursor:pointer;
 }
 
@@ -1208,18 +1213,21 @@ canvas{
     border-left-color:transparent;
     color:var(--text);
     box-shadow:none;
+    transform:translate3d(0,0,0);
   }
   20%,40%{
     background:rgba(34,197,94,.2);
     border-left-color:var(--success);
     color:var(--success);
     box-shadow:0 0 15px rgba(34,197,94,.3);
+    transform:translate3d(2px,0,0);
   }
   60%,80%{
     background:rgba(0,240,255,.15);
     border-left-color:var(--glow);
     color:var(--glow);
     box-shadow:0 0 12px rgba(0,240,255,.25);
+    transform:translate3d(1px,0,0);
   }
 }
 
@@ -1231,18 +1239,21 @@ canvas{
     border-left-color:transparent;
     color:var(--text);
     box-shadow:none;
+    -webkit-transform:translate3d(0,0,0);
   }
   20%,40%{
     background:rgba(34,197,94,.2);
     border-left-color:var(--success);
     color:var(--success);
     box-shadow:0 0 15px rgba(34,197,94,.3);
+    -webkit-transform:translate3d(2px,0,0);
   }
   60%,80%{
     background:rgba(0,240,255,.15);
     border-left-color:var(--glow);
     color:var(--glow);
     box-shadow:0 0 12px rgba(0,240,255,.25);
+    -webkit-transform:translate3d(1px,0,0);
   }
 }
 
@@ -1265,8 +1276,8 @@ canvas{
 /* Ensure animations work on mobile Safari */
 @supports (-webkit-touch-callout:none){
   .reading-word{
-    -webkit-transform:translateZ(0);
-    transform:translateZ(0);
+    -webkit-transform:translate3d(0,0,0);
+    transform:translate3d(0,0,0);
   }
 }
 
@@ -1275,7 +1286,6 @@ canvas{
 
 .reading-word:hover{
   animation-play-state:paused;
-  -webkit-animation-play-state:paused;
   background:rgba(34,197,94,.25);
   border-left-color:var(--success);
   color:var(--success);
@@ -1291,17 +1301,24 @@ canvas{
   border-radius:4px;
   animation:readingHighlight 2s ease-in-out infinite;
   animation-delay:calc(var(--line-index) * .3s);
+  transform:translate3d(0,0,0);
+  -webkit-transform:translate3d(0,0,0);
+  will-change: transform, background, color, box-shadow;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 @keyframes readingHighlight{
   0%,100%{
     background:transparent;
     color:var(--text);
+    transform:translate3d(0,0,0);
   }
   30%,70%{
     background:rgba(34,197,94,.2);
     color:var(--success);
     box-shadow:0 0 10px rgba(34,197,94,.3);
+    transform:translate3d(2px,0,0);
   }
 }
 
@@ -1441,16 +1458,6 @@ canvas{
   -webkit-overflow-scrolling:touch;
 }
 
-.reading-word{
-  font-size:.8rem;
-  padding:5px 8px;
-  -webkit-animation-duration:10s;
-  animation-duration:10s;
-}
-
-.reading-guide-container{
-  gap:4px;
-}
 
 
 }
@@ -1527,10 +1534,6 @@ canvas{
     height:auto !important;
     }
 
-    .reading-word{
-    font-size:.75rem;
-    padding:4px 6px;
-    }
 
 }
 
@@ -2013,39 +2016,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   initHeaderButtonsSwipe();
   
   startTimedOverlayCheck();
-  
-  initReadingGuideTouch();
 
 });
-
-/* ================= READING GUIDE MOBILE SUPPORT ================= */
-
-function initReadingGuideTouch(){
-  const readingWords = document.querySelectorAll('.reading-word');
-  
-  readingWords.forEach(word=>{
-    word.addEventListener('touchstart', (e)=>{
-      e.preventDefault();
-      readingWords.forEach(w=>w.classList.remove('touched'));
-      word.classList.add('touched');
-    }, {passive:false});
-    
-    word.addEventListener('touchend', (e)=>{
-      e.preventDefault();
-      setTimeout(()=>{
-        word.classList.remove('touched');
-      }, 300);
-    }, {passive:false});
-    
-    word.addEventListener('click', (e)=>{
-      readingWords.forEach(w=>w.classList.remove('active'));
-      word.classList.add('active');
-      setTimeout(()=>{
-        word.classList.remove('active');
-      }, 500);
-    });
-  });
-}
 
 /* ================= LOGIC TAB ================= */
 
@@ -3083,6 +3055,7 @@ function initLiveSwipe(){
   
   liveStream.addEventListener('click', (e)=>{
     if(e.target.classList.contains('stream-word')){
+      // Single click does nothing, double click copies
     }
   });
   
