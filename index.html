@@ -1172,13 +1172,14 @@ canvas{
   color:var(--text);
   font-size:.85rem;
   line-height:1.6;
+  transition:background .3s ease, border-left-color .3s ease, color .3s ease, box-shadow .3s ease;
   animation:readingIndicator 8s ease-in-out infinite;
   animation-delay:calc(var(--word-index) * 1.2s);
   border-left:3px solid transparent;
   background:rgba(255,255,255,.02);
   -webkit-animation:readingIndicator 8s ease-in-out infinite;
   -webkit-animation-delay:calc(var(--word-index) * 1.2s);
-  will-change: background, border-left-color, color;
+  will-change: transform;
   -webkit-tap-highlight-color: transparent;
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -1189,7 +1190,7 @@ canvas{
 .reading-word.active{
   background:rgba(34,197,94,.15);
   border-left-color:var(--success);
-  transform:translateX(4px);
+  transform:translateX(4px) translateZ(0);
   cursor:pointer;
 }
 
@@ -1244,60 +1245,15 @@ canvas{
   }
 }
 
-/* Mobile touch support - optimized for performance */
-@media(hover:none) and (pointer:coarse){
-  .reading-word{
-    animation:readingIndicatorMobile 8s ease-in-out infinite;
-    -webkit-animation:readingIndicatorMobile 8s ease-in-out infinite;
-    will-change: transform;
-    transform: translate3d(0,0,0);
-    backface-visibility: hidden;
-    contain: layout style paint;
-  }
-  
-  @keyframes readingIndicatorMobile{
-    0%,100%{
-      background:rgba(255,255,255,.02);
-      border-left-color:transparent;
-      color:var(--text);
-    }
-    20%,40%{
-      background:rgba(34,197,94,.2);
-      border-left-color:var(--success);
-      color:var(--success);
-    }
-    60%,80%{
-      background:rgba(0,240,255,.15);
-      border-left-color:var(--glow);
-      color:var(--glow);
-    }
-  }
-  
-  @-webkit-keyframes readingIndicatorMobile{
-    0%,100%{
-      background:rgba(255,255,255,.02);
-      border-left-color:transparent;
-      color:var(--text);
-    }
-    20%,40%{
-      background:rgba(34,197,94,.2);
-      border-left-color:var(--success);
-      color:var(--success);
-    }
-    60%,80%{
-      background:rgba(0,240,255,.15);
-      border-left-color:var(--glow);
-      color:var(--glow);
-    }
-  }
-  
+/* Mobile touch support */
+@media(hover:none){
   .reading-word:hover{
-    animation-play-state: running;
-    -webkit-animation-play-state: running;
+    animation-play-state:running;
+    -webkit-animation-play-state:running;
   }
   .reading-word.touched{
-    animation-play-state: paused;
-    -webkit-animation-play-state: paused;
+    animation-play-state:paused;
+    -webkit-animation-play-state:paused;
     background:rgba(34,197,94,.25);
     border-left-color:var(--success);
     color:var(--success);
@@ -1383,9 +1339,6 @@ canvas{
 }
 
 /* ================= MOBILE ================= */
-
-
-
 
 @media(max-width:900px){
 
@@ -1483,7 +1436,62 @@ canvas{
   -webkit-overflow-scrolling:touch;
 }
 
-
+  /* Mobile optimization for reading animation */
+  .reading-word{
+    animation-duration: 10s !important;
+    -webkit-animation-duration: 10s !important;
+    will-change: transform !important;
+    transform: translate3d(0,0,0) !important;
+    -webkit-transform: translate3d(0,0,0) !important;
+  }
+  
+  @keyframes readingIndicator{
+    0%,100%{
+      background:rgba(255,255,255,.02);
+      border-left-color:transparent;
+      color:var(--text);
+      box-shadow:none;
+      transform: translate3d(0,0,0);
+    }
+    20%,40%{
+      background:rgba(34,197,94,.2);
+      border-left-color:var(--success);
+      color:var(--success);
+      box-shadow:0 0 15px rgba(34,197,94,.3);
+      transform: translate3d(0,0,0);
+    }
+    60%,80%{
+      background:rgba(0,240,255,.15);
+      border-left-color:var(--glow);
+      color:var(--glow);
+      box-shadow:0 0 12px rgba(0,240,255,.25);
+      transform: translate3d(0,0,0);
+    }
+  }
+  
+  @-webkit-keyframes readingIndicator{
+    0%,100%{
+      background:rgba(255,255,255,.02);
+      border-left-color:transparent;
+      color:var(--text);
+      box-shadow:none;
+      -webkit-transform: translate3d(0,0,0);
+    }
+    20%,40%{
+      background:rgba(34,197,94,.2);
+      border-left-color:var(--success);
+      color:var(--success);
+      box-shadow:0 0 15px rgba(34,197,94,.3);
+      -webkit-transform: translate3d(0,0,0);
+    }
+    60%,80%{
+      background:rgba(0,240,255,.15);
+      border-left-color:var(--glow);
+      color:var(--glow);
+      box-shadow:0 0 12px rgba(0,240,255,.25);
+      -webkit-transform: translate3d(0,0,0);
+    }
+  }
 
 }
 
@@ -1559,6 +1567,19 @@ canvas{
     height:auto !important;
     }
 
+  /* Extra mobile optimization for small screens */
+  .reading-word{
+    animation: none !important;
+    -webkit-animation: none !important;
+    transition: background .2s ease, border-left-color .2s ease !important;
+  }
+  
+  .reading-word.active,
+  .reading-word.touched{
+    background:rgba(34,197,94,.25) !important;
+    border-left-color:var(--success) !important;
+    color:var(--success) !important;
+  }
 
 }
 
@@ -2978,18 +2999,29 @@ function drawSpiral(){
 /* ================= INFO ================= */
 
 function openInfo(){
-
-  document.getElementById('infoModal').style.display =
-  'flex';
+  // Pause reading animations on mobile when opening info modal to prevent stuttering
+  if(window.innerWidth <= 900){
+    const readingWords = document.querySelectorAll('.reading-word');
+    readingWords.forEach(word => {
+      word.style.animationPlayState = 'paused';
+      word.style.webkitAnimationPlayState = 'paused';
+      word.style.transform = 'translate3d(0,0,0)';
+    });
+  }
+  document.getElementById('infoModal').style.display = 'flex';
 }
 
 function closeInfo(){
-
-    document.getElementById('infoModal').style.display =
-    'none';
-
-    document.getElementById('counterBadge').classList.add('hidden')
-
+    document.getElementById('infoModal').style.display = 'none';
+    document.getElementById('counterBadge').classList.add('hidden');
+    // Resume animations if needed when closing
+    if(window.innerWidth <= 900){
+      const readingWords = document.querySelectorAll('.reading-word');
+      readingWords.forEach(word => {
+        word.style.animationPlayState = 'running';
+        word.style.webkitAnimationPlayState = 'running';
+      });
+    }
 }
 
 /* ================= MESSAGE US ================= */
